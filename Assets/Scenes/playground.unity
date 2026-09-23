@@ -1012,10 +1012,25 @@ MonoBehaviour:
   acceleration: 10
   brakingDeceleration: 20
   coastingDeceleration: 15
+  motorTorqueGain: 8
+  maxMotorTorque: 12
   maxTurnSpeed: 90
   turnAcceleration: 240
   turnDeceleration: 360
   invertSteerWhenReversing: 0
+  autoSetupWheels: 1
+  wheels: []
+  disableTrackColliders: 1
+  suspensionDistance: 0.25
+  suspensionTargetPosition: 0.5
+  suspensionSpring: 235
+  suspensionDamper: 30
+  wheelMass: 2
+  wheelRadius: 0
+  wheelEndInset: 0.4
+  forwardFrictionStiffness: 2
+  sidewaysFrictionStiffness: 1
+  centerOfMass: {fileID: 7793054624681313599}
 --- !u!54 &919132149510503231
 Rigidbody:
   m_ObjectHideFlags: 0
