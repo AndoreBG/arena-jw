@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 36730159}
   - component: {fileID: 36730158}
   m_Layer: 0
-  m_Name: Cube (6)
+  m_Name: Chao8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1558,7 +1558,7 @@ GameObject:
   - component: {fileID: 137250455}
   - component: {fileID: 137250454}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Chao1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3685,7 +3685,7 @@ GameObject:
   - component: {fileID: 445761804}
   - component: {fileID: 445761803}
   m_Layer: 0
-  m_Name: Arch
+  m_Name: Chao12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4700,7 +4700,7 @@ GameObject:
   - component: {fileID: 521337074}
   - component: {fileID: 521337073}
   m_Layer: 0
-  m_Name: Arch (1)
+  m_Name: Chao13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5893,7 +5893,7 @@ GameObject:
   - component: {fileID: 601592510}
   - component: {fileID: 601592509}
   m_Layer: 0
-  m_Name: Cube (9)
+  m_Name: Chao11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8917,7 +8917,7 @@ GameObject:
   - component: {fileID: 841690690}
   - component: {fileID: 841690689}
   m_Layer: 0
-  m_Name: Cube (2)
+  m_Name: Chao2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9451,7 +9451,7 @@ GameObject:
   - component: {fileID: 914206549}
   - component: {fileID: 914206548}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Chao5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11630,7 +11630,7 @@ GameObject:
   - component: {fileID: 1146261045}
   - component: {fileID: 1146261044}
   m_Layer: 0
-  m_Name: Cube (5)
+  m_Name: Chao6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13232,7 +13232,7 @@ GameObject:
   - component: {fileID: 1270164313}
   - component: {fileID: 1270164312}
   m_Layer: 0
-  m_Name: Cube (8)
+  m_Name: Chao10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13944,7 +13944,7 @@ GameObject:
   - component: {fileID: 1292926158}
   - component: {fileID: 1292926157}
   m_Layer: 0
-  m_Name: Cube (7)
+  m_Name: Chao7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15947,8 +15947,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 445761808}
-  - {fileID: 521337072}
   - {fileID: 137250453}
   - {fileID: 841690688}
   - {fileID: 2077994390}
@@ -15959,8 +15957,10 @@ Transform:
   - {fileID: 36730157}
   - {fileID: 1969610605}
   - {fileID: 1270164311}
-  - {fileID: 1096439883}
   - {fileID: 601592508}
+  - {fileID: 445761808}
+  - {fileID: 521337072}
+  - {fileID: 1096439883}
   - {fileID: 745811435}
   - {fileID: 1344975830}
   - {fileID: 726902451}
@@ -18845,7 +18845,7 @@ GameObject:
   - component: {fileID: 1934006406}
   - component: {fileID: 1934006405}
   m_Layer: 0
-  m_Name: Cube (4)
+  m_Name: Chao4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19414,7 +19414,7 @@ GameObject:
   - component: {fileID: 1969610607}
   - component: {fileID: 1969610606}
   m_Layer: 0
-  m_Name: Cube (10)
+  m_Name: Chao9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25386,7 +25386,7 @@ GameObject:
   - component: {fileID: 2077994392}
   - component: {fileID: 2077994391}
   m_Layer: 0
-  m_Name: Cube (3)
+  m_Name: Chao3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
