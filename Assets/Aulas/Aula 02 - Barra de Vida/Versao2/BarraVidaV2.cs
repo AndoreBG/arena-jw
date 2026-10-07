@@ -4,7 +4,9 @@ using UnityEngine.UI;
 // AULA 2 — VERSÃO 2
 // A vida AVISA quando muda. A barra só trabalha quando precisa.
 // Repare: não existe mais nenhum Update nesta classe.
-public class BarraVida : MonoBehaviour
+// O sufixo no nome da classe evita erro de compilação: no Unity, não podem existir
+// duas classes com o mesmo nome no projeto (todas as versões da aula ficam nele).
+public class BarraVidaV2 : MonoBehaviour
 {
     [Header("Referências")]
     [SerializeField] private Vida vida;

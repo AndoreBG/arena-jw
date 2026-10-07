@@ -3444,7 +3444,7 @@ GameObject:
   - component: {fileID: 429868341}
   - component: {fileID: 429868340}
   m_Layer: 0
-  m_Name: Chao
+  m_Name: Chao0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

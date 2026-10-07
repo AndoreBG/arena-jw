@@ -5,7 +5,9 @@ using UnityEngine.InputSystem;
 // Agora obedece às teclas W, A, S e D.
 // Ainda usa transform.Translate, então ATRAVESSA PAREDES. Isso é proposital:
 // é o problema que a versão 3 resolve.
-public class MovimentoPlayer : MonoBehaviour
+// O sufixo no nome da classe evita erro de compilação: no Unity, não podem existir
+// duas classes com o mesmo nome no projeto (todas as versões da aula ficam nele).
+public class MovimentoPlayerV2 : MonoBehaviour
 {
     public float velocidade = 6f;
 

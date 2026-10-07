@@ -4,7 +4,9 @@ using UnityEngine.InputSystem;
 // AULA 5 — PASSO 2
 // Agora a posição é sorteada dentro da área da arena.
 // Continua nascendo na tecla E.
-public class GeradorInimigos : MonoBehaviour
+// O sufixo no nome da classe evita erro de compilação: no Unity, não podem existir
+// duas classes com o mesmo nome no projeto (todas as versões da aula ficam nele).
+public class GeradorInimigosPasso2 : MonoBehaviour
 {
     [Header("Inimigo")]
     [SerializeField] private GameObject inimigoPrefab;

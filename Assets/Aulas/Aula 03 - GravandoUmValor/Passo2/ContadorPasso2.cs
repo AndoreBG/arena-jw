@@ -4,7 +4,9 @@ using TMPro;
 
 // AULA 3 — PASSO 2
 // Agora o número muda com as setas. Ainda não grava nada.
-public class Contador : MonoBehaviour
+// O sufixo no nome da classe evita erro de compilação: no Unity, não podem existir
+// duas classes com o mesmo nome no projeto (todas as versões da aula ficam nele).
+public class ContadorPasso2 : MonoBehaviour
 {
     [SerializeField] private TMP_Text texto;
 

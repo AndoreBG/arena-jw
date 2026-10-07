@@ -4,7 +4,9 @@ using UnityEngine.UI;
 // AULA 2 — VERSÃO 1
 // A barra PERGUNTA a vida a cada quadro.
 // Funciona, mas faz 60 perguntas por segundo para um valor que muda pouco.
-public class BarraVida : MonoBehaviour
+// O sufixo no nome da classe evita erro de compilação: no Unity, não podem existir
+// duas classes com o mesmo nome no projeto (todas as versões da aula ficam nele).
+public class BarraVidaV1 : MonoBehaviour
 {
     [Header("Referências")]
     [SerializeField] private Vida vida;

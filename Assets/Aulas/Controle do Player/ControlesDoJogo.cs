@@ -48,7 +48,9 @@ public class ControlesDoJogo : MonoBehaviour
         MapaDoJogador = new InputActionMap("Jogador");
 
         // Mover: WASD no teclado e stick no controle
-        AcaoMover = MapaDoJogador.AddAction("Mover", InputActionType.Value, expectedControlType: "Vector2");
+        // Input System 1.19: o parâmetro da extensão AddAction saiu como
+        // expectedControlType e voltou com o nome expectedControlLayout.
+        AcaoMover = MapaDoJogador.AddAction("Mover", InputActionType.Value, expectedControlLayout: "Vector2");
         AcaoMover.AddCompositeBinding("2DVector")
             .With("Up", "<Keyboard>/w", groups: grupoTeclado)
             .With("Down", "<Keyboard>/s", groups: grupoTeclado)
