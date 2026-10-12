@@ -40,7 +40,22 @@ public class TankPlayerInput : MonoBehaviour
     [Tooltip("Luz de clarão do tiro (ex.: FX_TiroBrilho). Se vazio, busca nos filhos do FX_Tiro.")]
     [SerializeField] private Light flashLight;
 
+    [Tooltip("Transform cuja frente (+Z) representa a direção do canhão (ex.: Trabuco).")]
+    [SerializeField] private Transform barrelTransform;
+
+    [Tooltip("Ponto de origem onde o projétil nasce (ex.: FX_Tiro na ponta do Trabuco).")]
+    [SerializeField] private Transform firePoint;
+
     [Header("Configurações do Disparo")]
+    [Tooltip("Prefab do projétil disparado pelo canhão.")]
+    [SerializeField] private TankProjectile projectilePrefab;
+
+    [Tooltip("Velocidade de deslocamento do projétil disparado.")]
+    [SerializeField, Min(0.1f)] private float projectileSpeed = 50f;
+
+    [Tooltip("Tempo máximo de vida (em segundos) do projétil disparado.")]
+    [SerializeField, Min(0.1f)] private float projectileLifetime = 5f;
+
     [Tooltip("Tempo de intervalo mínimo entre disparos em segundos (cooldown).")]
     [SerializeField, Min(0f)] private float fireRate = 0.2f;
 
@@ -51,6 +66,7 @@ public class TankPlayerInput : MonoBehaviour
     private InputAction fireAction;
     private float nextFireTime;
     private Coroutine flashCoroutine;
+    private Collider[] tankColliders;
 
     private void Reset()
     {
@@ -64,6 +80,7 @@ public class TankPlayerInput : MonoBehaviour
             movement = GetComponent<TankMovement>();
 
         FindShootReferences();
+        tankColliders = GetComponentsInChildren<Collider>(true);
 
         if (shootVFX != null)
         {
@@ -136,7 +153,8 @@ public class TankPlayerInput : MonoBehaviour
     }
 
     /// <summary>
-    /// Dispara o efeito de partículas FX_Tiro e ativa o clarão da luz temporariamente.
+    /// Dispara o projétil sincronizado com a direção do canhão, o efeito de partículas FX_Tiro
+    /// e ativa o clarão da luz temporariamente.
     /// Pode ser chamado externamente por outros scripts ou botões de UI.
     /// </summary>
     public bool TryFire()
@@ -145,6 +163,8 @@ public class TankPlayerInput : MonoBehaviour
             return false;
 
         nextFireTime = Time.time + fireRate;
+
+        SpawnProjectile();
 
         // Dispara o Particle System do tiro
         if (shootVFX != null)
@@ -162,6 +182,41 @@ public class TankPlayerInput : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void SpawnProjectile()
+    {
+        Vector3 direction = barrelTransform != null && barrelTransform.forward.sqrMagnitude > 0.0001f
+            ? barrelTransform.forward.normalized
+            : (firePoint != null && firePoint.forward.sqrMagnitude > 0.0001f
+                ? firePoint.forward.normalized
+                : transform.forward);
+
+        Vector3 spawnPosition = firePoint != null
+            ? firePoint.position
+            : (barrelTransform != null ? barrelTransform.position + direction * 1.5f : transform.position + direction * 2f);
+
+        Quaternion spawnRotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        TankProjectile projectileInstance;
+        if (projectilePrefab != null)
+        {
+            projectileInstance = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
+        }
+        else
+        {
+            GameObject fallbackGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            fallbackGO.name = "ProjetilTanque";
+            fallbackGO.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+            fallbackGO.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+            fallbackGO.AddComponent<Rigidbody>();
+            projectileInstance = fallbackGO.AddComponent<TankProjectile>();
+        }
+
+        if (tankColliders == null || tankColliders.Length == 0)
+            tankColliders = GetComponentsInChildren<Collider>(true);
+
+        projectileInstance.Initialize(direction, projectileSpeed, projectileLifetime, tankColliders);
     }
 
     private IEnumerator FlashRoutine()
@@ -193,6 +248,39 @@ public class TankPlayerInput : MonoBehaviour
         if (flashLight == null && shootVFX != null)
         {
             flashLight = shootVFX.GetComponentInChildren<Light>(true);
+        }
+
+        if (barrelTransform == null)
+        {
+            TankTurretAim turretAim = GetComponent<TankTurretAim>();
+            if (turretAim != null && turretAim.AimReference != null)
+            {
+                barrelTransform = turretAim.AimReference;
+            }
+            else if (shootVFX != null && shootVFX.transform.parent != null)
+            {
+                barrelTransform = shootVFX.transform.parent;
+            }
+            else
+            {
+                Transform[] children = GetComponentsInChildren<Transform>(true);
+                foreach (Transform child in children)
+                {
+                    if (child.name.Equals("Trabuco", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        barrelTransform = child;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (firePoint == null)
+        {
+            if (shootVFX != null)
+                firePoint = shootVFX.transform;
+            else if (barrelTransform != null)
+                firePoint = barrelTransform;
         }
     }
 }

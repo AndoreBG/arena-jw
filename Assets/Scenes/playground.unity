@@ -105,7 +105,7 @@ NavMeshSettings:
     agentRadius: 0.5
     agentHeight: 2
     agentSlope: 45
-    agentClimb: 0.4
+    agentClimb: 0.75
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
@@ -118,7 +118,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000}
 --- !u!43 &11277361
 Mesh:
   m_ObjectHideFlags: 0
@@ -489,6 +489,7 @@ GameObject:
   - component: {fileID: 36730160}
   - component: {fileID: 36730159}
   - component: {fileID: 36730158}
+  - component: {fileID: 800000003}
   m_Layer: 0
   m_Name: Chao8
   m_TagString: Untagged
@@ -496,6 +497,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36730156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &36730157
 Transform:
   m_ObjectHideFlags: 0
@@ -1201,13 +1222,34 @@ GameObject:
   - component: {fileID: 133464854}
   - component: {fileID: 133464853}
   - component: {fileID: 133464852}
+  - component: {fileID: 800000004}
   m_Layer: 0
   m_Name: Cube (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133464850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &133464851
 Transform:
   m_ObjectHideFlags: 0
@@ -1557,6 +1599,7 @@ GameObject:
   - component: {fileID: 137250456}
   - component: {fileID: 137250455}
   - component: {fileID: 137250454}
+  - component: {fileID: 800000005}
   m_Layer: 0
   m_Name: Chao1
   m_TagString: Untagged
@@ -1564,6 +1607,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137250452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &137250453
 Transform:
   m_ObjectHideFlags: 0
@@ -2428,13 +2491,34 @@ GameObject:
   - component: {fileID: 346688209}
   - component: {fileID: 346688208}
   - component: {fileID: 346688207}
+  - component: {fileID: 800000006}
   m_Layer: 0
   m_Name: Cube (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346688205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &346688206
 Transform:
   m_ObjectHideFlags: 0
@@ -3089,13 +3173,34 @@ GameObject:
   - component: {fileID: 414883877}
   - component: {fileID: 414883876}
   - component: {fileID: 414883875}
+  - component: {fileID: 800000007}
   m_Layer: 0
   m_Name: Cube (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414883873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &414883874
 Transform:
   m_ObjectHideFlags: 0
@@ -3443,6 +3548,7 @@ GameObject:
   - component: {fileID: 429868342}
   - component: {fileID: 429868341}
   - component: {fileID: 429868340}
+  - component: {fileID: 800000008}
   m_Layer: 0
   m_Name: Chao0
   m_TagString: Untagged
@@ -3450,6 +3556,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429868339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!65 &429868340
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3684,6 +3810,7 @@ GameObject:
   - component: {fileID: 445761805}
   - component: {fileID: 445761804}
   - component: {fileID: 445761803}
+  - component: {fileID: 800000009}
   m_Layer: 0
   m_Name: Chao12
   m_TagString: Untagged
@@ -3691,6 +3818,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445761802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!64 &445761803
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4343,13 +4490,34 @@ GameObject:
   - component: {fileID: 519609685}
   - component: {fileID: 519609684}
   - component: {fileID: 519609683}
+  - component: {fileID: 800000010}
   m_Layer: 0
   m_Name: Cube (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519609681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &519609682
 Transform:
   m_ObjectHideFlags: 0
@@ -4699,6 +4867,7 @@ GameObject:
   - component: {fileID: 521337075}
   - component: {fileID: 521337074}
   - component: {fileID: 521337073}
+  - component: {fileID: 800000011}
   m_Layer: 0
   m_Name: Chao13
   m_TagString: Untagged
@@ -4706,6 +4875,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521337071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &521337072
 Transform:
   m_ObjectHideFlags: 0
@@ -5180,13 +5369,34 @@ GameObject:
   - component: {fileID: 535837976}
   - component: {fileID: 535837975}
   - component: {fileID: 535837974}
+  - component: {fileID: 800000012}
   m_Layer: 0
   m_Name: Cube (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535837972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &535837973
 Transform:
   m_ObjectHideFlags: 0
@@ -5536,13 +5746,34 @@ GameObject:
   - component: {fileID: 567395115}
   - component: {fileID: 567395114}
   - component: {fileID: 567395113}
+  - component: {fileID: 800000013}
   m_Layer: 0
   m_Name: Cube (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567395111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &567395112
 Transform:
   m_ObjectHideFlags: 0
@@ -5892,6 +6123,7 @@ GameObject:
   - component: {fileID: 601592511}
   - component: {fileID: 601592510}
   - component: {fileID: 601592509}
+  - component: {fileID: 800000014}
   m_Layer: 0
   m_Name: Chao11
   m_TagString: Untagged
@@ -5899,6 +6131,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601592507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &601592508
 Transform:
   m_ObjectHideFlags: 0
@@ -6604,13 +6856,34 @@ GameObject:
   - component: {fileID: 608914636}
   - component: {fileID: 608914635}
   - component: {fileID: 608914634}
+  - component: {fileID: 800000015}
   m_Layer: 0
   m_Name: Cube (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608914632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &608914633
 Transform:
   m_ObjectHideFlags: 0
@@ -6960,13 +7233,34 @@ GameObject:
   - component: {fileID: 639840889}
   - component: {fileID: 639840888}
   - component: {fileID: 639840887}
+  - component: {fileID: 800000016}
   m_Layer: 0
   m_Name: Cube (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639840885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &639840886
 Transform:
   m_ObjectHideFlags: 0
@@ -7369,13 +7663,34 @@ GameObject:
   - component: {fileID: 726902454}
   - component: {fileID: 726902453}
   - component: {fileID: 726902452}
+  - component: {fileID: 800000017}
   m_Layer: 0
   m_Name: Cube (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726902450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &726902451
 Transform:
   m_ObjectHideFlags: 0
@@ -7725,13 +8040,34 @@ GameObject:
   - component: {fileID: 732367925}
   - component: {fileID: 732367924}
   - component: {fileID: 732367923}
+  - component: {fileID: 800000018}
   m_Layer: 0
   m_Name: Cube (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732367921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &732367922
 Transform:
   m_ObjectHideFlags: 0
@@ -8112,13 +8448,34 @@ GameObject:
   - component: {fileID: 745811438}
   - component: {fileID: 745811437}
   - component: {fileID: 745811436}
+  - component: {fileID: 800000019}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745811434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &745811435
 Transform:
   m_ObjectHideFlags: 0
@@ -8916,6 +9273,7 @@ GameObject:
   - component: {fileID: 841690691}
   - component: {fileID: 841690690}
   - component: {fileID: 841690689}
+  - component: {fileID: 800000020}
   m_Layer: 0
   m_Name: Chao2
   m_TagString: Untagged
@@ -8923,6 +9281,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841690687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &841690688
 Transform:
   m_ObjectHideFlags: 0
@@ -9450,6 +9828,7 @@ GameObject:
   - component: {fileID: 914206550}
   - component: {fileID: 914206549}
   - component: {fileID: 914206548}
+  - component: {fileID: 800000021}
   m_Layer: 0
   m_Name: Chao5
   m_TagString: Untagged
@@ -9457,6 +9836,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914206546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &914206547
 Transform:
   m_ObjectHideFlags: 0
@@ -9806,13 +10205,34 @@ GameObject:
   - component: {fileID: 1054653055}
   - component: {fileID: 1054653054}
   - component: {fileID: 1054653053}
+  - component: {fileID: 800000022}
   m_Layer: 0
   m_Name: Cube (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054653051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1054653052
 Transform:
   m_ObjectHideFlags: 0
@@ -10162,13 +10582,34 @@ GameObject:
   - component: {fileID: 1059398764}
   - component: {fileID: 1059398763}
   - component: {fileID: 1059398762}
+  - component: {fileID: 800000023}
   m_Layer: 0
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059398760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1059398761
 Transform:
   m_ObjectHideFlags: 0
@@ -10696,13 +11137,34 @@ GameObject:
   - component: {fileID: 1096439886}
   - component: {fileID: 1096439885}
   - component: {fileID: 1096439884}
+  - component: {fileID: 800000024}
   m_Layer: 0
   m_Name: Door (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096439882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1096439883
 Transform:
   m_ObjectHideFlags: 0
@@ -11273,13 +11735,34 @@ GameObject:
   - component: {fileID: 1116191916}
   - component: {fileID: 1116191915}
   - component: {fileID: 1116191914}
+  - component: {fileID: 800000025}
   m_Layer: 0
   m_Name: Cube (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116191912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1116191913
 Transform:
   m_ObjectHideFlags: 0
@@ -11629,6 +12112,7 @@ GameObject:
   - component: {fileID: 1146261046}
   - component: {fileID: 1146261045}
   - component: {fileID: 1146261044}
+  - component: {fileID: 800000026}
   m_Layer: 0
   m_Name: Chao6
   m_TagString: Untagged
@@ -11636,6 +12120,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146261042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1146261043
 Transform:
   m_ObjectHideFlags: 0
@@ -12341,13 +12845,34 @@ GameObject:
   - component: {fileID: 1182989234}
   - component: {fileID: 1182989233}
   - component: {fileID: 1182989232}
+  - component: {fileID: 800000027}
   m_Layer: 0
   m_Name: Cube (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182989230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1182989231
 Transform:
   m_ObjectHideFlags: 0
@@ -12697,13 +13222,34 @@ GameObject:
   - component: {fileID: 1194676537}
   - component: {fileID: 1194676536}
   - component: {fileID: 1194676535}
+  - component: {fileID: 800000028}
   m_Layer: 0
   m_Name: Cube (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194676533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1194676534
 Transform:
   m_ObjectHideFlags: 0
@@ -13231,6 +13777,7 @@ GameObject:
   - component: {fileID: 1270164314}
   - component: {fileID: 1270164313}
   - component: {fileID: 1270164312}
+  - component: {fileID: 800000029}
   m_Layer: 0
   m_Name: Chao10
   m_TagString: Untagged
@@ -13238,6 +13785,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270164310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1270164311
 Transform:
   m_ObjectHideFlags: 0
@@ -13943,6 +14510,7 @@ GameObject:
   - component: {fileID: 1292926159}
   - component: {fileID: 1292926158}
   - component: {fileID: 1292926157}
+  - component: {fileID: 800000030}
   m_Layer: 0
   m_Name: Chao7
   m_TagString: Untagged
@@ -13950,6 +14518,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292926155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1292926156
 Transform:
   m_ObjectHideFlags: 0
@@ -14655,13 +15243,34 @@ GameObject:
   - component: {fileID: 1344975833}
   - component: {fileID: 1344975832}
   - component: {fileID: 1344975831}
+  - component: {fileID: 800000031}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344975829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1344975830
 Transform:
   m_ObjectHideFlags: 0
@@ -15996,13 +16605,34 @@ GameObject:
   - component: {fileID: 1611074979}
   - component: {fileID: 1611074978}
   - component: {fileID: 1611074977}
+  - component: {fileID: 800000032}
   m_Layer: 0
   m_Name: Cube (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611074975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1611074976
 Transform:
   m_ObjectHideFlags: 0
@@ -16530,13 +17160,34 @@ GameObject:
   - component: {fileID: 1621633683}
   - component: {fileID: 1621633682}
   - component: {fileID: 1621633681}
+  - component: {fileID: 800000033}
   m_Layer: 0
   m_Name: Cube (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621633679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1621633680
 Transform:
   m_ObjectHideFlags: 0
@@ -17420,13 +18071,34 @@ GameObject:
   - component: {fileID: 1754479446}
   - component: {fileID: 1754479445}
   - component: {fileID: 1754479444}
+  - component: {fileID: 800000034}
   m_Layer: 0
   m_Name: Cube (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754479442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1754479443
 Transform:
   m_ObjectHideFlags: 0
@@ -18132,13 +18804,34 @@ GameObject:
   - component: {fileID: 1864337390}
   - component: {fileID: 1864337389}
   - component: {fileID: 1864337388}
+  - component: {fileID: 800000035}
   m_Layer: 0
   m_Name: Cube (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864337386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1864337387
 Transform:
   m_ObjectHideFlags: 0
@@ -18844,6 +19537,7 @@ GameObject:
   - component: {fileID: 1934006407}
   - component: {fileID: 1934006406}
   - component: {fileID: 1934006405}
+  - component: {fileID: 800000036}
   m_Layer: 0
   m_Name: Chao4
   m_TagString: Untagged
@@ -18851,6 +19545,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934006403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1934006404
 Transform:
   m_ObjectHideFlags: 0
@@ -19373,13 +20087,34 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1953590248}
+  - component: {fileID: 800000037}
   m_Layer: 0
   m_Name: Paredes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953590247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1953590248
 Transform:
   m_ObjectHideFlags: 0
@@ -19413,6 +20148,7 @@ GameObject:
   - component: {fileID: 1969610608}
   - component: {fileID: 1969610607}
   - component: {fileID: 1969610606}
+  - component: {fileID: 800000038}
   m_Layer: 0
   m_Name: Chao9
   m_TagString: Untagged
@@ -19420,6 +20156,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969610604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1969610605
 Transform:
   m_ObjectHideFlags: 0
@@ -24851,13 +25607,34 @@ GameObject:
   - component: {fileID: 2045784926}
   - component: {fileID: 2045784925}
   - component: {fileID: 2045784924}
+  - component: {fileID: 800000039}
   m_Layer: 0
   m_Name: Cube (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045784922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &2045784923
 Transform:
   m_ObjectHideFlags: 0
@@ -25385,6 +26162,7 @@ GameObject:
   - component: {fileID: 2077994393}
   - component: {fileID: 2077994392}
   - component: {fileID: 2077994391}
+  - component: {fileID: 800000040}
   m_Layer: 0
   m_Name: Chao3
   m_TagString: Untagged
@@ -25392,6 +26170,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077994389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &2077994390
 Transform:
   m_ObjectHideFlags: 0
@@ -25741,13 +26539,34 @@ GameObject:
   - component: {fileID: 2104970156}
   - component: {fileID: 2104970155}
   - component: {fileID: 2104970154}
+  - component: {fileID: 800000041}
   m_Layer: 0
   m_Name: Cube (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104970152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &2104970153
 Transform:
   m_ObjectHideFlags: 0
@@ -26298,6 +27117,8 @@ GameObject:
   - component: {fileID: 919132149510503230}
   - component: {fileID: 919132149510503229}
   - component: {fileID: 919132149510503232}
+  - component: {fileID: 919132149510503233}
+  - component: {fileID: 800000042}
   m_Layer: 0
   m_Name: Tanque
   m_TagString: Player
@@ -26305,6 +27126,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &800000042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149510503228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!114 &919132149510503229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26324,6 +27165,11 @@ MonoBehaviour:
   movement: {fileID: 919132149510503230}
   shootVFX: {fileID: 1972503553}
   flashLight: {fileID: 436328573}
+  barrelTransform: {fileID: 5175087742618028742}
+  firePoint: {fileID: 1972503551}
+  projectilePrefab: {fileID: 11400000, guid: a73c91e45b284d608f14c92038b7e641, type: 3}
+  projectileSpeed: 50
+  projectileLifetime: 5
   fireRate: 0.2
   flashDuration: 0.05
 --- !u!114 &919132149510503230
@@ -26398,6 +27244,30 @@ MonoBehaviour:
   rotationSpeed: 90
   elevationSpeed: 40
   elevationLimits: {x: -15, y: 5}
+--- !u!114 &919132149510503233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149510503228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e91b64c83a2d47f19c05b84216e7a504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TankAimReticleHUD
+  turretAim: {fileID: 919132149510503232}
+  barrelTransform: {fileID: 5175087742618028742}
+  barrelOrigin: {fileID: 1972503551}
+  aimCamera: {fileID: 330585545}
+  aimDistance: 50
+  hudCanvas: {fileID: 850000002}
+  cameraReticle: {fileID: 850000011}
+  barrelReticle: {fileID: 850000021}
+  cameraReticleColor: {r: 1, g: 1, b: 1, a: 0.85}
+  barrelReticleColor: {r: 1, g: 0.55, b: 0.1, a: 0.95}
+  cameraReticleSize: {x: 36, y: 36}
+  barrelReticleSize: {x: 44, y: 44}
 --- !u!1 &1099422061330183553
 GameObject:
   m_ObjectHideFlags: 0
@@ -26958,10 +27828,845 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.036686216, y: 0.030000832, z: 0.008}
   m_Center: {x: -0.008343103, y: 0.00000025202783, z: 0.01}
+--- !u!1 &800000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 800000001}
+  - component: {fileID: 800000002}
+  m_Layer: 0
+  m_Name: NavMeshSurface
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &800000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &800000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 1
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000}
+  m_BuildHeightMesh: 0
+--- !u!238 &23800000
+NavMeshData:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NavMesh-NavMeshSurface
+  m_NavMeshTiles:
+  - m_MeshData: 56414e4410000000fdfffffffeffffff000000000200000006000000020000000000000004000000040000000000fac2000000bf000096c2abaaaac20000cc41abaa2ac20000c0400000f7c25655153f00005ec2abaaaac25655153f00005ec2abaaaac25655153f000095c20000f7c25655153f000095c20000f7c25655153fabaa2ac2abaaaac25655153fabaa2ac2000001000200030000000000020000800000000000000000010000000400000004000500010000000000000002800080010000000000000001000000040000000000000000000000000002000000000002000000000002000300000002001100000001000200050003000000020011000000010002000500090005000300ee000c00c200fdffffff090005000300ee000c00750000000000090005007500ee000c00c2000100000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: cad762240d07718c9ee135ad1206e97b
+      bytes[0]: 202
+      bytes[1]: 215
+      bytes[2]: 98
+      bytes[3]: 36
+      bytes[4]: 13
+      bytes[5]: 7
+      bytes[6]: 113
+      bytes[7]: 140
+      bytes[8]: 158
+      bytes[9]: 225
+      bytes[10]: 53
+      bytes[11]: 173
+      bytes[12]: 18
+      bytes[13]: 6
+      bytes[14]: 233
+      bytes[15]: 123
+  - m_MeshData: 56414e4410000000fefffffffeffffff00000000080000001300000008000000000000001000000010000000abaaaac2000000bf000096c2abaa2ac20000cc41abaa2ac20000c040abaaaac25655153f00005ec20000aac25655153f00005ec20000aac25655153f000095c2abaaaac25655153f000095c2abaaaac25655153fabaa2ac20000aac25655153fabaa2ac2000083c25655153f00005ec2000083c25655153f000095c2000083c25655153fabaa2ac2000032c25655153f00005ec2000032c25655153f000095c2abaa2ac25655153f00005ec2abaa2ac25655153f000095c200007ac255552941abaa2ac200003ec255552941abaa2ac200003ec255552941000052c200007ac255552941000052c2abaa2ac255552941abaa2ac2abaa2ac255552941000052c20000010002000300000000000200030000000480000000000100000004000000040005000100000000000000028004000100048000000000010000000400000001000600070002000000000004000500000001000000000001000000040000000500080006000100000000000280000003000200000000000100000004000000060009000a00070000000000000006000000030000000000010000000400000009000b000c000a000000000000000080000005000000000001000000040000000d000e000f0010000000000002800800000000000000000001000000040000000e00110012000f00000000000280008000000700000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500030000014800c200f1ffffff00000500030077000c00c200f9ffffff00000500030077000c007500fdffffff00000500030002000c0075000000000002000500030077000c0075000200000000000500750077000c00c200fdffffff00000500750002000c00c2000100000002000500750077000c00c2000300000077000500030000014800c200f9ffffff77000500030000010c007500fdffffff770005000300f5000c00750004000000f5000500030000010c0075000500000089004100870000014800c200fdffffff890041008700e3004800c20006000000e3004100870000014800c2000700000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 51cabbe1477744c4eccd32e9ec3251b3
+      bytes[0]: 81
+      bytes[1]: 202
+      bytes[2]: 187
+      bytes[3]: 225
+      bytes[4]: 71
+      bytes[5]: 119
+      bytes[6]: 68
+      bytes[7]: 196
+      bytes[8]: 236
+      bytes[9]: 205
+      bytes[10]: 50
+      bytes[11]: 233
+      bytes[12]: 236
+      bytes[13]: 50
+      bytes[14]: 81
+      bytes[15]: 179
+  - m_MeshData: 56414e4410000000fffffffffeffffff00000000070000001200000007000000000000000e0000000e000000abaa2ac2000000bf000096c2000000000000cc41abaa2ac20000c040abaa2ac25655153f00005ec2000078c15655153f00005ec2000078c15655153f000095c2abaa2ac25655153f000095c2000008c15655153f00005ec2000008c15655153f000095c20000d0c05655153f00005ec20000d0c05655153f000095c2000000005655153f00005ec2000000005655153f000095c20000d0c05655153fabaa2ac2000000005655153fabaa2ac2abaa2ac255552941abaa2ac2000008c155552941abaa2ac2000008c155552941000052c2abaa2ac255552941000052c20000000055552941abaa2ac20000000055552941000052c200000100020003000000000000000200000004800000000001000000040000000100040005000200000000000000030000000100000000000100000004000000040006000700050000000000000004000000020000000000010000000400000006000800090007000000000005000080000003000000000001000000040000000a000b00080006000000000002800080040000000000000001000000040000000c000d000e000f000000000002800700000004800000000001000000040000000d00100011000e00000000000280008000000600000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500030000014800c200f3ffffff000005000300cd004800c200fbffffff000005000300a3000c00750000000000000005000300cd004800c200fdffffff000041008700cd004800c20005000000a30005000300cd000c00750001000000cd000500030000014800c200f9ffffffcd000500030000010c007500fdffffffcd0005000300d9000c00750002000000d9000500030000010c00750003000000cd000500750000014800c200fdffffffd9000500750000010c00c20004000000cd004100870000014800c2000600000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 2e2d8f9bcc92dfab3a62dbb55e2f883a
+      bytes[0]: 46
+      bytes[1]: 45
+      bytes[2]: 143
+      bytes[3]: 155
+      bytes[4]: 204
+      bytes[5]: 146
+      bytes[6]: 223
+      bytes[7]: 171
+      bytes[8]: 58
+      bytes[9]: 98
+      bytes[10]: 219
+      bytes[11]: 181
+      bytes[12]: 94
+      bytes[13]: 47
+      bytes[14]: 136
+      bytes[15]: 58
+  - m_MeshData: 56414e441000000000000000feffffff00000000070000001200000007000000000000000e0000000e00000000000000000000bf000096c2abaa2a420000cc41abaa2ac20000c040000000005655153f00005ec20000d0405655153f00005ec20000d0405655153f000095c2000000005655153f000095c2000000005655153fabaa2ac20000d0405655153fabaa2ac2000008415655153f00005ec2000008415655153f000095c2000078415655153f00005ec2000078415655153f000095c2abaa2a425655153f00005ec2abaa2a425655153f000095c20000000055552941abaa2ac20000084155552941abaa2ac20000084155552941000052c20000000055552941000052c2abaa2a4255552941abaa2ac2abaa2a4255552941000052c2000001000200030000000000020003000000048000000000010000000400000004000500010000000000000002800000010004800000000001000000040000000100060007000200000000000000040000000100000000000100000004000000060008000900070000000000000005000000030000000000010000000400000008000a000b0009000000000000000080000004000000000001000000040000000c000d000e000f000000000002800700000004800000000001000000040000000d00100011000e00000000000280008000000600000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500030000014800c200f3ffffff00000500030033004800c200fbffffff00000500030027000c0075000000000000000500750033004800c200fdffffff00000500750027000c00c2000100000000004100870033004800c2000500000027000500030000014800c200f9ffffff2700050003005d000c007500fdffffff27000500030033000c007500020000003300050003005d000c0075000300000033000500030000014800c200fdffffff33004100870000014800c200060000005d000500030000010c0075000400000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: eadadfef3ebdbc1aca2470197ce70d02
+      bytes[0]: 234
+      bytes[1]: 218
+      bytes[2]: 223
+      bytes[3]: 239
+      bytes[4]: 62
+      bytes[5]: 189
+      bytes[6]: 188
+      bytes[7]: 26
+      bytes[8]: 202
+      bytes[9]: 36
+      bytes[10]: 112
+      bytes[11]: 25
+      bytes[12]: 124
+      bytes[13]: 231
+      bytes[14]: 13
+      bytes[15]: 2
+  - m_MeshData: 56414e441000000001000000feffffff00000000080000001300000008000000000000001000000010000000abaa2a42000000bf000096c2abaaaa420000cc41abaa2ac20000c040abaa2a425655153f00005ec2000032425655153f00005ec2000032425655153f000095c2abaa2a425655153f000095c2000083425655153f00005ec2000083425655153f000095c20000aa425655153f00005ec20000aa425655153f000095c2000083425655153fabaa2ac20000aa425655153fabaa2ac2abaaaa425655153f00005ec2abaaaa425655153f000095c2abaaaa425655153fabaa2ac2abaa2a4255552941abaa2ac200003e4255552941abaa2ac200003e4255552941000052c2abaa2a4255552941000052c200007a4255552941abaa2ac200007a4255552941000052c2000001000200030000000000000002000000048000000000010000000400000001000400050002000000000000000300000001000000000001000000040000000400060007000500000000000400050000000200000000000100000004000000080009000600040000000000028006000300000000000000010000000400000006000a000b00070000000000060000800000030000000000010000000400000009000c000a0006000000000002800080050004000000000001000000040000000d000e000f0010000000000002800800000004800000000001000000040000000e00110012000f00000000000280000000000700000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500030000014800c200f1ffffff00000500030089004800c200f9ffffff00000500030089000c007500fdffffff0000050003000b000c007500000000000b000500030089000c0075000100000000004100870077004800c200fdffffff0000410087001d004800c200060000001d004100870077004800c2000700000089000500030000010c00c200f9ffffff89000500030000010c007500fdffffff890005000300fe000c00750002000000fe000500030000010c0075000400000089000500750000010c00c200fdffffff890005007500fe000c00c20003000000fe000500750000010c00c2000500000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: cb96ae97d591481259611adb8287c32d
+      bytes[0]: 203
+      bytes[1]: 150
+      bytes[2]: 174
+      bytes[3]: 151
+      bytes[4]: 213
+      bytes[5]: 145
+      bytes[6]: 72
+      bytes[7]: 18
+      bytes[8]: 89
+      bytes[9]: 97
+      bytes[10]: 26
+      bytes[11]: 219
+      bytes[12]: 130
+      bytes[13]: 135
+      bytes[14]: 195
+      bytes[15]: 45
+  - m_MeshData: 56414e441000000002000000feffffff00000000020000000600000002000000000000000400000004000000abaaaa42000000bf000096c20000fa420000cc41abaa2ac20000c040abaaaa425655153f00005ec20000f7425655153f00005ec20000f7425655153f000095c2abaaaa425655153f000095c2abaaaa425655153fabaa2ac20000f7425655153fabaa2ac2000001000200030000000000020000000000048000000000010000000400000004000500010000000000000002800000010004800000000001000000040000000000000000000000000002000000000002000000000002000300000002001100000001000200050003000000020011000000010002000500000005000300e5000c00c200fdffffff000005000300e5000c00750000000000000005007500e5000c00c2000100000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 38200c75b52e6629426611c77c70d2e0
+      bytes[0]: 56
+      bytes[1]: 32
+      bytes[2]: 12
+      bytes[3]: 117
+      bytes[4]: 181
+      bytes[5]: 46
+      bytes[6]: 102
+      bytes[7]: 41
+      bytes[8]: 66
+      bytes[9]: 102
+      bytes[10]: 17
+      bytes[11]: 199
+      bytes[12]: 124
+      bytes[13]: 112
+      bytes[14]: 210
+      bytes[15]: 224
+  - m_MeshData: 56414e4410000000fdffffffffffffff00000000040000000a000000040000000000000008000000080000000000fac2000000bfabaa2ac2abaaaac20000cc41000000000000c0400000f7c25655153f00000ac2abaaaac25655153f00000ac2abaaaac25655153fabaa2ac20000f7c25655153fabaa2ac20000f7c25655153f000078c1abaaaac25655153f000078c10000f7c25655153f000018c1abaaaac25655153f000018c10000f7c25655153f00000000abaaaac25655153f00000000000001000200030000000000020000800680000000000000010000000400000004000500010000000000000003000080010000000000000001000000040000000600070005000400000000000400008002000000000000000100000004000000080009000700060000000000028000800300000000000000010000000400000000000000000000000000020000000000020000000000020000000000040000000000020000000000060000000000020003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500090005000000ee000c000001f9ffffff090005000000ee000c00a300fdffffff090005000000ee000c00310000000000090005003100ee000c00a3000100000009000500a300ee000c000001fdffffff09000500a300ee000c00c7000200000009000500c700ee000c0000010300000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 92d345eba202bb5bddf6eca7fbfe8acc
+      bytes[0]: 146
+      bytes[1]: 211
+      bytes[2]: 69
+      bytes[3]: 235
+      bytes[4]: 162
+      bytes[5]: 2
+      bytes[6]: 187
+      bytes[7]: 91
+      bytes[8]: 221
+      bytes[9]: 246
+      bytes[10]: 236
+      bytes[11]: 167
+      bytes[12]: 251
+      bytes[13]: 254
+      bytes[14]: 138
+      bytes[15]: 204
+  - m_MeshData: 56414e4410000000feffffffffffffff00000000110000002400000011000000000000002200000022000000abaaaac2000000bfabaa2ac2abaa2ac20000cc41000000000000c040abaaaac25655153f00000ac20000aac25655153f00000ac20000aac25655153fabaa2ac2abaaaac25655153fabaa2ac2abaaaac25655153f000078c10000aac25655153f000078c1abaaaac25655153f000018c10000aac25655153f000018c1abaaaac25655153f000000000000aac25655153f00000000000083c25655153f00000ac2000083c25655153fabaa2ac2000083c25655153f000078c1000083c25655153f000018c1000032c25655153f000078c1abaa2ac25655153f000078c1abaa2ac25655153f00000ac2000032c25655153f00000ac2000032c25655153f000018c1abaa2ac25655153f000018c1000032c25655153f00000000abaa2ac25655153f00000000000082c2555529410000000000007ac2555529410000000000007ac255552941000018c1000082c255552941000018c100007ac255552941000016c200003ec255552941000016c200003ec255552941abaa2ac200007ac255552941abaa2ac200007ac255552941000010c200003ec255552941000010c200003ec255552941000018c100003ec25555294100000000abaa2ac255552941000016c2abaa2ac255552941abaa2ac2000001000200030000000000020005000680048000000000010000000400000004000500010000000000000003000600010004800000000001000000040000000600070005000400000000000400070002000480000000000100000004000000080009000700060000000000028011000300048000000000010000000400000001000a000b00020000000000060000000680010000000000010000000400000005000c000a00010000000000070000000500020000000000010000000400000007000d000c0005000000000000000000060003000000000001000000040000000e000f0010001100000000000900008000000000000000000100000004000000120013000f000e00000000000a00008008000000000000000100000004000000140015001300120000000000028000800900000000000000010000000400000016001700180019000000000002800f00000011000000000001000000040000001a001b001c001d00000000000d001000068000000000000001000000040000001e001f001b001a00000000000e0000000c000000000000000100000004000000180020001f001e00000000000f0000000d000000000000000100000004000000170021002000180000000000028000000e000b000000000001000000040000001b00220023001c00000000000000008006800c0000000000010000000400000009001600190007000000000002800b0000000400000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a00000000000200000000001c00000000000200000000001e000000000002000000000020000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000148000001dfffffff0000050000007a0048000001f1ffffff00000500000077000c00a300f9ffffff00000500000077000c003100fdffffff00000500000002000c0031000000000002000500000077000c0031000400000000000500310077000c00a300fdffffff00000500310002000c00a3000100000002000500310077000c00a3000500000000000500a3007a0048000001f9ffffff00000500a30002000c000001fdffffff00000500a30002000c00c7000200000000000500c70002000c0000010300000002000500a3007a0048000001fdffffff02000500a30077000c00c7000600000002000500c7007a0048000001100000007a0005000000000148000001efffffff89000500000000014800a300f9ffffff890041000000000148001f00fdffffff890041000000e30048001f000b000000e30041000000000148001f000f000000890005001f0000014800a300fdffffff890041001f00e300480028000c000000f5000500310000010c00a300070000007a0005002800000148000001f7ffffff89000500280000014800c700fdffffff890041002800e3004800c7000d000000f5000500a30000010c00c700080000007a000500c700000148000001fbffffff7a004100c7008900480000010a00000089000500c700000148000001fdffffff89004100c700e300480000010e000000f5000500c70000010c0000010900000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 2e7bc5ef3b51a8081456e2b6a7cf53c9
+      bytes[0]: 46
+      bytes[1]: 123
+      bytes[2]: 197
+      bytes[3]: 239
+      bytes[4]: 59
+      bytes[5]: 81
+      bytes[6]: 168
+      bytes[7]: 8
+      bytes[8]: 20
+      bytes[9]: 86
+      bytes[10]: 226
+      bytes[11]: 182
+      bytes[12]: 167
+      bytes[13]: 207
+      bytes[14]: 83
+      bytes[15]: 201
+  - m_MeshData: 56414e4410000000ffffffffffffffff000000000e000000200000000e000000000000001c0000001c000000abaa2ac2000000bfabaa2ac2000000000000cc41000000000000c040abaa2ac25655153f000078c1000078c15655153f000078c1000078c15655153f00000ac2abaa2ac25655153f00000ac2abaa2ac25655153f000018c1000078c15655153f000018c1abaa2ac25655153f00000000000078c15655153f00000000000008c15655153f000078c1000008c15655153f00000ac20000d0c05655153f000078c10000d0c05655153f00000ac2000000005655153f00000ac2000000005655153fabaa2ac20000d0c05655153fabaa2ac2000000005655153f000078c1abaa2ac255552941000016c2000008c155552941000016c2000008c155552941abaa2ac2abaa2ac255552941abaa2ac20000000055552941000016c20000000055552941abaa2ac2000008c155552941000010c20000000055552941000010c2000048c1abaaa44100000000000008c1abaaa44100000000000008c1abaaa441000048c1000048c1abaaa441000048c100000000abaaa441000048c100000000abaaa441000070c1000008c1abaaa441000070c100000000abaaa44100000000000001000200030000000000020004000000048000000000010000000400000004000500010000000000000003000000010004800000000001000000040000000600070005000400000000000280000002000480000000000100000004000000010008000900020000000000000005000000010000000000010000000400000008000a000b0009000000000000000700000004000000000001000000040000000b000c000d000e000000000007000080068000000000000001000000040000000a000f000c000b0000000000000000800600050000000000010000000400000010001100120013000000000000000900068004800000000001000000040000001100140015001200000000000a000080068008000000000001000000040000001600170014001100000000000e00008009000000000000000100000004000000180019001a001b000000000002800d00000000000000000001000000040000001a001c001d001e00000000000d0000800e00000000000000010000000400000019001f001c001a0000000000028000800c000b000000000001000000040000001e001d0017001600000000000c0000800a000000000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000184000001e5ffffff000005000000d90084000001f3ffffff000005000000cd004800a300fbffffff000005003100a3000c00a30000000000000005000000cd004800a300fdffffff000041000000cd0048001f0007000000a30005003100cd000c00a30003000000000005003100d90084000001f9ffffff00000500a300a3000c000001fdffffff00000500a300a3000c00c7000100000000000500c700a3000c00000102000000b50005003100d90084000001fdffffffcd0005003100d9000c00a30004000000b5007d00b500cd00840000010a000000cd0005000000000184000001f3ffffffcd0005000000000148003100fbffffffd9000500000000010c00310005000000cd0041000000000148002800fdffffffcd0041000000000148001f0008000000cd0041001f0000014800280009000000cd0005002800000184000001f9ffffffcd000500280000018400a600fdffffffd9000500310000010c00a30006000000cd004100280000018400a6000d000000cd007d00a600000184000001fdffffffcd007d00a60000018400b5000b000000cd007d00b5000001840000010c00000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 8b8ea05a917242593ce3441fd957b2dd
+      bytes[0]: 139
+      bytes[1]: 142
+      bytes[2]: 160
+      bytes[3]: 90
+      bytes[4]: 145
+      bytes[5]: 114
+      bytes[6]: 66
+      bytes[7]: 89
+      bytes[8]: 60
+      bytes[9]: 227
+      bytes[10]: 68
+      bytes[11]: 31
+      bytes[12]: 217
+      bytes[13]: 87
+      bytes[14]: 178
+      bytes[15]: 221
+  - m_MeshData: 56414e441000000000000000ffffffff000000000e000000200000000e000000000000001c0000001c00000000000000000000bfabaa2ac2abaa2a420000cc41000000000000c040000000005655153f00000ac20000d0405655153f00000ac20000d0405655153fabaa2ac2000000005655153fabaa2ac2000000005655153f000078c10000d0405655153f000078c1000008415655153f000078c1000008415655153f00000ac2000078415655153f000078c1000078415655153f00000ac2abaa2a425655153f000078c1abaa2a425655153f00000ac2000078415655153f000018c1abaa2a425655153f000018c1000078415655153f00000000abaa2a425655153f000000000000000055552941000016c20000084155552941000016c20000084155552941abaa2ac20000000055552941abaa2ac20000000055552941000010c20000084155552941000010c2abaa2a4255552941000016c2abaa2a4255552941abaa2ac200000000abaaa441000048c100000841abaaa441000048c100000841abaaa441000070c100000000abaaa441000070c100000000abaaa4410000000000000841abaaa4410000000000004841abaaa4410000000000004841abaaa441000048c1000001000200030000000000020000000680048000000000010000000400000004000500010000000000000000000300010004800000000001000000040000000500060007000100000000000000040000000200000000000100000004000000060008000900070000000000000005000000030000000000010000000400000008000a000b0009000000000006000080000004000000000001000000040000000c000d000a0008000000000007000080050000000000000001000000040000000e000f000d000c0000000000028000800600000000000000010000000400000010001100120013000000000009000a00068004800000000001000000040000001400150011001000000000000e000000080004800000000001000000040000001100160017001200000000000000008006800800000000000100000004000000180019001a001b00000000000c0000000e0004800000000001000000040000001c001d00190018000000000002800d000b0004800000000001000000040000001d001e001f001900000000000280000000000c000000000001000000040000001b001a0015001400000000000b00000009000480000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000184000001e5ffffff000005000000330084000001f3ffffff000005000000330048003100fbffffff00000500000027000c00310000000000000041000000330048002800fdffffff000041000000330048001f0007000000000041001f0033004800280008000000000005002800330084000001f9ffffff00000500280033008400a600fdffffff00000500310027000c00a3000100000000004100280033008400a6000d00000000007d00a600330084000001fdffffff00007d00a60033008400b5000a00000000007d00b5003300840000010b000000270005000000000184000001f3ffffff27000500000000014800a300fbffffff27000500310033000c00a3000200000033000500000000014800a300fdffffff3300050031005d000c00a30003000000330041000000000148001f0009000000330005003100000184000001f9ffffff5d000500310000010c00c700fdffffff5d000500310000010c00a300040000005d000500a30000010c00c7000500000033000500b500000184000001fdffffff33007d00b5004b00840000010c0000005d000500c70000010c0000010600000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 76396cc3923580cb450a51634015cbba
+      bytes[0]: 118
+      bytes[1]: 57
+      bytes[2]: 108
+      bytes[3]: 195
+      bytes[4]: 146
+      bytes[5]: 53
+      bytes[6]: 128
+      bytes[7]: 203
+      bytes[8]: 69
+      bytes[9]: 10
+      bytes[10]: 81
+      bytes[11]: 99
+      bytes[12]: 64
+      bytes[13]: 21
+      bytes[14]: 203
+      bytes[15]: 186
+  - m_MeshData: 56414e441000000001000000ffffffff00000000110000002400000011000000000000002200000022000000abaa2a42000000bfabaa2ac2abaaaa420000cc41000000000000c040abaa2a425655153f000078c1000032425655153f000078c1000032425655153f00000ac2abaa2a425655153f00000ac2abaa2a425655153f000018c1000032425655153f000018c1abaa2a425655153f00000000000032425655153f00000000000083425655153f00000ac20000aa425655153f00000ac20000aa425655153fabaa2ac2000083425655153fabaa2ac2000083425655153f000078c10000aa425655153f000078c1000083425655153f000018c10000aa425655153f000018c1abaaaa425655153f00000ac2abaaaa425655153fabaa2ac2abaaaa425655153f000078c1abaaaa425655153f000018c10000aa425655153f00000000abaaaa425655153f00000000abaa2a4255552941000016c200003e4255552941000016c200003e4255552941abaa2ac2abaa2a4255552941abaa2ac200007a4255552941000016c200007a4255552941abaa2ac200003e4255552941000010c200007a4255552941000010c200003e4255552941000018c100007a4255552941000018c100003e42555529410000000000007a4255552941000000000000824255552941000000000000824255552941000018c1000001000200030000000000020000000000048000000000010000000400000004000500010000000000000003000000010004800000000001000000040000000600070005000400000000000280000002000480000000000100000004000000080009000a000b000000000005000700068000000000000001000000040000000c000d00090008000000000006000800040000000000000001000000040000000e000f000d000c000000000000000900050000000000000001000000040000000900100011000a000000000008000080068004000000000001000000040000000d001200100009000000000009000080070005000000000001000000040000000f00130012000d00000000000a000080080006000000000001000000040000001400150013000f0000000000028000800900110000000000010000000400000016001700180019000000000000000c000680048000000000010000000400000017001a001b001800000000000d00000006800b000000000001000000040000001c001d001a001700000000000e0000000c0000000000000001000000040000001e001f001d001c00000000000f0000000d000000000000000100000004000000200021001f001e0000000000028010000e0000000000000001000000040000002100220023001f00000000000280110000000f00000000000100000004000000220014000f0023000000000002800a0000001000000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a00000000000200000000001c00000000000200000000001e000000000002000000000020000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000148000001dfffffff000005000000770048000001f1ffffff00000500000077004800a300f9ffffff000041000000770048001f00fdffffff0000410000001d0048001f000a0000001d0041000000770048001f000b000000000005001f0077004800a300fdffffff1d0041001f007700480028000c0000000000050031000b000c00a30000000000000005002800770048000001f9ffffff00000500280077004800c700fdffffff1d004100280077004800c7000d00000000000500a3000b000c00c7000100000000000500c700770048000001fdffffff00000500c7000b000c000001020000001d004100c7007700480000010e000000770005000000000148000001efffffff89000500000000010c00a300f9ffffff89000500000000010c003100fdffffff890005000000fe000c00310003000000fe000500000000010c0031000600000089000500310000010c00a300fdffffff890005003100fe000c00a30004000000fe000500310000010c00a3000700000077000500a300000148000001f7ffffff77000500c700fe0048000001fdffffff77004100c7008600480000010f00000086000500c700fe00480000011000000089000500a30000010c000001fbffffff89000500a300fe000c00c70005000000fe000500a30000010c000001fdfffffffe000500a30000010c00c70008000000fe000500c70000010c0000010900000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: b52eb4f602395ec50b185faa57da37df
+      bytes[0]: 181
+      bytes[1]: 46
+      bytes[2]: 180
+      bytes[3]: 246
+      bytes[4]: 2
+      bytes[5]: 57
+      bytes[6]: 94
+      bytes[7]: 197
+      bytes[8]: 11
+      bytes[9]: 24
+      bytes[10]: 95
+      bytes[11]: 170
+      bytes[12]: 87
+      bytes[13]: 218
+      bytes[14]: 55
+      bytes[15]: 223
+  - m_MeshData: 56414e441000000002000000ffffffff00000000040000000a00000004000000000000000800000008000000abaaaa42000000bfabaa2ac20000fa420000cc41000000000000c040abaaaa425655153f00000ac20000f7425655153f00000ac20000f7425655153fabaa2ac2abaaaa425655153fabaa2ac2abaaaa425655153f000078c10000f7425655153f000078c1abaaaa425655153f000018c10000f7425655153f000018c1abaaaa425655153f000000000000f7425655153f00000000000001000200030000000000020000000680048000000000010000000400000004000500010000000000000003000000010004800000000001000000040000000600070005000400000000000400000002000480000000000100000004000000080009000700060000000000028000000300048000000000010000000400000000000000000000000000020000000000020000000000020000000000040000000000020000000000060000000000020003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000e5000c000001f9ffffff000005000000e5000c00a300fdffffff000005000000e5000c00310000000000000005003100e5000c00a3000100000000000500a300e5000c000001fdffffff00000500a300e5000c00c7000200000000000500c700e5000c0000010300000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: f57a05674171e86fa4b22afe08a9abd6
+      bytes[0]: 245
+      bytes[1]: 122
+      bytes[2]: 5
+      bytes[3]: 103
+      bytes[4]: 65
+      bytes[5]: 113
+      bytes[6]: 232
+      bytes[7]: 111
+      bytes[8]: 164
+      bytes[9]: 178
+      bytes[10]: 42
+      bytes[11]: 254
+      bytes[12]: 8
+      bytes[13]: 169
+      bytes[14]: 171
+      bytes[15]: 214
+  - m_MeshData: 56414e4410000000fdffffff0000000000000000040000000a000000040000000000000008000000080000000000fac2000000bf00000000abaaaac20000cc41abaa2a420000c0400000f7c25655153f00001841abaaaac25655153f00001841abaaaac25655153f000000000000f7c25655153f000000000000f7c25655153f00007841abaaaac25655153f000078410000f7c25655153f00000a42abaaaac25655153f00000a420000f7c25655153fabaa2a42abaaaac25655153fabaa2a42000001000200030000000000020000800680000000000000010000000400000004000500010000000000000003000080010000000000000001000000040000000600070005000400000000000400008002000000000000000100000004000000080009000700060000000000028000800300000000000000010000000400000000000000000000000000020000000000020000000000020000000000040000000000020000000000060000000000020003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500090005000000ee000c000001f9ffffff090005000000ee000c005d00fdffffff090005000000ee000c00390000000000090005003900ee000c005d0001000000090005005d00ee000c000001fdffffff090005005d00ee000c00cf000200000009000500cf00ee000c0000010300000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: c9f1b9d400d8a7f5afaa1cfcbf041736
+      bytes[0]: 201
+      bytes[1]: 241
+      bytes[2]: 185
+      bytes[3]: 212
+      bytes[4]: 0
+      bytes[5]: 216
+      bytes[6]: 167
+      bytes[7]: 245
+      bytes[8]: 175
+      bytes[9]: 170
+      bytes[10]: 28
+      bytes[11]: 252
+      bytes[12]: 191
+      bytes[13]: 4
+      bytes[14]: 23
+      bytes[15]: 54
+  - m_MeshData: 56414e4410000000feffffff0000000000000000110000002400000011000000000000002200000022000000abaaaac2000000bf00000000abaa2ac20000cc41abaa2a420000c040abaaaac25655153f000018410000aac25655153f000018410000aac25655153f00000000abaaaac25655153f00000000abaaaac25655153f000078410000aac25655153f00007841abaaaac25655153f00000a420000aac25655153f00000a42abaaaac25655153fabaa2a420000aac25655153fabaa2a42000083c25655153f00007841000083c25655153f00001841000083c25655153f00000a42000083c25655153fabaa2a42000032c25655153f00001841abaa2ac25655153f00001841abaa2ac25655153f00000000000032c25655153f00000000000032c25655153f00007841abaa2ac25655153f00007841000032c25655153f00000a42abaa2ac25655153f00000a42000082c2555529410000184100007ac2555529410000184100007ac25555294100000000000082c2555529410000000000003ec2555529410000184100003ec2555529410000000000007ac2555529410000104200003ec2555529410000104200007ac2555529410000164200003ec2555529410000164200007ac255552941abaa2a4200003ec255552941abaa2a42abaa2ac255552941abaa2a42abaa2ac25555294100001642000001000200030000000000020011000680048000000000010000000400000004000500010000000000000003000500010004800000000001000000040000000600070005000400000000000400060002000480000000000100000004000000080009000700060000000000028007000300048000000000010000000400000005000a000b00010000000000060000000000020000000000010000000400000007000c000a00050000000000070000000500030000000000010000000400000009000d000c0007000000000002800000060004000000000001000000040000000e000f0010001100000000000900008006800000000000000100000004000000120013000f000e00000000000a00008008000000000000000100000004000000140015001300120000000000000000800900000000000000010000000400000016001700180019000000000000000c000680110000000000010000000400000017001a001b001800000000000d00000006800b000000000001000000040000001c001d001a001700000000000e0000000c0000000000000001000000040000001e001f001d001c00000000000f0000000d000000000000000100000004000000200021001f001e0000000000028010000e0000000000000001000000040000002100220023001f00000000000280008000000f0000000000010000000400000001001600190002000000000000000b0006800100000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a00000000000200000000001c00000000000200000000001e000000000002000000000020000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000148000001dfffffff0000050000007a0048000001f1ffffff0000050000007a0048005d00f9ffffff00000500000002000c005d00fdffffff00000500000002000c0039000000000000000500390002000c005d00010000000200050000007a0048005d00fdffffff02000500390077000c005d00040000000200050000007a004800390010000000000005005d0077000c000001f9ffffff000005005d0077000c00cf00fdffffff000005005d0002000c00cf0002000000020005005d0077000c00cf000500000000000500cf0077000c000001fdffffff00000500cf0002000c0000010300000002000500cf0077000c000001060000007a0005000000000148000001efffffff7a0005000000000148005d00f9ffffff7a0041000000e30048003900fdffffff7a00410000008900480039000a000000890041000000e300480039000b000000f5000500000000010c005d00fdfffffff5000500000000010c00390007000000f5000500390000010c005d0008000000890005003900000148000001f7ffffff89000500390000014800d800fdffffff890041003900e3004800d8000c000000f50005005d0000010c00cf000900000089004100d800000148000001fbffffff89004100d800e3004800e1000d00000089004100e100000148000001fdffffff89004100e100e300480000010e000000e3004100e1000001480000010f00000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: aba514ae50f0bc0f745d1d18da81fe07
+      bytes[0]: 171
+      bytes[1]: 165
+      bytes[2]: 20
+      bytes[3]: 174
+      bytes[4]: 80
+      bytes[5]: 240
+      bytes[6]: 188
+      bytes[7]: 15
+      bytes[8]: 116
+      bytes[9]: 93
+      bytes[10]: 29
+      bytes[11]: 24
+      bytes[12]: 218
+      bytes[13]: 129
+      bytes[14]: 254
+      bytes[15]: 7
+  - m_MeshData: 56414e4410000000ffffffff00000000000000000e000000200000000e000000000000001c0000001c000000abaa2ac2000000bf00000000000000000000cc41abaa2a420000c040abaa2ac25655153f00001841000078c15655153f00001841000078c15655153f00000000abaa2ac25655153f00000000abaa2ac25655153f00007841000078c15655153f00007841abaa2ac25655153f00000a42000078c15655153f00000a42000008c15655153f00000a42000008c15655153f000078410000d0c05655153f00000a420000d0c05655153f00007841000000005655153f00000a42000000005655153f000078410000d0c05655153fabaa2a42000000005655153fabaa2a42abaa2ac255552941abaa2a42000008c155552941abaa2a42000008c15555294100001642abaa2ac25555294100001642000000005555294100001642000000005555294100001042000008c155552941000010420000000055552941abaa2a42000048c1abaaa44100004841000008c1abaaa44100004841000008c1abaaa44100000000000048c1abaaa4410000000000000000abaaa4410000484100000000abaaa44100000000000008c1abaaa4410000704100000000abaaa44100007041000001000200030000000000020000000680048000000000010000000400000004000500010000000000000003000000010004800000000001000000040000000600070005000400000000000000040002000480000000000100000004000000070008000900050000000000000005000000030000000000010000000400000008000a000b0009000000000000000600000004000000000001000000040000000a000c000d000b000000000007000080000005000000000001000000040000000e000f000c000a0000000000028000800600000000000000010000000400000010001100120013000000000002800a00000004800000000001000000040000001200140015001600000000000a0000800e0000000000000001000000040000001100170014001200000000000280008009000800000000000100000004000000180019001a001b000000000000000c000680000000000000010000000400000019001c001d001a00000000000d00008006800b000000000001000000040000001e001f001c001900000000000e0000800c000000000000000100000004000000160015001f001e0000000000090000800d000000000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000184000001e5ffffff000005000000d90084000001f3ffffff000005000000cd0084005d00fbffffff000005000000a3000c00390000000000000005000000cd0084005d00fdffffff000005003900a3000c005d0001000000b5007d000000cd0084004b000a000000000005005d00d90048000001f9ffffff000005005d00cd0048000001fdffffff000005005d00a3000c00cf000200000000004100e100cd004800000107000000a30005005d00d9000c00cf00fdffffffa30005005d00cd000c00cf0003000000cd0005005d00d9000c00cf0004000000cd0005000000000184000001f3ffffffcd000500000000018400cf00fbffffffcd007d000000000184004b000b000000cd0005004b0000018400cf00fdffffffcd007d004b00000184005a000c000000d90005005d0000010c00cf0005000000cd0005005a00000184000001f9ffffffcd0041005a0000018400e100fdffffffcd0041005a0000018400d8000d000000cd004100d80000014800e10008000000cd000500cf00000148000001fdffffffd9000500cf0000010c00000106000000cd004100e1000001480000010900000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 91b8ef176d2320258172ab88b827d14d
+      bytes[0]: 145
+      bytes[1]: 184
+      bytes[2]: 239
+      bytes[3]: 23
+      bytes[4]: 109
+      bytes[5]: 35
+      bytes[6]: 32
+      bytes[7]: 37
+      bytes[8]: 129
+      bytes[9]: 114
+      bytes[10]: 171
+      bytes[11]: 136
+      bytes[12]: 184
+      bytes[13]: 39
+      bytes[14]: 209
+      bytes[15]: 77
+  - m_MeshData: 56414e44100000000000000000000000000000000e000000200000000e000000000000001c0000001c00000000000000000000bf00000000abaa2a420000cc41abaa2a420000c040000000005655153f00000a420000d0405655153f00000a420000d0405655153f00007841000000005655153f00007841000000005655153fabaa2a420000d0405655153fabaa2a42000008415655153f00000a42000008415655153f00007841000078415655153f00000a42000078415655153f00007841000078415655153f00001841abaa2a425655153f00001841abaa2a425655153f00000000000078415655153f00000000abaa2a425655153f00007841abaa2a425655153f00000a420000000055552941000016420000084155552941000016420000084155552941000010420000000055552941000010420000000055552941abaa2a420000084155552941abaa2a42abaa2a4255552941abaa2a42abaa2a42555529410000164200000000abaaa4410000484100000841abaaa4410000484100000841abaaa4410000000000000000abaaa4410000000000000000abaaa4410000704100000841abaaa4410000704100004841abaaa4410000484100004841abaaa4410000000000000100020003000000000002000300000004800000000001000000040000000400050001000000000000000280000001000480000000000100000004000000010006000700020000000000000004000000010000000000010000000400000006000800090007000000000000000700000003000000000001000000040000000a000b000c000d0000000000060000800680000000000000010000000400000009000e000b000a0000000000070000800500000000000000010000000400000008000f000e000900000000000000008006000400000000000100000004000000100011001200130000000000090000000e00048000000000010000000400000014001500110010000000000002800a00080004800000000001000000040000001500160017001100000000000280008000000900000000000100000004000000180019001a001b00000000000c000d00068004800000000001000000040000001c001d0019001800000000000e0000000b00048000000000010000000400000019001e001f001a00000000000000000006800b00000000000100000004000000130012001d001c0000000000080000000c000480000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000184000001e5ffffff000005000000330084000001f3ffffff00000500000033008400cf00fbffffff00007d000000330084004b000a000000000005004b0033008400cf00fdffffff00007d004b00330084005a000b000000000005005d0027000c00cf0000000000000005005a00330084000001f9ffffff000041005a0033008400e100fdffffff000041005a0033008400d8000d00000000004100d80033004800e1000700000000000500cf00330048000001fdffffff00000500cf0027000c0000010100000000004100e10033004800000108000000270005000000000184000001f3ffffff330005000000000184005d00fbffffff33007d0000004b0084004b000c0000005d000500000000010c005d00fdffffff5d000500000000010c003900040000005d000500390000010c005d0005000000270005005d00000148000001f9ffffff270005005d005d000c00cf00fdffffff270005005d0033000c00cf0002000000330005005d005d000c00cf0003000000330005005d00000148000001fdffffff33004100e100000148000001090000005d0005005d0000010c00cf000600000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: e828a8c8a1c9f1fad6b0cdc3d064fd7e
+      bytes[0]: 232
+      bytes[1]: 40
+      bytes[2]: 168
+      bytes[3]: 200
+      bytes[4]: 161
+      bytes[5]: 201
+      bytes[6]: 241
+      bytes[7]: 250
+      bytes[8]: 214
+      bytes[9]: 176
+      bytes[10]: 205
+      bytes[11]: 195
+      bytes[12]: 208
+      bytes[13]: 100
+      bytes[14]: 253
+      bytes[15]: 126
+  - m_MeshData: 56414e4410000000010000000000000000000000110000002400000011000000000000002200000022000000abaa2a42000000bf00000000abaaaa420000cc41abaa2a420000c040abaa2a425655153f00001841000032425655153f00001841000032425655153f00000000abaa2a425655153f00000000abaa2a425655153f00007841000032425655153f00007841abaa2a425655153f00000a42000032425655153f00000a42000083425655153f000078410000aa425655153f000078410000aa425655153f00001841000083425655153f00001841000083425655153f00000a420000aa425655153f00000a42000083425655153fabaa2a420000aa425655153fabaa2a42abaaaa425655153f00001841abaaaa425655153f000000000000aa425655153f00000000abaaaa425655153f00007841abaaaa425655153f00000a42abaaaa425655153fabaa2a42abaa2a4255552941abaa2a4200003e4255552941abaa2a4200003e425555294100001642abaa2a42555529410000164200003e42555529410000184100007a42555529410000184100007a42555529410000000000003e42555529410000000000003e42555529410000104200007a42555529410000104200007a42555529410000164200007a4255552941abaa2a42000082425555294100001841000082425555294100000000000001000200030000000000020000000680048000000000010000000400000004000500010000000000000003000000010004800000000001000000040000000600070005000400000000000000000002000480000000000100000004000000080009000a000b000000000005000800000000000000000001000000040000000c000d00090008000000000006000900040000000000000001000000040000000e000f000d000c000000000002800a00050000000000000001000000040000000a001000110012000000000008000080068011000000000001000000040000000900130010000a000000000009000080070004000000000001000000040000000d00140013000900000000000a000080080005000000000001000000040000000f00150014000d0000000000028000800900060000000000010000000400000016001700180019000000000002800f00000004800000000001000000040000001a001b001c001d00000000000d001000068000000000000001000000040000001e001f001b001a00000000000e0000000c000000000000000100000004000000180020001f001e00000000000f0000000d000000000000000100000004000000170021002000180000000000028000000e000b000000000001000000040000001b00220023001c00000000000000110006800c0000000000010000000400000022000a0012002300000000000000070006801000000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200000000001000000000000200000000001200000000000200000000001400000000000200000000001600000000000200000000001800000000000200000000001a00000000000200000000001c00000000000200000000001e000000000002000000000020000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000000148000001dfffffff000005000000770048000001f1ffffff00000500000077004800d800f9ffffff000005000000770048003900fdffffff0000050000000b000c003900000000001d00410000007700480039000b00000000000500390077004800d800fdffffff0000050039000b000c005d00010000001d004100390077004800d8000c000000000005005d00770048000001f9ffffff000005005d0077004800e100fdffffff000005005d000b000c00cf00020000001d004100d80077004800e1000d00000000004100e100770048000001fdffffff00004100e1001d00480000010a0000001d004100e1007700480000010e000000770005000000000148000001efffffff770005000000000148005d00f9ffffff770005000000fe0048003900fdffffff7700410000008600480039000f000000860005000000fe00480039001000000089000500000000010c005d00fdffffff890005003900fe000c005d0003000000fe000500000000010c0039000600000089000500390000010c000001f7ffffff89000500390000010c00cf00fdfffffffe000500390000010c005d0007000000890005005d00fe000c00cf0004000000890005005d0000010c000001fbfffffffe0005005d0000010c00cf000800000089000500cf0000010c000001fdffffff89000500cf00fe000c00000105000000fe000500cf0000010c0000010900000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: f69f48045391bd7f0653a0f0dbd3d452
+      bytes[0]: 246
+      bytes[1]: 159
+      bytes[2]: 72
+      bytes[3]: 4
+      bytes[4]: 83
+      bytes[5]: 145
+      bytes[6]: 189
+      bytes[7]: 127
+      bytes[8]: 6
+      bytes[9]: 83
+      bytes[10]: 160
+      bytes[11]: 240
+      bytes[12]: 219
+      bytes[13]: 211
+      bytes[14]: 212
+      bytes[15]: 82
+  - m_MeshData: 56414e4410000000020000000000000000000000040000000a00000004000000000000000800000008000000abaaaa42000000bf000000000000fa420000cc41abaa2a420000c040abaaaa425655153f000018410000f7425655153f000018410000f7425655153f00000000abaaaa425655153f00000000abaaaa425655153f000078410000f7425655153f00007841abaaaa425655153f00000a420000f7425655153f00000a42abaaaa425655153fabaa2a420000f7425655153fabaa2a42000001000200030000000000020000000680048000000000010000000400000004000500010000000000000003000000010004800000000001000000040000000600070005000400000000000400000002000480000000000100000004000000080009000700060000000000028000000300048000000000010000000400000000000000000000000000020000000000020000000000020000000000040000000000020000000000060000000000020003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500000005000000e5000c000001f9ffffff000005000000e5000c005d00fdffffff000005000000e5000c00390000000000000005003900e5000c005d0001000000000005005d00e5000c000001fdffffff000005005d00e5000c00cf000200000000000500cf00e5000c0000010300000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 0a063e5474649f2ae3eace5f6a5e3038
+      bytes[0]: 10
+      bytes[1]: 6
+      bytes[2]: 62
+      bytes[3]: 84
+      bytes[4]: 116
+      bytes[5]: 100
+      bytes[6]: 159
+      bytes[7]: 42
+      bytes[8]: 227
+      bytes[9]: 234
+      bytes[10]: 206
+      bytes[11]: 95
+      bytes[12]: 106
+      bytes[13]: 94
+      bytes[14]: 48
+      bytes[15]: 56
+  - m_MeshData: 56414e4410000000fdffffff01000000000000000200000006000000020000000000000004000000040000000000fac2000000bfabaa2a42abaaaac20000cc41000096420000c0400000f7c25655153f00005e42abaaaac25655153f00005e42abaaaac25655153fabaa2a420000f7c25655153fabaa2a420000f7c25655153f00009542abaaaac25655153f00009542000001000200030000000000020000800680000000000000010000000400000004000500010000000000000000000080010000000000000001000000040000000000000000000000000002000000000002000000000002000300000002001100000001000200050003000000020011000000010002000500090005000000ee000c00bf00fdffffff090005000000ee000c004d0000000000090005004d00ee000c00bf000100000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 224c14efbe204c3e174ffe2f3bffbbde
+      bytes[0]: 34
+      bytes[1]: 76
+      bytes[2]: 20
+      bytes[3]: 239
+      bytes[4]: 190
+      bytes[5]: 32
+      bytes[6]: 76
+      bytes[7]: 62
+      bytes[8]: 23
+      bytes[9]: 79
+      bytes[10]: 254
+      bytes[11]: 47
+      bytes[12]: 59
+      bytes[13]: 255
+      bytes[14]: 187
+      bytes[15]: 222
+  - m_MeshData: 56414e4410000000feffffff0100000000000000080000001300000008000000000000001000000010000000abaaaac2000000bfabaa2a42abaa2ac20000cc41000096420000c040abaaaac25655153f00005e420000aac25655153f00005e420000aac25655153fabaa2a42abaaaac25655153fabaa2a42abaaaac25655153f000095420000aac25655153f00009542000083c25655153f00005e42000083c25655153fabaa2a42000083c25655153f00009542000032c25655153f00009542000032c25655153f00005e42abaa2ac25655153f00009542abaa2ac25655153f00005e4200007ac2555529410000524200003ec2555529410000524200003ec255552941abaa2a4200007ac255552941abaa2a42abaa2ac25555294100005242abaa2ac255552941abaa2a420000010002000300000000000200030006800480000000000100000004000000040005000100000000000000000004000100048000000000010000000400000001000600070002000000000004000000068001000000000001000000040000000500080006000100000000000000050003000200000000000100000004000000080009000a00060000000000000006000000040000000000010000000400000009000b000c000a000000000000000080000005000000000001000000040000000d000e000f0010000000000000000800068000000000000001000000040000000e00110012000f00000000000000008006800700000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500000000014800bf00f1ffffff00000500000077000c00bf00f9ffffff00000500000077000c004d00fdffffff00000500000002000c004d000000000002000500000077000c004d0002000000000005004d0077000c00bf00fdffffff000005004d0002000c00bf0001000000020005004d0077000c00bf000300000077000500000000014800bf00f9ffffff890041000000000148003b00fdffffff890041000000e30048003b0006000000e30041000000000148003b0007000000770005004d0000010c00bf00fdffffff770005004d00f5000c00bf0004000000f50005004d0000010c00bf000500000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 850755c4cd87b9d26c8ce45a6e205605
+      bytes[0]: 133
+      bytes[1]: 7
+      bytes[2]: 85
+      bytes[3]: 196
+      bytes[4]: 205
+      bytes[5]: 135
+      bytes[6]: 185
+      bytes[7]: 210
+      bytes[8]: 108
+      bytes[9]: 140
+      bytes[10]: 228
+      bytes[11]: 90
+      bytes[12]: 110
+      bytes[13]: 32
+      bytes[14]: 86
+      bytes[15]: 5
+  - m_MeshData: 56414e4410000000ffffffff0100000000000000070000001200000007000000000000000e0000000e000000abaa2ac2000000bfabaa2a42000000000000cc41000096420000c040abaa2ac25655153f00009542000078c15655153f00009542000078c15655153f00005e42abaa2ac25655153f00005e42000008c15655153f00009542000008c15655153f00005e420000d0c05655153f000095420000d0c05655153f00005e42000000005655153f00005e42000000005655153fabaa2a420000d0c05655153fabaa2a42000000005655153f00009542abaa2ac25555294100005242000008c15555294100005242000008c155552941abaa2a42abaa2ac255552941abaa2a420000000055552941000052420000000055552941abaa2a420000010002000300000000000000020000000480000000000100000004000000010004000500020000000000000003000000010000000000010000000400000004000600070005000000000000000500000002000000000001000000040000000700080009000a0000000000050000800680000000000000010000000400000006000b00080007000000000000000080040003000000000001000000040000000c000d000e000f000000000000000700068004800000000001000000040000000d00100011000e00000000000000008006800600000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500000000014800bf00f3ffffff000005000000cd004800bf00fbffffff000005004d00a3000c00bf0000000000000005000000cd004800bf00fdffffff000041000000cd0048003b0005000000a30005004d00cd000c00bf0001000000cd000500000000014800bf00f9ffffffcd0005000000000148004d00fdffffffcd0041000000000148003b0006000000d9000500000000010c004d0003000000cd0005004d0000010c00bf00fdffffffcd0005004d00d9000c00bf0002000000d90005004d0000010c00bf000400000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: b3a6b5b873faf625500266565a3487ef
+      bytes[0]: 179
+      bytes[1]: 166
+      bytes[2]: 181
+      bytes[3]: 184
+      bytes[4]: 115
+      bytes[5]: 250
+      bytes[6]: 246
+      bytes[7]: 37
+      bytes[8]: 80
+      bytes[9]: 2
+      bytes[10]: 102
+      bytes[11]: 86
+      bytes[12]: 90
+      bytes[13]: 52
+      bytes[14]: 135
+      bytes[15]: 239
+  - m_MeshData: 56414e4410000000000000000100000000000000070000001200000007000000000000000e0000000e00000000000000000000bfabaa2a42abaa2a420000cc41000096420000c040000000005655153f00005e420000d0405655153f00005e420000d0405655153fabaa2a42000000005655153fabaa2a42000000005655153f000095420000d0405655153f00009542000008415655153f00009542000008415655153f00005e42000078415655153f00009542000078415655153f00005e42abaa2a425655153f00009542abaa2a425655153f00005e420000000055552941000052420000084155552941000052420000084155552941abaa2a420000000055552941abaa2a42abaa2a425555294100005242abaa2a4255552941abaa2a42000001000200030000000000020000000680048000000000010000000400000004000500010000000000000000000300010004800000000001000000040000000500060007000100000000000000040000000200000000000100000004000000060008000900070000000000000005000000030000000000010000000400000008000a000b0009000000000000000080000004000000000001000000040000000c000d000e000f000000000000000700068004800000000001000000040000000d00100011000e00000000000000008006800600000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c000000000002000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500000000014800bf00f3ffffff00000500000033004800bf00fbffffff000041000000330048003b000500000000000500000027000c00bf00fdffffff00000500000027000c004d0000000000000005004d0027000c00bf000100000027000500000000014800bf00f9ffffff270005004d005d000c00bf00fdffffff270005004d0033000c00bf0002000000330005004d005d000c00bf000300000033000500000000014800bf00fdffffff330041000000000148003b00060000005d0005004d0000010c00bf000400000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: b28d06d5b6dc1a5d9246dca9e5fe2cb6
+      bytes[0]: 178
+      bytes[1]: 141
+      bytes[2]: 6
+      bytes[3]: 213
+      bytes[4]: 182
+      bytes[5]: 220
+      bytes[6]: 26
+      bytes[7]: 93
+      bytes[8]: 146
+      bytes[9]: 70
+      bytes[10]: 220
+      bytes[11]: 169
+      bytes[12]: 229
+      bytes[13]: 254
+      bytes[14]: 44
+      bytes[15]: 182
+  - m_MeshData: 56414e4410000000010000000100000000000000080000001300000008000000000000001000000010000000abaa2a42000000bfabaa2a42abaaaa420000cc41000096420000c040abaa2a425655153f00009542000032425655153f00009542000032425655153f00005e42abaa2a425655153f00005e42000083425655153f00009542000083425655153f00005e420000aa425655153f00005e420000aa425655153fabaa2a42000083425655153fabaa2a420000aa425655153f00009542abaaaa425655153f00005e42abaaaa425655153fabaa2a42abaaaa425655153f00009542abaa2a42555529410000524200003e42555529410000524200003e4255552941abaa2a42abaa2a4255552941abaa2a4200007a42555529410000524200007a4255552941abaa2a42000001000200030000000000000002000000048000000000010000000400000001000400050002000000000000000400000001000000000001000000040000000500060007000800000000000400050006800000000000000100000004000000040009000600050000000000000006000300020000000000010000000400000006000a000b00070000000000060000800680030000000000010000000400000009000c000a0006000000000000000080050004000000000001000000040000000d000e000f0010000000000000000800068004800000000001000000040000000e00110012000f00000000000000000006800700000000000100000004000000000000000000000000000200000000000200000000000200000000000400000000000200000000000600000000000200000000000800000000000200000000000a00000000000200000000000c00000000000200000000000e00000000000200030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050003000000020011000000010002000500030000000200110000000100020005000300000002001100000001000200050000000500000000014800bf00f1ffffff00000500000089004800bf00f9ffffff000041000000770048003b00fdffffff0000410000001d0048003b00060000001d0041000000770048003b0007000000000005004d0089000c00bf00fdffffff000005004d000b000c00bf00000000000b0005004d0089000c00bf000100000089000500000000010c00bf00f9ffffff89000500000000010c004d00fdffffff890005000000fe000c004d0002000000fe000500000000010c004d0004000000890005004d0000010c00bf00fdffffff890005004d00fe000c00bf0003000000fe0005004d0000010c00bf000500000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 3ee617a6ab0cff013c43b225c896c9fa
+      bytes[0]: 62
+      bytes[1]: 230
+      bytes[2]: 23
+      bytes[3]: 166
+      bytes[4]: 171
+      bytes[5]: 12
+      bytes[6]: 255
+      bytes[7]: 1
+      bytes[8]: 60
+      bytes[9]: 67
+      bytes[10]: 178
+      bytes[11]: 37
+      bytes[12]: 200
+      bytes[13]: 150
+      bytes[14]: 201
+      bytes[15]: 250
+  - m_MeshData: 56414e4410000000020000000100000000000000020000000600000002000000000000000400000004000000abaaaa42000000bfabaa2a420000fa420000cc41000096420000c040abaaaa425655153f00005e420000f7425655153f00005e420000f7425655153fabaa2a42abaaaa425655153fabaa2a42abaaaa425655153f000095420000f7425655153f00009542000001000200030000000000020000000680048000000000010000000400000004000500010000000000000000000000010004800000000001000000040000000000000000000000000002000000000002000000000002000300000002001100000001000200050003000000020011000000010002000500000005000000e5000c00bf00fdffffff000005000000e5000c004d0000000000000005004d00e5000c00bf000100000000000000000000000000000000000000
+    m_Hash:
+      serializedVersion: 2
+      Hash: 6d7a97b5f75f3e5590af3fc84a104273
+      bytes[0]: 109
+      bytes[1]: 122
+      bytes[2]: 151
+      bytes[3]: 181
+      bytes[4]: 247
+      bytes[5]: 95
+      bytes[6]: 62
+      bytes[7]: 85
+      bytes[8]: 144
+      bytes[9]: 175
+      bytes[10]: 63
+      bytes[11]: 200
+      bytes[12]: 74
+      bytes[13]: 16
+      bytes[14]: 66
+      bytes[15]: 115
+  m_NavMeshBuildSettings:
+    serializedVersion: 3
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.75
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    manualTileSize: 0
+    tileSize: 256
+    buildHeightMesh: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
+    debug:
+      m_Flags: 0
+  m_Heightmaps: []
+  m_HeightMeshes: []
+  m_OffMeshLinks: []
+  m_SourceBounds:
+    m_Center: {x: 0, y: 10.458334, z: 0}
+    m_Extent: {x: 124, y: 10.125, z: 75}
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Position: {x: 0, y: 0, z: 0}
+  m_AgentTypeID: 0
+--- !u!1 &850000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 850000001}
+  - component: {fileID: 850000002}
+  - component: {fileID: 850000003}
+  - component: {fileID: 850000004}
+  m_Layer: 5
+  m_Name: HUD_Mira
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &850000001
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 850000011}
+  - {fileID: 850000021}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!223 &850000002
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000000}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 100
+  m_TargetDisplay: 0
+--- !u!114 &850000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0.5
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!114 &850000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!1 &850000010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 850000011}
+  - component: {fileID: 850000012}
+  - component: {fileID: 850000013}
+  m_Layer: 5
+  m_Name: ReticuloCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &850000011
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000010}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 850000001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 36, y: 36}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &850000012
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000010}
+  m_CullTransparentMesh: 1
+--- !u!114 &850000013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.85}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &850000020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 850000021}
+  - component: {fileID: 850000022}
+  - component: {fileID: 850000023}
+  m_Layer: 5
+  m_Name: ReticuloCanhao
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &850000021
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000020}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 850000001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 44, y: 44}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &850000022
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000020}
+  m_CullTransparentMesh: 1
+--- !u!114 &850000023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850000020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.55, b: 0.1, a: 0.95}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 800000001}
   - {fileID: 330585546}
   - {fileID: 832575519}
   - {fileID: 410087041}
@@ -26971,3 +28676,4 @@ SceneRoots:
   - {fileID: 429868343}
   - {fileID: 1584804302}
   - {fileID: 1953590248}
+  - {fileID: 850000001}

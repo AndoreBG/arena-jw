@@ -39,6 +39,36 @@ public sealed class TankTurretAim : MonoBehaviour
     private Vector3 connectionPointInBarrelSpace;
     private Vector3 connectionPointInTurretSpace;
 
+    /// <summary>Transform que gira a torre horizontalmente.</summary>
+    public Transform Turret => turret;
+
+    /// <summary>Transform cuja frente (+Z) representa a direção atual do canhão (Trabuco).</summary>
+    public Transform AimReference => aimReference;
+
+    /// <summary>Câmera usada como referência de mira.</summary>
+    public Camera AimCamera => aimCamera != null ? aimCamera : Camera.main;
+
+    /// <summary>Direção atual do canhão no espaço do mundo.</summary>
+    public Vector3 BarrelDirection => aimReference != null ? aimReference.forward : transform.forward;
+
+    /// <summary>Posição da extremidade frontal (boca) do canhão no espaço do mundo.</summary>
+    public Vector3 BarrelMuzzlePosition
+    {
+        get
+        {
+            if (aimReference == null)
+                return transform.position;
+
+            if (barrelBounds != null)
+            {
+                Vector3 muzzleLocal = barrelBounds.center + Vector3.forward * (barrelBounds.size.z * 0.5f);
+                return aimReference.TransformPoint(muzzleLocal);
+            }
+
+            return aimReference.position;
+        }
+    }
+
     private void Awake()
     {
         if (aimCamera == null)
