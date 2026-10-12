@@ -29,6 +29,23 @@ public sealed class TankAimReticleHUD : MonoBehaviour
         Depletes
     }
 
+    /// <summary>De onde sai o raio que gera a posição do retículo do canhão na tela.</summary>
+    public enum AimProjectionOrigin
+    {
+        /// <summary>
+        /// O raio sai da câmera na direção do cano. Quando o cano aponta para onde a câmera
+        /// aponta, os dois retículos coincidem exatamente, e o retículo do canhão mede só o
+        /// desvio angular do cano. (Recomendado: remove o desalinhamento por paralaxe.)
+        /// </summary>
+        CameraAligned,
+        /// <summary>
+        /// O raio sai da boca do cano (FX_Tiro). Mostra onde o canhão realmente passa no mundo,
+        /// inclusive a paralaxe entre a câmera e o cano — que deixa os dois retículos separados
+        /// mesmo com o cano alinhado à câmera.
+        /// </summary>
+        BarrelMuzzle
+    }
+
     /// <summary>Método de preenchimento aplicado ao Image do retículo.</summary>
     public enum ReloadFillMethod
     {
@@ -53,7 +70,13 @@ public sealed class TankAimReticleHUD : MonoBehaviour
     [SerializeField] private Camera aimCamera;
 
     [Header("Projeção da Direção do Canhão")]
-    [Tooltip("Distância fixa à frente do canhão usada para projetar o retículo do canhão na tela.")]
+    [Tooltip("Origem do raio projetado. CameraAligned = os dois retículos ficam coincidentes quando " +
+             "o cano está alinhado à câmera (sem o deslocamento de paralaxe). BarrelMuzzle = parte da " +
+             "boca do cano e mostra a posição real do cano no mundo.")]
+    [SerializeField] private AimProjectionOrigin projectionOrigin = AimProjectionOrigin.CameraAligned;
+
+    [Tooltip("Distância ao longo da direção do cano usada para projetar o retículo na tela. Com " +
+             "origem na boca do cano, aumentar reduz o efeito da paralaxe (não elimina).")]
     [SerializeField, Min(1f)] private float aimDistance = 50f;
 
     [Header("Retículos (criados por você, com Source Image próprio)")]
@@ -141,6 +164,13 @@ public sealed class TankAimReticleHUD : MonoBehaviour
 
     /// <summary>True enquanto a animação de recarga está rolando.</summary>
     public bool IsReloading => reloadActive;
+
+    /// <summary>Origem do raio usado para projetar o retículo do canhão.</summary>
+    public AimProjectionOrigin ProjectionOrigin
+    {
+        get => projectionOrigin;
+        set => projectionOrigin = value;
+    }
 
     /// <summary>Retículo do canhão, para quem quiser ler/ajustar o desenho no runtime.</summary>
     public RectTransform BarrelReticle => barrelReticle;
@@ -254,7 +284,7 @@ public sealed class TankAimReticleHUD : MonoBehaviour
     /// </summary>
     private void UpdateBarrelDirectionReticle()
     {
-        Vector3 origin = GetBarrelOriginPosition();
+        Vector3 origin = GetProjectionOrigin();
         Vector3 direction = GetBarrelDirection();
         Vector3 worldAimPoint = origin + direction * aimDistance;
 
@@ -286,6 +316,18 @@ public sealed class TankAimReticleHUD : MonoBehaviour
             // mesmo com CanvasScaler em Scale With Screen Size.
             reticle.anchoredPosition = localPoint + offset;
         }
+    }
+
+    private Vector3 GetProjectionOrigin()
+    {
+        // CameraAligned projeta a DIREÇÃO a partir do olho da câmera: um ponto sobre o eixo da
+        // câmera cai sempre no centro da tela, então alinhar o cano à câmera alinha os retículos.
+        // A boca do cano deslocada alguns metros da câmera produziria ali um desvio de dezenas de
+        // pixels (paralaxe), que é o que separa os dois retículos no modo BarrelMuzzle.
+        if (projectionOrigin == AimProjectionOrigin.CameraAligned && aimCamera != null)
+            return aimCamera.transform.position;
+
+        return GetBarrelOriginPosition();
     }
 
     private Vector3 GetBarrelOriginPosition()

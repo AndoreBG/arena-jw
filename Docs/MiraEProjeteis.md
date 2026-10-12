@@ -60,6 +60,45 @@ Caso você queira "mira deslocada = tiro deslocado", não é preciso mexer no HU
 usa `firePoint`/`barrelTransform` como origem e direção, e é lá que um offset de mira vira
 compensação de ballistic drop (basta rotacionar/ajustar a direção do tiro em `TryRequestProjectile`).
 
+## 2b. Por que os dois retículos estavam desalinhados (e o que mudou)
+
+O retículo do canhão era projetado assim:
+
+```
+pontoNoMundo = bocaDoCano (FX_Tiro) + direçãoDoCano * aimDistance   // aimDistance = 50
+naTela       = camera.WorldToScreenPoint(pontoNoMundo)
+```
+
+A **câmera orbital não está na boca do cano**: ela fica ~6,5 m atrás do tanque e o cano sai deslocado
+para cima/frente. Esse deslocamento lateral entre os dois "olhos" é a **paralaxe**. Quando o cano está
+perfeitamente alinhado com o olhar (que é o caso da maior parte do tempo, já que a torre segue a
+câmera em yaw e a elevação segue até o limite), o ponto a 50 m na frente do cano **não** está sobre o
+eixo da câmera — então ele projeta alguns dezenas de pixels fora do centro, e os dois retículos
+parecem "soltos" um em relação ao outro. O valor é `atan(separaçãoPerpendicular / 50)`; com ~1,5 a
+2 m de separação e FOV 60 em 1080p, são ~25 a 40 px de desvio constante.
+
+Novo campo no `TankAimReticleHUD`:
+
+| Campo | Default | O que faz |
+|---|---|---|
+| `Projection Origin` | `CameraAligned` | `CameraAligned` projeta **a direção do cano a partir do olho da câmera**: um ponto sobre o eixo da câmera cai sempre no centro da tela, então ** Cano alinhado ao olhar ⇒ os dois retículos coincidem exatamente** e o retículo do canhão passa a medir só o desvio *angular* do cano (que é o que você quer ver). `BarrelMuzzle` volta ao comportamento antigo (parte da boca do cano e mostra a posição real do cano no mundo, paralaxe incluída). |
+| `Aim Distance` | `50` | Comprimento do raio. No modo `BarrelMuzzle`, aumentar derruba o efeito da paralaxe (não zera: em 1000 m o desvio cai ~16x). |
+
+Medido no harness (câmera e cano com a mesma direção, boca do cano deslocada do olho da câmera):
+`BarrelMuzzle` = 268 px de separação; `CameraAligned` = 0,00 px. E girar o cano 10° continua movendo
+o retículo do canhão para o lado correspondente, simétrico para os dois lados — ou seja, o retículo
+não foi "colado" no centro, ele ainda acompanha o cano.
+
+### Duas outras separações que são esperadas (não são bugs)
+
+1. **Limites de elevação.** A cena tem `TankTurretAim.Elevation Limits = (-15, 5)` e
+   `MouseOrbitCamera.Pitch Limits = (-15, 20)`. Ao olhar acima de 5°, o cano trava no limite e o
+   retículo do canhão se afasta do central — corretamente, porque o cano realmente não alcança. Se
+   quiser que os dois andem juntos o tempo todo, iguale os limites (ex.: cano em `-15..20`).
+2. **Velocidade da torre.** `Rotation Speed = 90 °/s` e `Elevation Speed = 40 °/s`: ao mover o mouse,
+   o retículo do canhão persegue o cano e chega depois do central. Em movimento é esperado; em
+   repouso, com `CameraAligned`, os dois ficam no mesmo pixel.
+
 ## 3. Animação de recarga no retículo do canhão
 
 O retículo que representa o canhão usa o **próprio `Image`** como medidor de cooldown — igual à
@@ -162,7 +201,7 @@ pool.GetStats(out int emVoo, out int criados, out int capacidade, out int totalD
 
 | Arquivo | O que houve |
 |---|---|
-| `TankAimReticleHUD.cs` | reescrito: sem criação de canvas/retículos/sprites; offsets em pixels; animação de recarga por `Filled`; aviso de anchor; resolução tardia do `TankPlayerInput` |
+| `TankAimReticleHUD.cs` | reescrito: sem criação de canvas/retículos/sprites; offsets em pixels; projeção da direção do cano com origem alinhada à câmera (`Projection Origin`); animação de recarga por `Filled`; aviso de anchor; resolução tardia do `TankPlayerInput` |
 | `TankProjectilePool.cs` | **novo** — pool de teto rígido, API de instância + estática (`Spawn`/`SpawnAt`/`Ensure`), prewarm, `ReturnAll`, estatísticas |
 | `TankPlayerInput.cs` | `TryFire` passa pela pool; cooldown não consumido em recusa; API pública `IsReady`/`CooldownProgress`/`CooldownRemaining`/`CooldownElapsed`/`ShotsFired`; campos `projectilePool`/`poolCapacity` |
 | `TankProjectile.cs` | devolve-se à pool (com liberação dos ignores) em vez de `Destroy`; `RemainingLifetime`; tolerante a vida fora de pool |
@@ -175,10 +214,12 @@ pool.GetStats(out int emVoo, out int criados, out int capacidade, out int totalD
 Sem Unity neste ambiente, então a validação foi por compilação + execução:
 
 - **typecheck** dos 6 scripts da pasta contra stubs da API do Unity 6/UGUI/Input System: 0 erros.
-- **execução** dos scripts reais num mini-runtime (harness em `unity-check/` fora do repositório):
-  78 checagens, 0 falhas — prewarm e reaproveitamento, posição/velocidade do spawn, cooldown não
+- **execução** dos scripts reais num mini-runtime (harness em `unity-check/` fora do repositório) com
+  álgebra de vetores/quaternions e projeção em perspectiva reais: 83 checagens, 0 falhas — prewarm e reaproveitamento, posição/velocidade do spawn, cooldown não
   consumido em recusa, retorno por impacto e por fim de vida, reversão do `IgnoreCollision`,
-  pedido de NPC pela API estática (inclusive recusa com a pool lotada), offset aplicado no ponto
-  projetado, recarga acompanhando o cooldown real e o HUD reativado no meio de um cooldown.
+  pedido de NPC pela API estática (inclusive recusa com a pool lotada), offset aplicado 1:1 no ponto
+  projetado, recarga acompanhando o cooldown real, HUD reativado no meio de um cooldown, e o
+  alinhamento dos dois retículos nos dois modos de `Projection Origin` (0 px em `CameraAligned`,
+  paralaxe preservada em `BarrelMuzzle`).
 - não verificado (requer o Editor): aparência do `fillAmount` com os seus sprites, comportamento
   físico do projétil e o resultado visual na tela.
