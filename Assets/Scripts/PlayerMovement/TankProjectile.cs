@@ -2,8 +2,12 @@ using UnityEngine;
 
 /// <summary>
 /// Projétil disparado pelo canhão do tanque.
-/// Desloca-se em linha reta de forma síncrona com a direção do canhão no momento do disparo
-/// e se destrói ao colidir com qualquer superfície.
+/// Desloca-se em linha reta na direção do canhão no momento do disparo.
+///
+/// Ele não se destrói mais: quem o pediu (a <see cref="TankProjectilePool"/>) o recolhe no fim
+/// da vida útil ou no impacto, e o objeto volta para a pool. Projéteis criados fora da pool
+/// (Instantiate direto, prefab solto na cena) mantêm o comportamento antigo de Destroy, para o
+/// script continuar útil sem pool.
 /// </summary>
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 [DisallowMultipleComponent]
@@ -14,7 +18,7 @@ public sealed class TankProjectile : MonoBehaviour
     [Tooltip("Velocidade de deslocamento do projétil em unidades por segundo.")]
     [SerializeField, Min(0.1f)] private float speed = 50f;
 
-    [Tooltip("Tempo máximo de vida (em segundos) antes de o projétil ser destruído automaticamente.")]
+    [Tooltip("Tempo máximo de vida (em segundos) antes de o projétil ser recolhido.")]
     [SerializeField, Min(0.1f)] private float maxLifetime = 5f;
 
     private Rigidbody body;
@@ -22,33 +26,45 @@ public sealed class TankProjectile : MonoBehaviour
     private Vector3 moveDirection;
     private bool initialized;
 
+    // Controle de pool: tempo restante, pedido de recolhimento pendente, dona e colisores que
+    // foram ignorados neste uso (precisam voltar a colidir antes do próximo atirador).
+    private float despawnTime;
+    private bool despawnRequested;
+    private TankProjectilePool sourcePool;
+    private Collider[] ignoredColliders;
+
+    /// <summary>Direção do disparo no espaço do mundo.</summary>
+    public Vector3 MoveDirection => moveDirection;
+
+    /// <summary>Pool que forneceu este projétil (null quando ele não veio de uma pool).</summary>
+    public TankProjectilePool SourcePool => sourcePool;
+
+    /// <summary>Velocidade atual em unidades por segundo.</summary>
+    public float Speed => speed;
+
+    /// <summary>Segundos que faltam para o recolhimento automático.</summary>
+    public float RemainingLifetime => Mathf.Max(0f, despawnTime - Time.time);
+
     private void Awake()
     {
-        body = GetComponent<Rigidbody>();
-        projectileCollider = GetComponent<Collider>();
-
+        EnsureComponents();
         ConfigureRigidbody();
     }
 
     private void Start()
     {
+        // Permite usar o prefab sem pool nem script de disparo: segue a frente do próprio objeto.
         if (!initialized)
-        {
-            Initialize(transform.forward, speed, maxLifetime, null);
-        }
+            Initialize(transform.forward, 0f, 0f, null);
     }
 
     /// <summary>
-    /// Inicializa o projétil com a direção exata do canhão do tanque, velocidade e colliders a ignorar.
+    /// Inicializa o projétil com a direção do canhão, velocidade, vida e colisores a ignorar.
+    /// Velocidade/vida em zero significam "mantém o valor do prefab".
     /// </summary>
     public void Initialize(Vector3 barrelDirection, float projectileSpeed, float lifetime, Collider[] ignoredColliders)
     {
-        if (body == null)
-            body = GetComponent<Rigidbody>();
-
-        if (projectileCollider == null)
-            projectileCollider = GetComponent<Collider>();
-
+        EnsureComponents();
         ConfigureRigidbody();
 
         moveDirection = barrelDirection.sqrMagnitude > 0.0001f
@@ -63,27 +79,28 @@ public sealed class TankProjectile : MonoBehaviour
 
         transform.forward = moveDirection;
 
-        if (ignoredColliders != null && projectileCollider != null)
-        {
-            for (int i = 0; i < ignoredColliders.Length; i++)
-            {
-                Collider col = ignoredColliders[i];
-                if (col != null && col != projectileCollider)
-                {
-                    Physics.IgnoreCollision(projectileCollider, col, true);
-                }
-            }
-        }
+        ApplyIgnoredColliders(ignoredColliders);
 
-        body.linearVelocity = moveDirection * speed;
+        despawnRequested = false;
+        despawnTime = Time.time + maxLifetime;
         initialized = true;
 
-        Destroy(gameObject, maxLifetime);
+        if (body != null)
+            body.linearVelocity = moveDirection * speed;
+    }
+
+    private void Update()
+    {
+        if (despawnRequested)
+            return;
+
+        if (Time.time >= despawnTime)
+            RequestDespawn();
     }
 
     private void FixedUpdate()
     {
-        if (body == null)
+        if (body == null || despawnRequested)
             return;
 
         // Mantém a velocidade constante e perfeitamente alinhada com a direção do disparo.
@@ -92,7 +109,120 @@ public sealed class TankProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        RequestDespawn();
+    }
+
+    /// <summary>
+    /// Fora da pool, equivale ao antigo Destroy(gameObject): recolhe o projétil agora.
+    /// Dentro da pool, apenas marca e zera a velocidade; o desligamento do GameObject acontece
+    /// no LateUpdate da pool, porque desativar um colisor durante um callback de física é o
+    /// caminho clássico para warnings e para o restante da simulação ver um collider sumido.
+    /// </summary>
+    public void RequestDespawn()
+    {
+        if (despawnRequested)
+            return;
+
+        despawnRequested = true;
+
+        if (body != null)
+            body.linearVelocity = Vector3.zero;
+
+        if (sourcePool != null)
+            sourcePool.EnqueueRelease(this);
+        else
+            Destroy(gameObject);
+    }
+
+    /// <summary>Chamado pela pool ao entregar o projétil. Use <see cref="RequestDespawn"/> para devolver.</summary>
+    public void ClaimFromPool(TankProjectilePool pool)
+    {
+        sourcePool = pool;
+        initialized = false;
+        despawnRequested = false;
+    }
+
+    /// <summary>
+    /// Chamado pela pool no LateUpdate. Devolve false se este projétil não pertence à pool que
+    /// pediu o recolhimento (nesse caso ele é destruído, para não vazar um objeto órfão).
+    /// </summary>
+    public bool ReleaseToPool(TankProjectilePool pool)
+    {
+        if (pool == null || sourcePool != pool)
+        {
+            if (this != null)
+                Destroy(gameObject);
+            return false;
+        }
+
+        ClearIgnoredColliders();
+
+        EnsureComponents();
+
+        if (body != null)
+            body.linearVelocity = Vector3.zero;
+
+        moveDirection = Vector3.zero;
+        initialized = false;
+        despawnRequested = false;
+        sourcePool = null;
+
+        gameObject.SetActive(false);
+        return true;
+    }
+
+    private void EnsureComponents()
+    {
+        if (body == null)
+            body = GetComponent<Rigidbody>();
+
+        if (projectileCollider == null)
+            projectileCollider = GetComponent<Collider>();
+    }
+
+    /// <summary>
+    /// Ignora os colisores do atirador para o projétil não bater na boca do próprio cano.
+    /// Os pares anteriores são liberados antes: como <see cref="Physics.IgnoreCollision"/> é
+    /// permanente por par, sem isso o projétil reutilizado atravessaria o tanque do atirador
+    /// anterior.
+    /// </summary>
+    private void ApplyIgnoredColliders(Collider[] newIgnoredColliders)
+    {
+        ClearIgnoredColliders();
+
+        if (newIgnoredColliders == null || newIgnoredColliders.Length == 0)
+            return;
+
+        ignoredColliders = newIgnoredColliders;
+
+        // Sem colisor próprio não há par para ignorar (e Physics.IgnoreCollision reclamaria de null).
+        if (projectileCollider == null)
+            return;
+
+        for (int i = 0; i < newIgnoredColliders.Length; i++)
+        {
+            Collider col = newIgnoredColliders[i];
+            if (col != null && col != projectileCollider)
+                Physics.IgnoreCollision(projectileCollider, col, true);
+        }
+    }
+
+    private void ClearIgnoredColliders()
+    {
+        if (ignoredColliders == null)
+            return;
+
+        if (projectileCollider != null)
+        {
+            for (int i = 0; i < ignoredColliders.Length; i++)
+            {
+                Collider col = ignoredColliders[i];
+                if (col != null && col != projectileCollider)
+                    Physics.IgnoreCollision(projectileCollider, col, false);
+            }
+        }
+
+        ignoredColliders = null;
     }
 
     private void ConfigureRigidbody()

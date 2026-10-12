@@ -47,8 +47,24 @@ public class TankPlayerInput : MonoBehaviour
     [SerializeField] private Transform firePoint;
 
     [Header("Configurações do Disparo")]
-    [Tooltip("Prefab do projétil disparado pelo canhão.")]
+    [Tooltip("Cadência / recarga: intervalo mínimo entre disparos em segundos. É o tempo que o " +
+             "retículo do canhão leva para completar a animação de recarga.")]
+    [SerializeField, Min(0f)] private float fireRate = 0.2f;
+
+    [Tooltip("Duração do clarão da luz (FX_TiroBrilho) a cada disparo.")]
+    [SerializeField, Min(0.01f)] private float flashDuration = 0.05f;
+
+    [Header("Projéteis (pool compartilhada com os NPCs)")]
+    [Tooltip("Pool que fornece os projéteis. Se vazio, usa a pool da cena; se não houver nenhuma, " +
+             "o próprio script cria um GameObject PoolDeProjetis com o prefab e a capacidade abaixo.")]
+    [SerializeField] private TankProjectilePool projectilePool;
+
+    [Tooltip("Prefab do projétil pedido à pool.")]
     [SerializeField] private TankProjectile projectilePrefab;
+
+    [Tooltip("Capacidade da pool criada por este script quando não existe pool na cena. " +
+             "Se já houver pool, quem manda é a Capacity dela.")]
+    [SerializeField, Min(1)] private int poolCapacity = 32;
 
     [Tooltip("Velocidade de deslocamento do projétil disparado.")]
     [SerializeField, Min(0.1f)] private float projectileSpeed = 50f;
@@ -56,21 +72,50 @@ public class TankPlayerInput : MonoBehaviour
     [Tooltip("Tempo máximo de vida (em segundos) do projétil disparado.")]
     [SerializeField, Min(0.1f)] private float projectileLifetime = 5f;
 
-    [Tooltip("Tempo de intervalo mínimo entre disparos em segundos (cooldown).")]
-    [SerializeField, Min(0f)] private float fireRate = 0.2f;
-
-    [Tooltip("Duração do clarão da luz (FX_TiroBrilho) a cada disparo.")]
-    [SerializeField, Min(0.01f)] private float flashDuration = 0.05f;
-
     private InputAction moveAction;
     private InputAction fireAction;
     private float nextFireTime;
     private Coroutine flashCoroutine;
     private Collider[] tankColliders;
+    private bool poolReported;
+    private int shotsFired;
+
+    /// <summary>
+    /// Quantos disparos realmente saíram. O HUD observa esse contador para saber o instante exato
+    /// de começar a animação de recarga (mais confiável que comparar timestamps).
+    /// </summary>
+    public int ShotsFired => shotsFired;
+
+    /// <summary>Intervalo de recarga entre disparos, em segundos.</summary>
+    public float FireRate => fireRate;
+
+    /// <summary>Instante (em segundos) a partir do qual o próximo disparo é liberado.</summary>
+    public float NextFireTime => nextFireTime;
+
+    /// <summary>True quando já pode disparar de novo.</summary>
+    public bool IsReady => Time.time >= nextFireTime;
+
+    /// <summary>Quanto falta para liberar o próximo disparo, em segundos.</summary>
+    public float CooldownRemaining => Mathf.Max(0f, nextFireTime - Time.time);
+
+    /// <summary>Quanto do cooldown já passou, em segundos (0 quando está pronto).</summary>
+    public float CooldownElapsed => Mathf.Max(0f, fireRate - CooldownRemaining);
+
+    /// <summary>
+    /// Progresso da recarga de 0 (recém-disparado) a 1 (pronto). É o valor que o HUD usa para
+    /// preencher o retículo do canhão; com fireRate zero, está sempre pronto.
+    /// </summary>
+    public float CooldownProgress => fireRate <= 0f || nextFireTime <= 0f
+        ? 1f
+        : Mathf.Clamp01(1f - CooldownRemaining / fireRate);
+
+    /// <summary>Pool em uso por este atirador.</summary>
+    public TankProjectilePool ProjectilePool => projectilePool;
 
     private void Reset()
     {
         movement = GetComponent<TankMovement>();
+        projectilePool = GetComponentInParent<TankProjectilePool>();
         FindShootReferences();
     }
 
@@ -81,6 +126,13 @@ public class TankPlayerInput : MonoBehaviour
 
         FindShootReferences();
         tankColliders = GetComponentsInChildren<Collider>(true);
+
+        // Pool: usa a atribuída, a da cena, ou cria uma com o prefab e a capacidade daqui.
+        // NPCs chamam o mesmo ponto de entrada (TankProjectilePool.Spawn), então todos os
+        // projéteis da partida saem de um único conjunto de objetos reutilizados.
+        projectilePool = TankProjectilePool.Ensure(projectilePrefab, poolCapacity);
+        if (projectilePool != null && projectilePrefab == null)
+            projectilePrefab = projectilePool.ProjectilePrefab;
 
         if (shootVFX != null)
         {
@@ -156,15 +208,23 @@ public class TankPlayerInput : MonoBehaviour
     /// Dispara o projétil sincronizado com a direção do canhão, o efeito de partículas FX_Tiro
     /// e ativa o clarão da luz temporariamente.
     /// Pode ser chamado externamente por outros scripts ou botões de UI.
+    ///
+    /// Se o projétil não puder ser obtido (pool inexistente, sem prefab ou lotada), o disparo é
+    /// cancelado e o cooldown NÃO é consumido — o jogador pode tentar de novo no mesmo frame.
     /// </summary>
     public bool TryFire()
     {
         if (Time.time < nextFireTime)
             return false;
 
-        nextFireTime = Time.time + fireRate;
+        if (!TryRequestProjectile(out TankProjectilePool.RequestResult result))
+        {
+            ReportPoolProblem(result);
+            return false;
+        }
 
-        SpawnProjectile();
+        nextFireTime = Time.time + fireRate;
+        shotsFired++;
 
         // Dispara o Particle System do tiro
         if (shootVFX != null)
@@ -184,7 +244,11 @@ public class TankPlayerInput : MonoBehaviour
         return true;
     }
 
-    private void SpawnProjectile()
+    /// <summary>
+    /// Pede um projétil à pool na boca do cano, na direção atual do canhão.
+    /// É o mesmo caminho que um NPC usa — a diferença é só quem fornece origem e direção.
+    /// </summary>
+    private bool TryRequestProjectile(out TankProjectilePool.RequestResult result)
     {
         Vector3 direction = barrelTransform != null && barrelTransform.forward.sqrMagnitude > 0.0001f
             ? barrelTransform.forward.normalized
@@ -196,27 +260,36 @@ public class TankPlayerInput : MonoBehaviour
             ? firePoint.position
             : (barrelTransform != null ? barrelTransform.position + direction * 1.5f : transform.position + direction * 2f);
 
-        Quaternion spawnRotation = Quaternion.LookRotation(direction, Vector3.up);
-
-        TankProjectile projectileInstance;
-        if (projectilePrefab != null)
-        {
-            projectileInstance = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
-        }
-        else
-        {
-            GameObject fallbackGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            fallbackGO.name = "ProjetilTanque";
-            fallbackGO.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
-            fallbackGO.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-            fallbackGO.AddComponent<Rigidbody>();
-            projectileInstance = fallbackGO.AddComponent<TankProjectile>();
-        }
-
         if (tankColliders == null || tankColliders.Length == 0)
             tankColliders = GetComponentsInChildren<Collider>(true);
 
-        projectileInstance.Initialize(direction, projectileSpeed, projectileLifetime, tankColliders);
+        if (projectilePool == null)
+            projectilePool = TankProjectilePool.Ensure(projectilePrefab, poolCapacity);
+
+        if (projectilePool == null)
+        {
+            result = TankProjectilePool.RequestResult.NoPool;
+            return false;
+        }
+
+        projectilePool.RequestProjectile(spawnPosition, direction, projectileSpeed, projectileLifetime,
+            tankColliders, out result);
+
+        return result == TankProjectilePool.RequestResult.Spawned;
+    }
+
+    private void ReportPoolProblem(TankProjectilePool.RequestResult result)
+    {
+        if (poolReported || result == TankProjectilePool.RequestResult.PoolFull)
+            return;
+
+        // Um aviso por sessão para cada problema de configuração; a recusa em si é tratada na pool.
+        if (result == TankProjectilePool.RequestResult.NoPrefab)
+        {
+            poolReported = true;
+            Debug.LogError($"[{nameof(TankPlayerInput)}] Sem prefab de projétil. Atribua Projectile Prefab em " +
+                           $"'{name}' (ou no componente TankProjectilePool da cena).", this);
+        }
     }
 
     private IEnumerator FlashRoutine()
