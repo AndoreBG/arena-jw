@@ -1,5 +1,16 @@
 using UnityEngine;
 
+public enum TankShotFaction { Neutral, Player, Enemy }
+
+/// <summary>Explicit per-shot provenance and damage; never stored globally.</summary>
+public struct TankShotData
+{
+    public readonly GameObject Shooter;
+    public readonly TankShotFaction Faction;
+    public readonly float Damage;
+    public TankShotData(GameObject shooter, TankShotFaction faction, float damage) { Shooter = shooter; Faction = faction; Damage = Mathf.Max(0f, damage); }
+}
+
 /// <summary>
 /// Projétil disparado pelo canhão do tanque.
 /// Desloca-se em linha reta na direção do canhão no momento do disparo.
@@ -25,6 +36,13 @@ public sealed class TankProjectile : MonoBehaviour
     private Collider projectileCollider;
     private Vector3 moveDirection;
     private bool initialized;
+    private GameObject shooter;
+    private TankShotFaction faction;
+    private float damage;
+    private float prefabSpeed;
+    private float prefabLifetime;
+    private bool defaultsCaptured;
+    private bool impactResolved;
 
     // Controle de pool: tempo restante, pedido de recolhimento pendente, dona e colisores que
     // foram ignorados neste uso (precisam voltar a colidir antes do próximo atirador).
@@ -41,6 +59,9 @@ public sealed class TankProjectile : MonoBehaviour
 
     /// <summary>Velocidade atual em unidades por segundo.</summary>
     public float Speed => speed;
+    public GameObject Shooter => shooter;
+    public TankShotFaction Faction => faction;
+    public float Damage => damage;
 
     /// <summary>Segundos que faltam para o recolhimento automático.</summary>
     public float RemainingLifetime => Mathf.Max(0f, despawnTime - Time.time);
@@ -49,6 +70,15 @@ public sealed class TankProjectile : MonoBehaviour
     {
         EnsureComponents();
         ConfigureRigidbody();
+        CaptureDefaults();
+    }
+
+    private void CaptureDefaults()
+    {
+        if (defaultsCaptured) return;
+        prefabSpeed = speed;
+        prefabLifetime = maxLifetime;
+        defaultsCaptured = true;
     }
 
     private void Start()
@@ -64,21 +94,28 @@ public sealed class TankProjectile : MonoBehaviour
     /// </summary>
     public void Initialize(Vector3 barrelDirection, float projectileSpeed, float lifetime, Collider[] ignoredColliders)
     {
+        Initialize(barrelDirection, projectileSpeed, lifetime, ignoredColliders, default(TankShotData));
+    }
+
+    public void Initialize(Vector3 barrelDirection, float projectileSpeed, float lifetime, Collider[] ignoredColliders, TankShotData shotData)
+    {
         EnsureComponents();
         ConfigureRigidbody();
+        CaptureDefaults();
 
         moveDirection = barrelDirection.sqrMagnitude > 0.0001f
             ? barrelDirection.normalized
             : transform.forward;
 
-        if (projectileSpeed > 0f)
-            speed = projectileSpeed;
-
-        if (lifetime > 0f)
-            maxLifetime = lifetime;
+        // Every reuse starts from prefab defaults; overrides from an earlier shot never leak.
+        speed = prefabSpeed > 0f ? prefabSpeed : speed;
+        maxLifetime = prefabLifetime > 0f ? prefabLifetime : maxLifetime;
+        if (projectileSpeed > 0f) speed = projectileSpeed;
+        if (lifetime > 0f) maxLifetime = lifetime;
 
         transform.forward = moveDirection;
 
+        shooter = shotData.Shooter; faction = shotData.Faction; damage = shotData.Damage; impactResolved = false;
         ApplyIgnoredColliders(ignoredColliders);
 
         despawnRequested = false;
@@ -86,7 +123,10 @@ public sealed class TankProjectile : MonoBehaviour
         initialized = true;
 
         if (body != null)
+        {
             body.linearVelocity = moveDirection * speed;
+            body.angularVelocity = Vector3.zero;
+        }
     }
 
     private void Update()
@@ -109,6 +149,23 @@ public sealed class TankProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (impactResolved || collision == null || collision.collider == null) return;
+        Transform hitRoot = collision.collider.transform.root;
+        Transform shooterRoot = shooter != null ? shooter.transform.root : null;
+        // Defensive owner check complements IgnoreCollision and protects unusual child-collider layouts.
+        if (shooterRoot != null && hitRoot == shooterRoot) return;
+        impactResolved = true;
+        if (ArenaManager.IsPlaying && damage > 0f && faction != TankShotFaction.Neutral)
+        {
+            Vida life = collision.collider.GetComponentInParent<Vida>();
+            if (life != null && !life.Morto)
+            {
+                bool isPlayer = hitRoot.CompareTag("Player") || (ArenaManager.Instance != null && life == ArenaManager.Instance.PlayerLife);
+                bool isEnemy = collision.collider.GetComponentInParent<ArenaEnemyRegistration>() != null || collision.collider.GetComponentInParent<ArenaEnemyAI>() != null;
+                if ((faction == TankShotFaction.Player && isEnemy) || (faction == TankShotFaction.Enemy && isPlayer))
+                    life.ReceberDano(damage);
+            }
+        }
         RequestDespawn();
     }
 
@@ -138,6 +195,7 @@ public sealed class TankProjectile : MonoBehaviour
     public void ClaimFromPool(TankProjectilePool pool)
     {
         sourcePool = pool;
+        shooter = null; faction = TankShotFaction.Neutral; damage = 0f; impactResolved = false;
         initialized = false;
         despawnRequested = false;
     }
@@ -159,10 +217,13 @@ public sealed class TankProjectile : MonoBehaviour
 
         EnsureComponents();
 
-        if (body != null)
-            body.linearVelocity = Vector3.zero;
+        if (body != null) { body.linearVelocity = Vector3.zero; body.angularVelocity = Vector3.zero; }
 
         moveDirection = Vector3.zero;
+        speed = prefabSpeed > 0f ? prefabSpeed : speed;
+        maxLifetime = prefabLifetime > 0f ? prefabLifetime : maxLifetime;
+        despawnTime = 0f;
+        shooter = null; faction = TankShotFaction.Neutral; damage = 0f; impactResolved = false;
         initialized = false;
         despawnRequested = false;
         sourcePool = null;

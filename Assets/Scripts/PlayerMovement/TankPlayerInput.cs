@@ -72,6 +72,8 @@ public class TankPlayerInput : MonoBehaviour
     [Tooltip("Tempo máximo de vida (em segundos) do projétil disparado.")]
     [SerializeField, Min(0.1f)] private float projectileLifetime = 5f;
 
+    [SerializeField, Min(0f)] private float projectileDamage = 50f;
+
     private InputAction moveAction;
     private InputAction fireAction;
     private float nextFireTime;
@@ -273,7 +275,7 @@ public class TankPlayerInput : MonoBehaviour
         }
 
         projectilePool.RequestProjectile(spawnPosition, direction, projectileSpeed, projectileLifetime,
-            tankColliders, out result);
+            tankColliders, new TankShotData(gameObject, TankShotFaction.Player, projectileDamage), out result);
 
         return result == TankProjectilePool.RequestResult.Spawned;
     }

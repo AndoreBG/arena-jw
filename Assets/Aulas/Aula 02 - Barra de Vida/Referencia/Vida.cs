@@ -19,6 +19,7 @@ public class Vida : MonoBehaviour
     public float VidaAtual => vidaAtual;
     public float VidaMaxima => vidaMaxima;
     public bool Morto => morto;
+    public bool DestruirAoMorrer { get => destruirAoMorrer; set => destruirAoMorrer = value; }
 
     public event Action<float, float> AoAlterarVida;
     public event Action AoMorrer;

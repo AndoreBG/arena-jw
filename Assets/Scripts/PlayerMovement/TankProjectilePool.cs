@@ -106,7 +106,7 @@ public sealed class TankProjectilePool : MonoBehaviour
     public TankProjectile RequestProjectile(Vector3 position, Vector3 direction, float speed = 0f,
         float lifetime = 0f, Collider[] ignoredColliders = null)
     {
-        return RequestProjectile(position, direction, speed, lifetime, ignoredColliders, out _);
+        return RequestProjectile(position, direction, speed, lifetime, ignoredColliders, default(TankShotData), out _);
     }
 
     /// <summary>
@@ -127,6 +127,12 @@ public sealed class TankProjectilePool : MonoBehaviour
     public TankProjectile RequestProjectile(Vector3 position, Vector3 direction, float speed, float lifetime,
         Collider[] ignoredColliders, out RequestResult result)
     {
+        return RequestProjectile(position, direction, speed, lifetime, ignoredColliders, default(TankShotData), out result);
+    }
+
+    public TankProjectile RequestProjectile(Vector3 position, Vector3 direction, float speed, float lifetime,
+        Collider[] ignoredColliders, TankShotData shotData, out RequestResult result)
+    {
         result = RequestResult.Spawned;
         TankProjectile projectile = Acquire(out result);
 
@@ -142,7 +148,7 @@ public sealed class TankProjectilePool : MonoBehaviour
         // posição antiga da pool. A posição do disparo é aplicada aqui (antes, quem fazia isso era
         // o Instantiate do prefab) e a rotação vem do Initialize, que alinha o +Z com a direção.
         projectile.transform.position = position;
-        projectile.Initialize(direction, speed, lifetime, ignoredColliders);
+        projectile.Initialize(direction, speed, lifetime, ignoredColliders, shotData);
         projectile.gameObject.SetActive(true);
         return projectile;
     }
