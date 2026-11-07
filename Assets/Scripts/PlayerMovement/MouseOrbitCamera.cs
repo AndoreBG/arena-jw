@@ -85,8 +85,8 @@ public sealed class MouseOrbitCamera : MonoBehaviour
         // Escape libera o cursor; clique esquerdo volta a controlar a câmera.
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             SetCursorLocked(false);
-        else if (lockCursorOnStart && mouse.leftButton.wasPressedThisFrame)
-            SetCursorLocked(true);
+        else if (lockCursorOnStart && mouse.leftButton.wasPressedThisFrame && ArenaManager.IsPlaying)
+            SetCursorLocked(true); // Não captura o cursor com o Game Over aberto (os botões precisam dele).
 
         if (Cursor.lockState != CursorLockMode.Locked && lockCursorOnStart)
             return;

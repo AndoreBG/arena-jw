@@ -114,6 +114,16 @@ public class TankMovement : MonoBehaviour
         rb.ResetInertiaTensor();
     }
 
+    /// <summary>
+    /// Ajusta os números do movimento em runtime (usado pelos PlayerStats).
+    /// Valores menores ou iguais a zero são ignorados: zero significaria "sem movimento".
+    /// </summary>
+    public void Configure(float maxForwardSpeed = 0f, float maxTurnSpeed = 0f)
+    {
+        if (maxForwardSpeed > 0f) this.maxForwardSpeed = maxForwardSpeed;
+        if (maxTurnSpeed > 0f) this.maxTurnSpeed = maxTurnSpeed;
+    }
+
     /// <summary>Chame no Update: throttle -1..1, steer -1..1.</summary>
     public void SetInput(float throttle, float steer)
     {

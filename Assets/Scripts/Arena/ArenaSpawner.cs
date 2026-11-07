@@ -2,99 +2,318 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>Respawn infinito por pontos seguros; conta instâncias vivas, não total de criações.</summary>
+/// <summary>
+/// Respawn infinito por pontos seguros. Conta instâncias vivas (não o total de criações) e
+/// respeita o limite da dificuldade.
+///
+/// A dificuldade vem do <see cref="SpawnerConfig"/> (asset) ou, se ele não estiver configurado,
+/// do <see cref="ArenaManager"/> (que lê a escolha do menu em PlayerPrefs).
+/// </summary>
+[DisallowMultipleComponent]
+[AddComponentMenu("Arena/Arena Spawner")]
 public sealed class ArenaSpawner : MonoBehaviour
 {
+    [Header("Configuração")]
+    [Tooltip("Configuração do spawner. Contém a dificuldade usada quando o ArenaManager não define uma.")]
+    [SerializeField] private SpawnerConfig spawnerConfig;
+
+    [Header("Prefab e pontos (referências de cena)")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Transform[] spawnPoints;
+
+    [Header("Fallback (sem pontos fixos)")]
+    [SerializeField] private bool useRandomNavMeshPoints = true;
+    [SerializeField, Min(1f)] private float ringRadiusMin = 28f;
+    [SerializeField, Min(1f)] private float ringRadiusMax = 45f;
+
+    [Header("Segurança de spawn")]
     [SerializeField, Min(0.1f)] private float retryInterval = 3f;
-    [SerializeField, Min(0f)] private float minimumPlayerDistance = 8f;
-    [SerializeField] private Vector3 occupancyHalfExtents = new Vector3(1.5f, 1f, 2f);
-    [SerializeField] private Vector3 occupancyOffset = new Vector3(0f, 1f, 0f);
+    [SerializeField, Min(0f)] private float minimumPlayerDistance = 18f;
+    [SerializeField] private Vector3 occupancyHalfExtents = new Vector3(1.6f, 1.2f, 2f);
+    [SerializeField] private Vector3 occupancyOffset = new Vector3(0f, 3f, 0f);
+    [Tooltip("Layers que bloqueiam o spawn (muros, árvores, outros inimigos). Triggers são ignorados.")]
     [SerializeField] private LayerMask occupancyMask = ~0;
     [SerializeField, Min(0.01f)] private float navMeshTolerance = 0.5f;
+
     private readonly HashSet<ArenaEnemyRegistration> alive = new HashSet<ArenaEnemyRegistration>();
     private ArenaManager manager;
     private Transform player;
     private float timer;
     private bool configErrorReported;
+    private bool firstSpawnReported;
+
     public int AliveCount => alive.Count;
+    public ArenaManager Manager => manager;
+
+    /// <summary>
+    /// Limite de inimigos vivos. A dificuldade escolhida no menu (via ArenaManager) manda;
+    /// o SpawnerConfig é apenas o fallback quando não há manager.
+    /// </summary>
+    public int EnemyLimit
+    {
+        get
+        {
+            if (manager != null && manager.Difficulty != null) return manager.EnemyLimit;
+            if (spawnerConfig != null && spawnerConfig.Difficulty != null) return spawnerConfig.MaxAliveEnemies;
+            return 2;
+        }
+    }
+
+    /// <summary>Intervalo entre tentativas de spawn (mesma prioridade do limite).</summary>
+    public float Interval
+    {
+        get
+        {
+            if (manager != null && manager.Difficulty != null) return manager.SpawnInterval;
+            if (spawnerConfig != null && spawnerConfig.Difficulty != null) return spawnerConfig.SpawnInterval;
+            return retryInterval;
+        }
+    }
+
     public void SetManager(ArenaManager value)
     {
         manager = value;
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if (go != null) player = go.transform;
+
+        if (spawnerConfig != null)
+        {
+            minimumPlayerDistance = spawnerConfig.MinimumPlayerDistance;
+            occupancyHalfExtents = spawnerConfig.OccupancyHalfExtents;
+            occupancyOffset = spawnerConfig.OccupancyOffset;
+            useRandomNavMeshPoints = spawnerConfig.UseRandomNavMeshPoints;
+            ringRadiusMin = spawnerConfig.RingRadiusMin;
+            ringRadiusMax = spawnerConfig.RingRadiusMax;
+        }
+
+        // Primeiro inimigo não espera o intervalo: a partida começa com o limite cheio.
+        timer = Interval;
     }
+
     private void Update()
     {
         alive.RemoveWhere(x => x == null);
-        if (manager == null || manager.State != ArenaRunState.Playing || alive.Count >= manager.EnemyLimit) return;
+        if (manager != null && manager.State != ArenaRunState.Playing) return;
+        if (alive.Count >= EnemyLimit) return;
+
         timer -= Time.deltaTime;
         if (timer > 0f) return;
-        timer = retryInterval;
+        timer = Interval;
         TrySpawnOne();
     }
+
     private void TrySpawnOne()
     {
-        if (enemyPrefab == null || spawnPoints == null || spawnPoints.Length == 0)
-        { if (!configErrorReported) { Debug.LogError("[ArenaSpawner] Configure o prefab inimigo e pelo menos um ponto de spawn.", this); configErrorReported = true; } return; }
-        List<int> order = new List<int>();
-        for (int i = 0; i < spawnPoints.Length; i++) if (spawnPoints[i] != null) order.Add(i);
-        for (int i = order.Count - 1; i > 0; i--) { int j = Random.Range(0, i + 1); (order[i], order[j]) = (order[j], order[i]); }
-        foreach (int index in order)
+        if (!enemyPrefab)
         {
-            Transform point = spawnPoints[index]; Vector3 pos = point.position;
-            if (player != null && HorizontalDistance(pos, player.position) < minimumPlayerDistance) continue;
-            if (!NavMesh.SamplePosition(pos, out NavMeshHit hit, navMeshTolerance, NavMesh.AllAreas) || Vector3.Distance(hit.position, pos) > navMeshTolerance) continue;
-            Quaternion rotation = point.rotation;
-            Vector3 center = hit.position + rotation * occupancyOffset;
-            if (Physics.CheckBox(center, occupancyHalfExtents, rotation, occupancyMask, QueryTriggerInteraction.Ignore)) continue;
-            GameObject enemy = Instantiate(enemyPrefab, hit.position, rotation);
-            NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
-            if (agent == null) agent = enemy.GetComponentInChildren<NavMeshAgent>();
-            if (agent == null || !agent.enabled || !agent.isOnNavMesh)
-            { Debug.LogError("[ArenaSpawner] Prefab precisa de NavMeshAgent válido no NavMesh; instância descartada.", enemy); Destroy(enemy); continue; }
-            ArenaEnemyAI ai = enemy.GetComponent<ArenaEnemyAI>(); if (ai != null) ai.SetTarget(player);
-            ArenaEnemyWeapon weapon = enemy.GetComponent<ArenaEnemyWeapon>(); if (weapon != null) weapon.SetTarget(player);
-            ArenaEnemyRegistration registration = enemy.GetComponent<ArenaEnemyRegistration>();
-            if (registration == null) registration = enemy.AddComponent<ArenaEnemyRegistration>();
-            registration.Initialize(this, manager);
-            alive.Add(registration);
+            if (!configErrorReported)
+            {
+                Debug.LogError("[ArenaSpawner] Prefab do inimigo não configurado.", this);
+                configErrorReported = true;
+            }
             return;
         }
+
+        if (!firstSpawnReported)
+        {
+            if (player == null)
+            {
+                GameObject go = GameObject.FindGameObjectWithTag("Player");
+                if (go != null) player = go.transform;
+            }
+            firstSpawnReported = true;
+        }
+
+        if (!TryFindPosition(out Vector3 position, out Quaternion rotation))
+            return;
+
+        GameObject enemy = Instantiate(enemyPrefab, position, rotation);
+        enemy.name = enemyPrefab.name + "_Vivo";
+
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        if (agent == null) agent = enemy.GetComponentInChildren<NavMeshAgent>();
+
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh)
+        {
+            Debug.LogError("[ArenaSpawner] O prefab precisa de um NavMeshAgent válido sobre o NavMesh. " +
+                           "Instância descartada.", enemy);
+            Destroy(enemy);
+            return;
+        }
+
+        // Liga os alvos e aplica a dificuldade (visão, agressão e cadência da nave).
+        AlienShipAI ai = enemy.GetComponent<AlienShipAI>();
+        if (ai != null) ai.SetTarget(player);
+
+        AlienShipWeapon weapon = enemy.GetComponent<AlienShipWeapon>();
+        if (weapon != null) weapon.SetTarget(player);
+
+        ArenaEnemySensor sensor = enemy.GetComponent<ArenaEnemySensor>();
+        if (sensor != null) sensor.SetTarget(player);
+
+        if (manager != null && manager.Difficulty != null)
+            manager.Difficulty.ApplyToEnemy(ai, sensor, weapon);
+        else if (spawnerConfig != null)
+            spawnerConfig.ApplyDifficultyToEnemy(ai, sensor, weapon);
+
+        // Compatibilidade: prefabs antigos ainda podem usar os scripts Arena*.
+        ArenaEnemyAI legacyAI = enemy.GetComponent<ArenaEnemyAI>();
+        if (legacyAI != null) legacyAI.SetTarget(player);
+        ArenaEnemyWeapon legacyWeapon = enemy.GetComponent<ArenaEnemyWeapon>();
+        if (legacyWeapon != null) legacyWeapon.SetTarget(player);
+
+        ArenaEnemyRegistration registration = enemy.GetComponent<ArenaEnemyRegistration>();
+        if (registration == null) registration = enemy.AddComponent<ArenaEnemyRegistration>();
+        registration.Initialize(this, manager);
+        alive.Add(registration);
     }
+
+    private bool TryFindPosition(out Vector3 position, out Quaternion rotation)
+    {
+        position = Vector3.zero;
+        rotation = Quaternion.identity;
+
+        if (spawnPoints != null && spawnPoints.Length > 0)
+        {
+            List<int> order = new List<int>(spawnPoints.Length);
+            for (int i = 0; i < spawnPoints.Length; i++) order.Add(i);
+            for (int i = order.Count - 1; i > 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                (order[i], order[j]) = (order[j], order[i]);
+            }
+
+            foreach (int index in order)
+            {
+                Transform point = spawnPoints[index];
+                if (point == null) continue;
+                if (IsPositionValid(point.position, point.rotation, out position, out rotation)) return true;
+            }
+        }
+
+        if (useRandomNavMeshPoints && player != null)
+        {
+            for (int attempt = 0; attempt < 12; attempt++)
+            {
+                float angle = Random.value * Mathf.PI * 2f;
+                float radius = Random.Range(ringRadiusMin, ringRadiusMax);
+                Vector3 candidate = player.position + new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * radius;
+                Quaternion facing = Quaternion.LookRotation((player.position - candidate).normalized, Vector3.up);
+                if (IsPositionValid(candidate, facing, out position, out rotation)) return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsPositionValid(Vector3 point, Quaternion pointRotation, out Vector3 position, out Quaternion rotation)
+    {
+        position = point;
+        rotation = pointRotation;
+
+        if (player != null && HorizontalDistance(point, player.position) < minimumPlayerDistance)
+            return false;
+
+        if (!NavMesh.SamplePosition(point, out NavMeshHit hit, navMeshTolerance, NavMesh.AllAreas))
+            return false;
+
+        if (Vector3.Distance(hit.position, point) > navMeshTolerance)
+            return false;
+
+        Vector3 center = hit.position + pointRotation * occupancyOffset;
+        if (Physics.CheckBox(center, occupancyHalfExtents, pointRotation, occupancyMask, QueryTriggerInteraction.Ignore))
+            return false;
+
+        position = hit.position;
+        return true;
+    }
+
     internal void Unregister(ArenaEnemyRegistration registration, bool killed)
     {
         if (!alive.Remove(registration)) return;
         if (killed && manager != null) manager.RegisterEnemyKill(this);
     }
-    private static float HorizontalDistance(Vector3 a, Vector3 b) { a.y = 0f; b.y = 0f; return Vector3.Distance(a, b); }
+
+    private static float HorizontalDistance(Vector3 a, Vector3 b)
+    {
+        a.y = 0f; b.y = 0f;
+        return Vector3.Distance(a, b);
+    }
+
     private void OnDrawGizmosSelected()
     {
-        if (spawnPoints == null) return;
-        Gizmos.color = Color.cyan;
-        foreach (Transform point in spawnPoints) if (point != null) Gizmos.DrawWireCube(point.position + occupancyOffset, occupancyHalfExtents * 2f);
+        if (spawnPoints != null)
+        {
+            Gizmos.color = Color.cyan;
+            foreach (Transform point in spawnPoints)
+                if (point != null) Gizmos.DrawWireCube(point.position + occupancyOffset, occupancyHalfExtents * 2f);
+        }
+
+        if (useRandomNavMeshPoints && minimumPlayerDistance > 0f)
+        {
+            Gizmos.color = new Color(0f, 1f, 1f, 0.35f);
+            Gizmos.DrawWireSphere(transform.position, ringRadiusMin);
+            Gizmos.DrawWireSphere(transform.position, ringRadiusMax);
+        }
     }
 }
 
-/// <summary>Idempotently connects Vida death and destroys/removes enemies exactly once.</summary>
+/// <summary>
+/// Conecta a morte da <see cref="Vida"/> ao spawner e ao placar: uma única vez, de forma idempotente.
+/// Também libera a vaga quando o inimigo é destruído por outro motivo (sem pontuar).
+/// </summary>
 [RequireComponent(typeof(Vida))]
+[DisallowMultipleComponent]
 public sealed class ArenaEnemyRegistration : MonoBehaviour
 {
     private Vida life;
     private ArenaSpawner spawner;
     private bool resolved;
-    private void Awake() { life = GetComponent<Vida>(); }
-    internal void Initialize(ArenaSpawner owner, ArenaManager arena) { spawner = owner; if (life == null) life = GetComponent<Vida>(); if (life != null) life.DestruirAoMorrer = false; }
-    private void OnEnable() { if (life == null) life = GetComponent<Vida>(); if (life != null) life.AoMorrer += OnKilled; }
-    private void OnDisable() { if (life != null) life.AoMorrer -= OnKilled; }
+
+    private void Awake()
+    {
+        life = GetComponent<Vida>();
+    }
+
+    internal void Initialize(ArenaSpawner owner, ArenaManager arena)
+    {
+        spawner = owner;
+        if (life == null) life = GetComponent<Vida>();
+        if (life != null) life.DestruirAoMorrer = false;
+    }
+
+    private void OnEnable()
+    {
+        if (life == null) life = GetComponent<Vida>();
+        if (life != null) life.AoMorrer += OnKilled;
+    }
+
+    private void OnDisable()
+    {
+        if (life != null) life.AoMorrer -= OnKilled;
+    }
+
     private void OnKilled()
     {
-        if (resolved) return; resolved = true;
+        if (resolved) return;
+        resolved = true;
+
         if (spawner != null) spawner.Unregister(this, true);
-        foreach (ArenaEnemyAI ai in GetComponentsInChildren<ArenaEnemyAI>()) ai.enabled = false;
-        foreach (ArenaEnemyWeapon weapon in GetComponentsInChildren<ArenaEnemyWeapon>()) weapon.SetCanFire(false);
+
+        foreach (AlienShipAI ai in GetComponentsInChildren<AlienShipAI>()) ai.enabled = false;
+        foreach (ArenaEnemyAI legacy in GetComponentsInChildren<ArenaEnemyAI>()) legacy.enabled = false;
+        foreach (AlienShipWeapon weapon in GetComponentsInChildren<AlienShipWeapon>()) weapon.enabled = false;
+        foreach (ArenaEnemyWeapon legacy in GetComponentsInChildren<ArenaEnemyWeapon>()) legacy.SetCanFire(false);
+
         Destroy(gameObject);
     }
-    private void OnDestroy() { if (!resolved && spawner != null) { resolved = true; spawner.Unregister(this, false); } }
+
+    private void OnDestroy()
+    {
+        if (!resolved && spawner != null)
+        {
+            resolved = true;
+            spawner.Unregister(this, false);
+        }
+    }
 }

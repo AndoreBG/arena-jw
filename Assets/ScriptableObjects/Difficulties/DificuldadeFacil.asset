@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa98ae94b1e268b495c3a40aa9498dc, type: 3}
+  m_Name: DificuldadeFacil
+  m_EditorClassIdentifier: Assembly-CSharp::DifficultyConfig
+  difficulty: 0
+  displayName: "F\xE1cil"
+  description: "IA fraca \xB7 2 inimigos vivos \xB7 spawn a cada 3 s"
+  maxAliveEnemies: 2
+  spawnInterval: 3
+  aiIntensity: 0.35

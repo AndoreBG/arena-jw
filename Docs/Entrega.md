@@ -1,0 +1,113 @@
+# Entrega — Implementação do planejamento arena-jw
+
+Repositório implementado em **`/home/user/repo`** (clone do seu GitHub, 12 commits organizados).
+Patches por fase e o pacote `.zip` estão em **`/home/user/patches/`**.
+
+---
+
+## 1. O que foi implementado
+
+### Inimigos → naves alienígenas flutuantes
+- `AlienShipAI`: 3 estados ativos com **pesos estáticos 40 / 60 / 100**
+  (Patrol / Pursue / Attack), histerese no alcance, percepção por visão **ou** proximidade.
+- `AlienShipWeapon`: gira a nave no **eixo Y** para encarar o jogador e atira da
+  `transform.position` na direção `transform.forward` — **sem cano, sem muzzle**, usando a
+  `TankProjectilePool` compartilhada.
+- `EnemyHover`: voo a **3 m** com oscilação **±0,5 m** (`agent.baseOffset`, o agente continua no NavMesh).
+- `EnemyHealthBar`: barra de vida + ícone de estado acima da nave (World Space, billboard).
+- Prefab `Inimigo` reescrito como nave (tag `Player` removida, `NavMeshAgent.updateRotation = false`,
+  `updateUpAxis = false`, `Rigidbody` kinematic, efeitos de cano removidos).
+
+### Menu principal completo
+- Cena `menu_principal`: **ranking à esquerda** (abas Fácil/Médio/Difícil, top 5 com Nome |
+  Pontuação), **título + Jogar/Configurações/Sair ao centro**, **créditos à direita**.
+- Painel de dificuldade (3 botões + descrição ao passar o mouse + Cancelar).
+- Painel de configurações (volumes, resolução, modo de exibição, Aplicar/Voltar) com
+  **modal de confirmação** quando há mudanças não aplicadas.
+
+### HUD, Game Over e ranking
+- HUD de partida: barra de vida, barra de aceleração, pontuação e dificuldade; retículos do
+  `TankAimReticleHUD` preservados.
+- Game Over: título, pontuação, input de apelido (3 caracteres A–Z/0–9), Tentar Novamente e
+  Menu Principal — **ambos salvam** a pontuação na dificuldade corrente.
+- `RankingService` por dificuldade, **top 5 por aba**, `timestamp` para desempate
+  (mais recente vence), uma entrada por apelido por dificuldade.
+
+### ScriptableObjects
+`DifficultyConfig` (Fácil 2/3 s/0,5 · Médio 4/2 s/0,7 · Difícil 6/1 s/1,0), `SpawnerConfig`,
+`PlayerStats`, `ResolutionOption` + `DifficultyCatalog` (extra, para o menu resolver a dificuldade).
+
+### Áudio
+`AudioSettings` **já implementado como se o mixer existisse**: procura `Resources/ArenaMixer`,
+converte linear→dB e aplica em `MasterVolume`/`MusicVolume`/`SfxVolume`; sem mixer, cai em
+`AudioListener.volume`. Passo a passo de criação: `Docs/AudioMixer.md` + menu
+`Arena → Check Audio Mixer` para validar.
+
+---
+
+## 2. Como aplicar
+
+```bash
+cd /caminho/do/seu/arena-jw
+git switch -c feature/planejamento-jogo
+
+# Opção A (recomendada): 8 commits por fase — testado em clone limpo do seu HEAD
+git am --whitespace=nowarn /home/user/patches/fases/*.patch
+
+# Opção B: um único diff
+git apply --3way /home/user/patches/arena-jw-full.patch
+
+# Opção C: só os arquivos finais
+unzip -o /home/user/patches/arena-jw-implementacao.zip -d .
+
+# Opção D: histórico completo como remote
+git fetch /home/user/patches/arena-jw.bundle 'refs/heads/*:refs/heads/arena/*'
+```
+
+Conteúdo de `/home/user/patches/`:
+
+| Arquivo | O que é |
+|---|---|
+| `fases/0001..0008-*.patch` | os 8 commits, na ordem (aplicação testada) |
+| `arena-jw-full.patch` | diff acumulado de `d933c62..HEAD` |
+| `arena-jw-implementacao.zip` | árvore final do projeto (idêntica a `/home/user/repo`) |
+| `arena-jw.bundle` | repositório git completo (histórico + commits novos) |
+
+Depois, no Unity: **Arena → Setup Main Menu + Playground** e **Bake** da NavMesh
+(ver `Docs/GuiaImplementacao.md`).
+
+---
+
+## 3. Verificação
+
+| Checagem | Resultado |
+|---|---|
+| Compilação dos 22 scripts de runtime contra stubs Unity 6/uGUI/TMP/Input System | **0 erros** |
+| Compilação dos 7 scripts de Editor (`UNITY_EDITOR`) | **0 erros** |
+| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs) | **53 verificações, 0 falhas** |
+
+Não validado (exige o Unity Editor): layout visual das telas, bake da NavMesh, comportamento
+em Play Mode, criação de assets/layer pelos menus.
+
+---
+
+## 4. Áudio
+
+- **Criar o mixer**: `Docs/AudioMixer.md`, seções 1–3 (grupos Master/Music/SFX e parâmetros
+  expostos com os nomes exatos).
+- **Ligar nos sons**: seção 4 (`Output` do AudioSource).
+- **Conferir**: menu `Arena → Check Audio Mixer`.
+- **Sem mixer**: nada quebra; `AudioSettings.EffectiveSfx` / `EffectiveMusic` ficam prontos.
+
+---
+
+## 5. Sobre converter a cena para YAML
+
+**Não é necessário para esta implementação** — toda a fiação do Playground é feita por scripts
+de Editor que usam a API do Unity (`PrefabUtility`, `EditorSceneManager`, `SerializedObject`),
+o que funciona com cena binária ou texto.
+
+Se quiser converter (útil para diff/revisão em PR): `Docs/ConversaoCenaYAML.md`, seção 1 —
+`Edit → Project Settings → Editor → Asset Serialization → Force Text`, reabrir o projeto e
+salvar cada cena. Aviso: não reescreva a cena por fora do Unity; o `NavMeshData` e os `fileID`
+são preservados apenas pelo resave do Editor.

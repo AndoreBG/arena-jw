@@ -29,6 +29,17 @@ public class Vida : MonoBehaviour
         vidaAtual = vidaMaxima;
     }
 
+    /// <summary>
+    /// Ajusta a vida máxima (usado pelos PlayerStats). Restaura se pedido; a vida nunca passa do máximo.
+    /// </summary>
+    public void Configure(float novaVidaMaxima, bool restore = false)
+    {
+        vidaMaxima = Mathf.Max(1f, novaVidaMaxima);
+        vidaAtual = Mathf.Clamp(restore ? vidaMaxima : vidaAtual, 0f, vidaMaxima);
+        if (restore) morto = false;
+        AoAlterarVida?.Invoke(vidaAtual, vidaMaxima);
+    }
+
     public void ReceberDano(float dano)
     {
         if (morto)

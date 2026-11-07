@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa98ae94b1e268b495c3a40aa9498dc, type: 3}
+  m_Name: DificuldadeDificil
+  m_EditorClassIdentifier: Assembly-CSharp::DifficultyConfig
+  difficulty: 2
+  displayName: "Dif\xEDcil"
+  description: "IA forte \xB7 6 inimigos vivos \xB7 spawn a cada 1 s"
+  maxAliveEnemies: 6
+  spawnInterval: 1
+  aiIntensity: 1

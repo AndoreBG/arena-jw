@@ -114,6 +114,15 @@ public class TankPlayerInput : MonoBehaviour
     /// <summary>Pool em uso por este atirador.</summary>
     public TankProjectilePool ProjectilePool => projectilePool;
 
+    /// <summary>
+    /// Ajusta dano e cadência em runtime (usado pelos PlayerStats). Zero é ignorado.
+    /// </summary>
+    public void Configure(float damage, float rate)
+    {
+        if (damage > 0f) projectileDamage = damage;
+        if (rate > 0f) fireRate = rate;
+    }
+
     private void Reset()
     {
         movement = GetComponent<TankMovement>();

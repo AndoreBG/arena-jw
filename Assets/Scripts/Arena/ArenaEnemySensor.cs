@@ -20,12 +20,25 @@ public sealed class ArenaEnemySensor : MonoBehaviour
     [SerializeField, Range(0f, 360f)] private float fieldOfView = 120f;
     [SerializeField] private float targetHeight = 1.1f;
     [SerializeField] private LayerMask blockingMask = ~0;
+    [SerializeField, Range(0.1f, 3f)] private float viewDistanceMultiplier = 1f;
     private Vector3 lastSeen;
     private bool hasLastSeen;
     private ArenaEnemySnapshot snapshot;
     public ArenaEnemySnapshot Snapshot => snapshot;
     public Transform Target { get => target; set => target = value; }
+    public LayerMask BlockingMask { get => blockingMask; set => blockingMask = value; }
+    public float ViewDistance { get => viewDistance; set => viewDistance = Mathf.Max(0f, value); }
     public void SetTarget(Transform value) { target = value; }
+    public void SetBlockingMask(int mask) => blockingMask = mask;
+
+    /// <summary>Multiplicador de visão aplicado pela dificuldade (0,75 a 1,25).</summary>
+    public float ViewDistanceMultiplier
+    {
+        get => viewDistanceMultiplier;
+        set => viewDistanceMultiplier = Mathf.Max(0.1f, value);
+    }
+
+    private float EffectiveViewDistance => viewDistance * viewDistanceMultiplier;
 
     public ArenaEnemySnapshot Observe(Transform newTarget)
     {
@@ -39,7 +52,7 @@ public sealed class ArenaEnemySensor : MonoBehaviour
             Vector3 delta = point - origin;
             distance = delta.magnitude;
             Vector3 flatForward = (eyes != null ? eyes.forward : transform.forward);
-            if (distance <= viewDistance && distance > 0.001f && Vector3.Angle(flatForward, delta) <= fieldOfView * 0.5f)
+            if (distance <= EffectiveViewDistance && distance > 0.001f && Vector3.Angle(flatForward, delta) <= fieldOfView * 0.5f)
             {
                 // RaycastAll ensures the sensor can ignore its own hierarchy and see the target collider.
                 RaycastHit[] hits = Physics.RaycastAll(origin, delta / distance, distance, blockingMask, QueryTriggerInteraction.Ignore);
