@@ -20,6 +20,8 @@ AudioMixerController:
     name: MasterVolume
   - guid: 329abd8b6f3762d498299059e18e489f
     name: MusicVolume
+  - guid: fa2a8d1ebf35fcc4b95672b21d4ba7ea
+    name: SfxVolume
   m_AudioMixerGroupViews:
   - guids:
     - 8101ded6fecdfcd49a9b178aba80a6e1
