@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 607881821067262807}
   - component: {fileID: 3336064061982472193}
   - component: {fileID: 4563717438202089153}
-  - component: {fileID: 5531868447968096397}
   - component: {fileID: 2130711200740270333}
   - component: {fileID: 3069618116409668783}
   - component: {fileID: 4883561827034985238}
   - component: {fileID: 7106821139262559771}
   - component: {fileID: 4863473366753429368}
   - component: {fileID: 4120245319706398713}
+  - component: {fileID: 5281947579620726671}
   m_Layer: 8
   m_Name: Inimigo
   m_TagString: Untagged
@@ -79,7 +79,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.2
-  m_Speed: 4
+  m_Speed: 12
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 360
@@ -87,31 +87,10 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 0
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 4.5
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!65 &5531868447968096397
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2266264261382295678}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.4, y: 1.8, z: 4.2}
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &2130711200740270333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,12 +120,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArenaEnemySensor
   eyes: {fileID: 607881821067262807}
   target: {fileID: 0}
-  viewDistance: 26
+  viewDistance: 35
   fieldOfView: 220
   targetHeight: 1.1
   blockingMask:
     serializedVersion: 2
-    m_Bits: 4294967259
+    m_Bits: 275
   viewDistanceMultiplier: 1
 --- !u!114 &4883561827034985238
 MonoBehaviour:
@@ -166,13 +145,13 @@ MonoBehaviour:
   pursueWeight: 60
   attackWeight: 100
   decisionInterval: 0.2
-  patrolIdleTime: {x: 1.5, y: 4}
+  patrolIdleTime: {x: 0.5, y: 1.5}
   patrolRadius: 12
-  patrolSpeed: 2
+  patrolSpeed: 8
   patrolArriveDistance: 1.5
-  pursueSpeed: 4
+  pursueSpeed: 12
   pursueRefresh: 0.25
-  attackRange: 18
+  attackRange: 40
   attackExitMultiplier: 1.2
   aggression: 0.5
 --- !u!114 &7106821139262559771
@@ -190,17 +169,17 @@ MonoBehaviour:
   target: {fileID: 0}
   turnSpeed: 180
   aimTolerance: 12
-  fireRange: 22
-  fireInterval: 1.6
-  projectileSpeed: 34
-  projectileLifetime: 4
-  damage: 10
+  fireRange: 40
+  fireInterval: 1
+  projectileSpeed: 30
+  projectileLifetime: 10
+  damage: 25
   targetHeight: 1.2
   spread: 0.2
   requireLineOfSight: 1
   lineOfSightMask:
     serializedVersion: 2
-    m_Bits: 4294967259
+    m_Bits: 275
   projectilePool: {fileID: 0}
 --- !u!114 &4863473366753429368
 MonoBehaviour:
@@ -242,10 +221,22 @@ MonoBehaviour:
   patrolColor: {r: 1, g: 0.85, b: 0.2, a: 1}
   pursueColor: {r: 1, g: 0.55, b: 0.1, a: 1}
   attackColor: {r: 1, g: 0.15, b: 0.15, a: 1}
-  height: 3.2
+  height: 6
   size: {x: 1.6, y: 0.28}
   iconSize: 0.38
   billboard: 1
+--- !u!114 &5281947579620726671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc2dca3bf450cb9f592e33219c5475c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArenaEnemyRegistration
 --- !u!1 &3631192642350276814
 GameObject:
   m_ObjectHideFlags: 0
