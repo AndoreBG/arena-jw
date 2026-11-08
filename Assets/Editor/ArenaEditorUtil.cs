@@ -337,7 +337,8 @@ namespace ArenaSetup
             Sprite knobSprite = LoadBuiltinSprite("UI/Skin/Knob.psd");
 
             // Trilho
-            Image background = CreateImage(root, "Background", backgroundSprite, new Color(1f, 1f, 1f, 0.30f));
+            Image background = CreateImage(root, "Background", backgroundSprite, new Color(1f, 1f, 1f, 0.30f),
+                raycastTarget: true);
             background.rectTransform.anchorMin = new Vector2(0f, 0.3f);
             background.rectTransform.anchorMax = new Vector2(1f, 0.7f);
             background.rectTransform.offsetMin = Vector2.zero;
@@ -365,7 +366,7 @@ namespace ArenaSetup
             handleArea.offsetMin = new Vector2(9f, 0f);
             handleArea.offsetMax = new Vector2(-9f, 0f);
 
-            Image handle = CreateImage(handleArea, "Handle", knobSprite, Color.white);
+            Image handle = CreateImage(handleArea, "Handle", knobSprite, Color.white, raycastTarget: true);
             RectTransform handleRect = handle.rectTransform;
             handleRect.anchorMin = new Vector2(0f, 0f);
             handleRect.anchorMax = new Vector2(0f, 1f);
@@ -380,7 +381,8 @@ namespace ArenaSetup
             return slider;
         }
 
-        private static Image CreateImage(Transform parent, string name, Sprite sprite, Color color)
+        private static Image CreateImage(Transform parent, string name, Sprite sprite, Color color,
+            bool raycastTarget = false)
         {
             GameObject go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
             go.transform.SetParent(parent, false);
@@ -389,7 +391,10 @@ namespace ArenaSetup
             image.sprite = sprite;
             image.color = color;
             image.type = Image.Type.Sliced;
-            image.raycastTarget = false;
+
+            // Por padrão decoração não recebe raycast. O slider é a exceção: o arrasto só começa
+            // se o ponteiro acertar um Graphic do próprio slider (who==targetGraphic ou o Fill).
+            image.raycastTarget = raycastTarget;
 
             return image;
         }

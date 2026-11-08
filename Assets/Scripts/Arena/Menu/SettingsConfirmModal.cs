@@ -31,10 +31,30 @@ public sealed class SettingsConfirmModal : MonoBehaviour
     {
         if (modalRoot == null) BuildHierarchy();
 
+        // Os botões são ligados aqui, e NÃO só no BuildHierarchy: na cena montada pelo Editor
+        // script o modal já existe, então BuildHierarchy nunca roda e os botões ficariam sem
+        // nenhuma ação (o painel abre e não fecha).
+        WireButtons();
+
         // Não se desativa se o Awake está rodando por causa do SetActive(true) do Show — isso
         // acontece quando o objeto nasce inativo na cena e seria fechado no mesmo instante em
         // que fosse aberto.
         if (!showing && modalRoot != null) modalRoot.SetActive(false);
+    }
+
+    private void WireButtons()
+    {
+        if (yesButton != null)
+        {
+            yesButton.onClick.RemoveAllListeners();
+            yesButton.onClick.AddListener(Confirm);
+        }
+
+        if (noButton != null)
+        {
+            noButton.onClick.RemoveAllListeners();
+            noButton.onClick.AddListener(Dismiss);
+        }
     }
 
     public void Show(Action confirmed)
@@ -43,6 +63,10 @@ public sealed class SettingsConfirmModal : MonoBehaviour
 
         showing = true;
         onConfirm = confirmed;
+
+        // Liga antes de ativar: se o objeto nasceu inativo na cena, o Awake ainda não rodou.
+        WireButtons();
+
         if (messageText != null) messageText.text = DefaultMessage;
         if (modalRoot != null) modalRoot.SetActive(true);
 

@@ -87,10 +87,36 @@ Depois, no Unity: **Arena → Setup Main Menu + Playground** e **Bake** da NavMe
 |---|---|
 | Compilação dos 22 scripts de runtime contra stubs Unity 6/uGUI/TMP/Input System | **0 erros** |
 | Compilação dos 7 scripts de Editor (`UNITY_EDITOR`) | **0 erros** |
-| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência, menu) | **113 verificações, 0 falhas** |
+| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência, menu, sliders, prefab do inimigo) | **173 verificações, 0 falhas** |
 
 Não validado (exige o Unity Editor): layout visual das telas, bake da NavMesh, comportamento
 em Play Mode, criação de assets/layer pelos menus.
+
+### Prefab do inimigo enxuto (versão atual)
+
+O `Inimigo.prefab` guarda só a **arte** (`Cabine`, `Corpo`) + `Rigidbody` + `NavMeshAgent`.
+Todo o comportamento entra pelo comando `Arena > Setup Enemy Prefab (Alien Ship)`, que pode
+rodar quantas vezes quiser ("pega se existir, senão cria"):
+
+| Componente | Para que serve |
+|---|---|
+| `Vida` | morrer e pontuar — **precisa estar no mesmo objeto** que o `ArenaEnemyRegistration` |
+| `BoxCollider` | recebe o tiro do jogador (sem ele a nave não leva dano) |
+| `NavMeshAgent` | movimento no plano; `updateRotation`/`updateUpAxis` desligados |
+| `ArenaEnemySensor` | enxerga o jogador |
+| `AlienShipAI` | patrulha / persegue / ataca |
+| `AlienShipWeapon` | atira da frente da nave |
+| `EnemyHover` | voa a 3 m ± 0,5 m |
+| `EnemyHealthBar` | barra de vida acima da nave |
+| `ArenaEnemyRegistration` | liga a morte ao spawner e ao placar |
+
+### Correção: sliders, modal e prefab do inimigo (`2aa9c94`)
+
+| Erro | Causa | Correção |
+|---|---|---|
+| Sliders de configurações não arrastam | `CreateImage` gravava `raycastTarget = false` em tudo. O `Slider` só inicia o arrasto quando o ponteiro acerta um `Graphic` dele (`targetGraphic` ou `Fill`) | `CreateImage` aceita `raycastTarget`; `Handle` e `Background` do slider nascem com raycast ligado. Os 9 gráficos dos 3 sliders foram corrigidos na cena |
+| Botões Sim/Não do aviso não respondem | `onClick.AddListener` existia **só** dentro de `BuildHierarchy`, que não roda quando o modal já está montado. E o objeto nasce inativo, então o `Awake` também não rodava | extraído para `WireButtons()`, chamado no `Awake` **e** no `Show` (antes de ativar) |
+| `Setup Enemy Prefab`: "script inexistente" e prefab não salva | o prefab carregava um `NavMeshModifier` cujo GUID não resolve no projeto → componente *Missing (Mono Script)* no objeto raiz | componente órfão removido do prefab; o setup agora limpa componentes sem script antes de salvar e avisa quando `SaveAsPrefabAsset` falha |
 
 ### Correção: botões do menu sem resposta (`cc04d2a`)
 

@@ -97,23 +97,18 @@ namespace ArenaSetup
 
             try
             {
-                // --- Hierarquia: o corpo visual precisa de um pai neutro ---
-                Transform body = instance.transform.Find("Corpo");
-                if (body == null) body = FindChildContaining(instance.transform, "Corpo");
-                if (body != null && body.parent != instance.transform)
-                    body.SetParent(instance.transform, true);
+                // O prefab guarda só a arte (Cabine, Corpo) + Rigidbody + NavMeshAgent. Este
+                // comando acrescenta o comportamento. Tudo abaixo é "pega se existir, senão cria",
+                // então pode rodar quantas vezes quiser.
 
-                // --- Tag: o prefab antigo estava como "Player" e quebrava o dano de facção ---
+                // --- Tag e layer ---
                 try { instance.tag = "Untagged"; }
                 catch { Debug.LogWarning("[Arena] Tag Untagged indisponível."); }
 
-                instance.layer = LayerMask.NameToLayer(LayerEnemy) >= 0
-                    ? LayerMask.NameToLayer(LayerEnemy)
-                    : 0;
+                int enemyLayer = LayerMask.NameToLayer(LayerEnemy);
+                instance.layer = enemyLayer >= 0 ? enemyLayer : 0;
 
-                // --- Rigidbody: kinematic. O NavMeshAgent move o Transform; sem o Rigidbody os
-                // colisores da nave seriam "static colliders em movimento" (custo de reconstrução
-                // da árvore de física) e o projétil do jogador não acertaria a nave de forma confiável.
+                // --- Rigidbody: kinematic, porque quem move é o NavMeshAgent ---
                 Rigidbody body3d = instance.GetComponent<Rigidbody>();
                 if (body3d == null) body3d = instance.AddComponent<Rigidbody>();
                 body3d.isKinematic = true;
@@ -121,15 +116,16 @@ namespace ArenaSetup
                 body3d.detectCollisions = true;
                 body3d.interpolation = RigidbodyInterpolation.None;
 
-                // --- Colisor sólido único na raiz (é ele que recebe o tiro do jogador) ---
-                BoxCollider rootBox = instance.GetComponent<BoxCollider>();
-                if (rootBox == null) rootBox = instance.AddComponent<BoxCollider>();
-                rootBox.isTrigger = false;    // o BoxCollider da raiz nasceu como trigger
-                rootBox.enabled = true;
-                rootBox.center = new Vector3(0f, 0.75f, 0f);
-                rootBox.size = new Vector3(3.4f, 1.8f, 4.2f);
+                // --- Colisor: é ele que recebe o tiro do jogador ---
+                // Sem colisor, Physics.Linecast do tiro não acha a nave e ela nunca leva dano.
+                BoxCollider hitBox = instance.GetComponent<BoxCollider>();
+                if (hitBox == null) hitBox = instance.AddComponent<BoxCollider>();
+                hitBox.isTrigger = false;
+                hitBox.enabled = true;
+                hitBox.center = new Vector3(0f, 0.75f, 0f);
+                hitBox.size = new Vector3(3.4f, 1.8f, 4.2f);
 
-                // --- NavMeshAgent: só X/Z; rotação é da arma, altura é do EnemyHover ---
+                // --- NavMeshAgent: anda no plano; a altura vem do EnemyHover ---
                 NavMeshAgent agent = instance.GetComponent<NavMeshAgent>();
                 if (agent == null) agent = instance.AddComponent<NavMeshAgent>();
                 agent.radius = 1.2f;
@@ -138,91 +134,70 @@ namespace ArenaSetup
                 agent.speed = 4f;
                 agent.acceleration = 8f;
                 agent.angularSpeed = 360f;
-                agent.stoppingDistance = 0.5f;
+                agent.stoppingDistance = 0f;
                 agent.autoBraking = false;
                 agent.autoTraverseOffMeshLink = false;
-                agent.updatePosition = true;    // agente dono do X/Z; a altura vem do baseOffset (EnemyHover)
-                agent.updateRotation = false;   // a AlienShipWeapon gira a nave no eixo Y
+                agent.updatePosition = true;    // o agente manda no X/Z
+                agent.updateRotation = false;   // quem gira a nave é a AlienShipWeapon
                 agent.updateUpAxis = false;
 
-                // --- Scripts antigos de tanque (não se aplicam a uma nave voadora) ---
-                RemoveIfPresent<ArenaEnemyAI>(instance);
-                RemoveIfPresent<ArenaEnemyWeapon>(instance);
-
-                // --- Vida: o spawner controla a destruição ---
+                // --- Vida: sem ela a nave não morre nem pontua ---
+                // ArenaEnemyRegistration exige Vida no MESMO GameObject ([RequireComponent]).
                 Vida life = instance.GetComponent<Vida>();
-                if (life == null)
-                {
-                    life = instance.AddComponent<Vida>();
-                    ArenaEditorUtil.SetField(life, "vidaMaxima", 100f);
-                }
+                if (life == null) life = instance.AddComponent<Vida>();
+                ArenaEditorUtil.SetField(life, "vidaMaxima", 100f);
                 ArenaEditorUtil.SetField(life, "destruirAoMorrer", false);
 
-                // --- Sensor (sem autoridade de movimento) ---
+                // --- Sensor: quem a nave vê ---
                 ArenaEnemySensor sensor = instance.GetComponent<ArenaEnemySensor>();
                 if (sensor == null) sensor = instance.AddComponent<ArenaEnemySensor>();
                 ArenaEditorUtil.SetField(sensor, "viewDistance", 26f);
                 ArenaEditorUtil.SetField(sensor, "fieldOfView", 220f);
                 ArenaEditorUtil.SetField(sensor, "blockingMask", ArenaGameInitializer.DefaultLineOfSightMask);
-                ArenaEditorUtil.SetField(sensor, "eyes", body != null ? body : instance.transform);
+                ArenaEditorUtil.SetField(sensor, "eyes", instance.transform);
 
-                // --- IA da nave ---
+                // --- IA: patrulha, persegue e ataca ---
                 AlienShipAI ai = instance.GetComponent<AlienShipAI>();
                 if (ai == null) ai = instance.AddComponent<AlienShipAI>();
                 ArenaEditorUtil.SetField(ai, "sensor", sensor);
 
-                // --- Arma ---
+                // --- Arma: atira da frente da nave ---
                 AlienShipWeapon weapon = instance.GetComponent<AlienShipWeapon>();
                 if (weapon == null) weapon = instance.AddComponent<AlienShipWeapon>();
                 ArenaEditorUtil.SetField(weapon, "lineOfSightMask", ArenaGameInitializer.DefaultLineOfSightMask);
 
-                // --- Flutuação ---
+                // --- Flutuação: 3 m ± 0,5 m ---
                 if (instance.GetComponent<EnemyHover>() == null) instance.AddComponent<EnemyHover>();
 
-                // --- Barra de vida + ícone de estado ---
-                EnemyHealthBar healthBarComponent = instance.GetComponent<EnemyHealthBar>();
-                if (healthBarComponent == null) healthBarComponent = instance.AddComponent<EnemyHealthBar>();
-                // A barra é visual: um raycaster em cada nave custaria caro.
-                if (healthBarComponent.GetComponent<UnityEngine.UI.GraphicRaycaster>() != null)
-                    Object.DestroyImmediate(healthBarComponent.GetComponent<UnityEngine.UI.GraphicRaycaster>());
-
-                // --- Registro (morte -> pontuação). O spawner também adiciona se faltar. ---
-                if (instance.GetComponent<ArenaEnemyRegistration>() == null) instance.AddComponent<ArenaEnemyRegistration>();
-
-                // Barra de vida usa a Vida do mesmo objeto.
+                // --- Barra de vida acima da nave ---
                 EnemyHealthBar healthBar = instance.GetComponent<EnemyHealthBar>();
+                if (healthBar == null) healthBar = instance.AddComponent<EnemyHealthBar>();
                 ArenaEditorUtil.SetField(healthBar, "life", life);
 
-                // Efeitos de tiro do tanque não valem para a nave: apaga o FX da boca do cano.
-                Transform fx = FindChildContaining(instance.transform, "FX_Tiro");
-                if (fx != null) Object.DestroyImmediate(fx.gameObject);
+                // --- Registro: liga a morte ao spawner e ao placar ---
+                if (instance.GetComponent<ArenaEnemyRegistration>() == null)
+                    instance.AddComponent<ArenaEnemyRegistration>();
 
-                // --- SpawnPoints ---
-                EnsureSpawnPoints(instance.transform);
+                PrefabUtility.SaveAsPrefabAsset(instance, ArenaEditorUtil.EnemyPrefabPath, out bool saveOk);
 
-                NavMeshAgent finalAgent = instance.GetComponent<NavMeshAgent>();
-                PrefabUtility.SaveAsPrefabAsset(instance, ArenaEditorUtil.EnemyPrefabPath);
-                Debug.Log("<b>[Arena] Prefab Inimigo reescrito</b> como nave alienígena.\n" +
-                          $"• NavMeshAgent: updatePosition={finalAgent.updatePosition}, updateRotation={finalAgent.updateRotation}, updateUpAxis={finalAgent.updateUpAxis}\n" +
-                          $"• Altura de voo: {instance.GetComponent<EnemyHover>().HoverHeight:0.0} m (baseOffset do agente)\n" +
-                          "• Componentes: AlienShipAI, AlienShipWeapon, EnemyHover, EnemyHealthBar, ArenaEnemyRegistration, Vida\n" +
-                          $"• Tag: {instance.tag} · Layer: {LayerMask.LayerToName(instance.layer)}\n" +
-                          "⚠ A carga do jogador NÃO é o componente Vida desta nave: o NavMeshAgent cuida do movimento.");
+                if (!saveOk)
+                {
+                    Debug.LogError("[Arena] Não foi possível salvar o prefab Inimigo. " +
+                                   "Feche o prefab se estiver aberto no Prefab Mode e tente de novo.");
+                    return;
+                }
+
+                Debug.Log("<b>[Arena] Prefab Inimigo configurado.</b>\n" +
+                          "• NavMeshAgent: " + (agent.updateRotation ? "gira sozinho" : "só anda no plano") +
+                          " · altura de voo pelo EnemyHover\n" +
+                          "• Componentes: Vida, ArenaEnemySensor, AlienShipAI, AlienShipWeapon, " +
+                          "EnemyHover, EnemyHealthBar, ArenaEnemyRegistration\n" +
+                          "• Tag: " + instance.tag + " · Layer: " + LayerMask.LayerToName(instance.layer));
             }
             finally
             {
-                Object.DestroyImmediate(instance);
+                if (instance != null) Object.DestroyImmediate(instance);
             }
-        }
-
-        private static void EnsureSpawnPoints(Transform instanceRoot)
-        {
-            // Os pontos de spawn ficam como um objeto irmão na cena — não no prefab.
-            // Aqui só validamos se já existem na cena aberta.
-            GameObject existing = GameObject.Find("PontosDeSpawn");
-            if (existing != null) return;
-            Debug.Log("[Arena] Crie 4 a 8 Transforms filhos de um 'PontosDeSpawn' no Playground para " +
-                      "controlar onde as naves aparecem. Sem eles, o spawner usa pontos aleatórios do NavMesh.");
         }
 
         #endregion

@@ -10,8 +10,15 @@ GameObject:
   m_Component:
   - component: {fileID: 607881821067262807}
   - component: {fileID: 3336064061982472193}
-  - component: {fileID: 5657469408540593874}
   - component: {fileID: 4563717438202089153}
+  - component: {fileID: 5531868447968096397}
+  - component: {fileID: 2130711200740270333}
+  - component: {fileID: 3069618116409668783}
+  - component: {fileID: 4883561827034985238}
+  - component: {fileID: 7106821139262559771}
+  - component: {fileID: 4863473366753429368}
+  - component: {fileID: 4120245319706398713}
+  - component: {fileID: 8890956404817682221}
   m_Layer: 8
   m_Name: Inimigo
   m_TagString: Untagged
@@ -63,26 +70,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5657469408540593874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2266264261382295678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
-  m_SerializedVersion: 0
-  m_OverrideArea: 0
-  m_Area: 0
-  m_OverrideGenerateLinks: 0
-  m_GenerateLinks: 0
-  m_IgnoreFromBuild: 1
-  m_ApplyToChildren: 1
-  m_AffectedAgents: ffffffff
 --- !u!195 &4563717438202089153
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -97,7 +84,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 0.5
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -105,6 +92,173 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!65 &5531868447968096397
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.4, y: 1.8, z: 4.2}
+  m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!114 &2130711200740270333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abd3002bc32da34f88501f8db10424b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Vida
+  vidaMaxima: 100
+  destruirAoMorrer: 0
+  tempoParaDestruir: 0
+--- !u!114 &3069618116409668783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ccd12622a1499d80f42547c0cb7719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArenaEnemySensor
+  eyes: {fileID: 607881821067262807}
+  target: {fileID: 0}
+  viewDistance: 26
+  fieldOfView: 220
+  targetHeight: 1.1
+  blockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967259
+  viewDistanceMultiplier: 1
+--- !u!114 &4883561827034985238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7fffe7f134ef3e6adc32954306cc55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlienShipAI
+  target: {fileID: 0}
+  sensor: {fileID: 3069618116409668783}
+  patrolWeight: 40
+  pursueWeight: 60
+  attackWeight: 100
+  decisionInterval: 0.2
+  patrolIdleTime: {x: 1.5, y: 4}
+  patrolRadius: 12
+  patrolSpeed: 2
+  patrolArriveDistance: 1.5
+  pursueSpeed: 4
+  pursueRefresh: 0.25
+  attackRange: 18
+  attackExitMultiplier: 1.2
+  aggression: 0.5
+--- !u!114 &7106821139262559771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 696db56681b9e529805037b5b0254367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlienShipWeapon
+  target: {fileID: 0}
+  turnSpeed: 180
+  aimTolerance: 12
+  fireRange: 22
+  fireInterval: 1.6
+  projectileSpeed: 34
+  projectileLifetime: 4
+  damage: 10
+  targetHeight: 1.2
+  spread: 0.2
+  requireLineOfSight: 1
+  lineOfSightMask:
+    serializedVersion: 2
+    m_Bits: 4294967259
+  projectilePool: {fileID: 0}
+--- !u!114 &4863473366753429368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b77aa2612cde47d00c8139b3ba24c5dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHover
+  hoverHeight: 3
+  amplitude: 0.5
+  frequency: 0.35
+  sharpness: 3
+--- !u!114 &4120245319706398713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d7a5006836652131b78a3551cc2bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthBar
+  life: {fileID: 2130711200740270333}
+  uiRoot: {fileID: 0}
+  fillImage: {fileID: 0}
+  stateIcon: {fileID: 0}
+  patrolIcon: {fileID: 0}
+  pursueIcon: {fileID: 0}
+  attackIcon: {fileID: 0}
+  fullColor: {r: 0.3, g: 1, b: 0.35, a: 1}
+  emptyColor: {r: 1, g: 0.25, b: 0.2, a: 1}
+  patrolColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  pursueColor: {r: 1, g: 0.55, b: 0.1, a: 1}
+  attackColor: {r: 1, g: 0.15, b: 0.15, a: 1}
+  height: 3.2
+  size: {x: 1.6, y: 0.28}
+  iconSize: 0.38
+  billboard: 1
+--- !u!114 &8890956404817682221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266264261382295678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArenaEnemyRegistration
 --- !u!1 &3631192642350276814
 GameObject:
   m_ObjectHideFlags: 0
