@@ -209,7 +209,6 @@ namespace ArenaSetup
 
         #region Cena do Playground
 
-        [MenuItem("Arena/Setup Playground Scene", priority = 40)]
         /// <summary>
         /// Remove componentes cujo m_Script ficou vazio (fileID 0). O Unity se recusa a salvar
         /// um prefab nesse estado: "You are trying to save a Prefab with a missing script".
@@ -233,6 +232,7 @@ namespace ArenaSetup
             return removed;
         }
 
+        [MenuItem("Arena/Setup Playground Scene", priority = 40)]
         public static void SetupPlaygroundScene()
         {
             Scene scene = EditorSceneManager.OpenScene(ArenaEditorUtil.PlaygroundScenePath, OpenSceneMode.Single);

@@ -1861,6 +1861,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4469637733464784245}
   - component: {fileID: 2530457723823143528}
+  - component: {fileID: 1079322271964755245}
+  - component: {fileID: 982911483610813973}
   m_Layer: 5
   m_Name: ArenaGame
   m_TagString: Untagged
@@ -1904,6 +1906,43 @@ MonoBehaviour:
   hud: {fileID: 1852076462040642577}
   gameOver: {fileID: 2114192311412178688}
   logReport: 1
+--- !u!114 &1079322271964755245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7842396841415672094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0867dda11d4b74dc807888e042838160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tiroDoJogador: {fileID: 8300000, guid: e231cd3273ab5954895e82e1e73703d5, type: 3}
+  tiroDoInimigo: {fileID: 8300000, guid: 2bc398c6b3643f347bef6bd5212cdeaf, type: 3}
+  naveAlienigena: {fileID: 8300000, guid: 28f6cf7334383c0498fd556b4971e8ec, type: 3}
+  musica: {fileID: 8300000, guid: aaf137d839cce5146a43b830dd5fc27f, type: 3}
+  volumeDosEfeitos: 1
+  volumeDaMusica: 0.5
+  volumeDaNave: 0.8
+--- !u!114 &982911483610813973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7842396841415672094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d17187eac4d7d3e89ef9d698de20bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tecla: 41
+  segundosSegurando: 3
+  funcionarNoGameOver: 0
+  mostrarAviso: 1
+  textoDoAviso: Voltando ao menu...
+  textoParaSoltarAntes: Solte Esc para cancelar
 --- !u!1 &7994175286676276332
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,30 +2254,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 5426922978819978084}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8307283365016752459
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,27 +2524,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 3440286202469473975}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []

@@ -237,6 +237,10 @@ public class TankPlayerInput : MonoBehaviour
         nextFireTime = Time.time + fireRate;
         shotsFired++;
 
+        // tank-shot
+        if (AudioDaArena.Instancia != null)
+            AudioDaArena.Instancia.TocarTiroDoJogador();
+
         // Dispara o Particle System do tiro
         if (shootVFX != null)
         {

@@ -51,6 +51,33 @@ public sealed class ArenaGameInitializer : MonoBehaviour
     }
 
     /// <summary>
+    /// Garante o <see cref="AudioDaArena"/> na cena: é ele que toca os efeitos (tank-shot,
+    /// alien-shot, alien-ship) e a música de fundo.
+    /// </summary>
+    public static AudioDaArena EnsureAudio()
+    {
+        AudioDaArena atual = AudioDaArena.Instancia;
+        if (atual == null) atual = FindFirstObjectByType<AudioDaArena>();
+
+        if (atual != null) return atual;
+
+        GameObject go = new GameObject("AudioDaArena");
+        return go.AddComponent<AudioDaArena>();
+    }
+
+    /// <summary>
+    /// Garante o atalho de saída (segurar Esc volta ao menu sem gravar pontuação).
+    /// </summary>
+    public static AtalhoParaOMenu EnsureAtalhoParaOMenu()
+    {
+        AtalhoParaOMenu atual = FindFirstObjectByType<AtalhoParaOMenu>();
+        if (atual != null) return atual;
+
+        GameObject go = new GameObject("AtalhoParaOMenu");
+        return go.AddComponent<AtalhoParaOMenu>();
+    }
+
+    /// <summary>
     /// Garante um EventSystem compatível com o Input System. Sem isso, o campo de apelido do
     /// Game Over e os botões do menu não recebem clique.
     /// </summary>
@@ -74,6 +101,8 @@ public sealed class ArenaGameInitializer : MonoBehaviour
     {
         GameSettings.ApplyRuntimeSettings();
         EnsureEventSystem();
+        EnsureAudio();
+        EnsureAtalhoParaOMenu();
 
         if (difficultyCatalog == null) difficultyCatalog = DifficultyCatalogLocator.Find();
         if (playerStats == null) playerStats = Resources.Load<PlayerStats>("PlayerStats");

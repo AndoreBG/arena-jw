@@ -11,11 +11,23 @@ public sealed class ArenaEnemyRegistration : MonoBehaviour
     private Vida life;
     private ArenaSpawner spawner;
     private bool resolved;
+    private AudioSource somDaNave;
 
     private void Awake()
     {
         life = GetComponent<Vida>();
     }
+
+    /// <summary>
+    /// O loop da nave alienígena começa junto com o inimigo. Fica no próprio GameObject,
+    /// então para sozinho quando ele é destruído ao morrer.
+    /// </summary>
+    private void Start()
+    {
+        if (AudioDaArena.Instancia != null)
+            somDaNave = AudioDaArena.Instancia.TocarNaveAlienigena(gameObject);
+    }
+
 
     internal void Initialize(ArenaSpawner owner, ArenaManager arena)
     {
@@ -53,6 +65,11 @@ public sealed class ArenaEnemyRegistration : MonoBehaviour
 
     private void OnDestroy()
     {
+        // O loop da nave some junto com o inimigo; avisa o AudioDaArena para parar de
+        // atualizar uma fonte que nao existe mais.
+        if (AudioDaArena.Instancia != null)
+            AudioDaArena.Instancia.EsquecerNave(somDaNave);
+
         if (!resolved && spawner != null)
         {
             resolved = true;

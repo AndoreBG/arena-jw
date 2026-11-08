@@ -85,7 +85,14 @@ public sealed class TiroDoInimigo : MonoBehaviour
             tiro,
             out _);
 
-        if (projetil != null) TirosDados++;
+        if (projetil != null)
+        {
+            TirosDados++;
+
+            // alien-shot
+            if (AudioDaArena.Instancia != null)
+                AudioDaArena.Instancia.TocarTiroDoInimigo();
+        }
     }
 
     /// <summary>
