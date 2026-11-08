@@ -3849,7 +3849,7 @@ MonoBehaviour:
   settingsButton: {fileID: 745008206}
   quitButton: {fileID: 1438843589}
   gameSceneName: playground
-  introSceneName: menu_principal
+  introSceneName: 
   messageText: {fileID: 1740847172}
 --- !u!4 &415757538
 Transform:
@@ -12141,7 +12141,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
