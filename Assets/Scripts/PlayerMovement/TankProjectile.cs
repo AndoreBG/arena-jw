@@ -25,6 +25,10 @@ public struct TankShotData
 [AddComponentMenu("Arena/Tank/Tank Projectile")]
 public sealed class TankProjectile : MonoBehaviour
 {
+    [Header("Partículas de impacto")]
+    [Tooltip("Cor da faísca no impacto. Alpha 0 desliga o efeito.")]
+    [SerializeField] private Color corDoImpacto = new Color(1f, 0.75f, 0.3f, 1f);
+
     [Header("Movimento")]
     [Tooltip("Velocidade de deslocamento do projétil em unidades por segundo.")]
     [SerializeField, Min(0.1f)] private float speed = 50f;
@@ -175,7 +179,23 @@ public sealed class TankProjectile : MonoBehaviour
                 }
             }
         }
+        ExplodirNoImpacto(collision);
         RequestDespawn();
+    }
+
+    /// <summary>
+    /// Faísca no ponto exato do impacto. Usa a escala pequena: o jogador atira uma vez por
+    /// segundo, e uma explosão grande em cada tiro cobre justamente a mira.
+    /// </summary>
+    private void ExplodirNoImpacto(Collision collision)
+    {
+        if (corDoImpacto.a <= 0f) return;
+
+        Vector3 onde = transform.position;
+        if (collision != null && collision.contactCount > 0)
+            onde = collision.GetContact(0).point;
+
+        ExplosaoDeParticulas.ExplodirEm(onde, corDoImpacto, 0.4f);
     }
 
     /// <summary>

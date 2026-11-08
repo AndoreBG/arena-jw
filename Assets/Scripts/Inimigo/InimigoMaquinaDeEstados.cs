@@ -136,6 +136,19 @@ public sealed class InimigoMaquinaDeEstados : MonoBehaviour
         return true;
     }
 
+    [Header("Explosão na morte")]
+    [Tooltip("Cor das partículas quando o inimigo morre.")]
+    [SerializeField] private Color corDaExplosaoDeMorte = new Color(1f, 0.45f, 0.1f, 1f);
+
+    [Tooltip("Escala da explosão de morte. 1 = tamanho padrão.")]
+    [SerializeField, Min(0.1f)] private float tamanhoDaExplosao = 1.2f;
+
+    [Tooltip("Altura em que a explosão nasce, em relação ao pivô (pivô costuma ficar nos pés).")]
+    [SerializeField] private float alturaDaExplosao = 0.8f;
+
+    /// <summary>Referência guardada para não depender de GetComponent num objeto já destruído.</summary>
+    private Vida vidaAssinada;
+
     private void Awake()
     {
         agente = GetComponent<NavMeshAgent>();
@@ -155,6 +168,36 @@ public sealed class InimigoMaquinaDeEstados : MonoBehaviour
     private void Start()
     {
         EntrarNoEstado(estadoAtual);
+
+        // Explosão na morte: o Vida avisa e aqui só escolhemos a cor/tamanho.
+        vidaAssinada = GetComponent<Vida>();
+        if (vidaAssinada != null)
+        {
+            vidaAssinada.AoMorrer -= ExplodirAoMorrer;
+            vidaAssinada.AoMorrer += ExplodirAoMorrer;
+        }
+    }
+
+    /// <summary>
+    /// O Vida do inimigo é destruído junto com o objeto (destruirAoMorrer), então na hora do
+    /// OnDestroy ele já pode ser null — e nesse caso não há evento para desinscrever.
+    /// </summary>
+    private void OnDestroy()
+    {
+        if (vidaAssinada != null) vidaAssinada.AoMorrer -= ExplodirAoMorrer;
+    }
+
+    /// <summary>
+    /// Explosão grande na morte do inimigo. A posição sobe um pouco porque o pivô do prefab
+    /// fica nos pés, e explosão no chão fica pela metade dentro da geometria.
+    /// </summary>
+    private void ExplodirAoMorrer()
+    {
+        // Alpha zero = explosão desligada pelo Inspector (útil para testar sem efeito).
+        if (corDaExplosaoDeMorte.a <= 0f) return;
+
+        Vector3 onde = transform.position + Vector3.up * alturaDaExplosao;
+        ExplosaoDeParticulas.ExplodirEm(onde, corDaExplosaoDeMorte, tamanhoDaExplosao);
     }
 
     private void Update()

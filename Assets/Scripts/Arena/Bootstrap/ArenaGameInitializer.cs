@@ -208,6 +208,22 @@ public sealed class ArenaGameInitializer : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
+        // Escudo de dano do jogador (shader autoral Arena/EscudoDoTanque).
+        //
+        // O caminho normal é o escudo JÁ estar na cena: montado uma vez por
+        // Arena > Efeitos > Montar Escudo do Tanque na Cena e salvo com o Tanque. Nesse caso
+        // CriarNo encontra o existente e não cria nada. A criação em runtime fica só como rede
+        // de segurança para cenas antigas — o objetivo é não depender dela.
+        if (player != null && player.GetComponentInChildren<EscudoDoTanque>(true) == null)
+        {
+            Debug.LogWarning("[ArenaGameInitializer] O escudo do tanque não está na cena. " +
+                             "Criando em runtime desta vez; para deixá-lo fixo no Tanque, rode " +
+                             "Arena > Efeitos > Montar Escudo do Tanque na Cena e salve a cena.",
+                             player);
+        }
+
+        EscudoDoTanque.CriarNo(player != null ? player.transform : null);
+
         // 1. Dependências primeiro.
         ArenaSpawner spawner = FindFirstObjectByType<ArenaSpawner>();
         if (spawner == null)

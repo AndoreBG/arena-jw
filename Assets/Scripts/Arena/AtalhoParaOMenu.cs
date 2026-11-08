@@ -231,26 +231,49 @@ public sealed class AtalhoParaOMenu : MonoBehaviour
         barraDeProgresso.color = new Color(1f, 0.72f, 0.2f, 1f);   // âmbar, para não confundir com vida
         barraDeProgresso.raycastTarget = false;
 
-        // Sem sprite, o Image ignora o "Filled" e o fillAmount não faz nada (foi o bug da
-        // barra de vida). Este é o sprite branco embutido da UI do Unity.
-        barraDeProgresso.sprite = SpriteDeUI();
+        // O "Filled" precisa de um sprite: sem ele o fillAmount não faz nada.
+        //
+        // Pedir o sprite embutido de UI pelo Resources nao funciona em runtime: o console
+        // recebe "Failed to find UI/Skin/UISprite.psd" a cada partida. Geramos o sprite
+        // branco 1x1 por codigo: mesmo efeito, custa 4 bytes e nunca falta.
+        // código — é o mesmo efeito, custa 4 bytes e nunca falta.
+        barraDeProgresso.sprite = SpriteBranco();
         barraDeProgresso.type = Image.Type.Filled;
         barraDeProgresso.fillMethod = Image.FillMethod.Horizontal;
         barraDeProgresso.fillOrigin = (int)Image.OriginHorizontal.Left;
         barraDeProgresso.fillAmount = 0f;
     }
 
-    /// <summary>
-    /// O sprite branco embutido do Unity (UI/Skin/UISprite.psd). Em build ele vem pelo
-    /// Resources, então não depende de nenhum asset do projeto.
-    /// </summary>
-    private static Sprite SpriteDeUI()
-    {
-        Sprite sprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
-        if (sprite == null)
-            sprite = Resources.Load<Sprite>(ResourceFolder + "/UISprite");
+    private static Sprite spriteBranco;
 
-        return sprite;
+    /// <summary>
+    /// Sprite branco 1x1 gerado em runtime. Serve para qualquer Image que precise de
+    /// "Filled" ou de uma cor sólida. Ao contrário de buscar o sprite embutido de UI pelo
+    /// Resources, funciona em qualquer versão do Unity sem depender de um recurso que pode
+    /// não existir.
+    ///
+    /// Criado uma única vez e reaproveitado: gerar por chamada vazaria uma textura por uso.
+    /// </summary>
+    private static Sprite SpriteBranco()
+    {
+        if (spriteBranco != null) return spriteBranco;
+
+        Texture2D textura = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+        textura.name = "Branco1x1";
+        textura.SetPixel(0, 0, Color.white);
+        textura.Apply();
+        textura.hideFlags = HideFlags.HideAndDontSave;   // não entra na cena nem no build
+
+        spriteBranco = Sprite.Create(
+            textura,
+            new Rect(0f, 0f, 1f, 1f),
+            new Vector2(0.5f, 0.5f),
+            100f);
+
+        spriteBranco.name = "Branco1x1";
+        spriteBranco.hideFlags = HideFlags.HideAndDontSave;
+
+        return spriteBranco;
     }
 
     private void AtualizarAviso()
