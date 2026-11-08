@@ -166,7 +166,11 @@ public sealed class AlienShipAI : MonoBehaviour, IEnemyStateProvider
     /// <summary>Raio em que a nave percebe o jogador mesmo sem linha de visão direta.</summary>
     private float AwarenessRadius => attackRange * 2f;
 
-    private AlienShipState DecideState() => AlienShipDecision.Choose(aware, attackRangeLatched,
+    // ATENÇÃO ao primeiro argumento: o Choose espera (hasTarget, attackInRange, ...).
+    // Passar 'aware' aqui fazia a nave voltar a patrulhar sempre que perdia a visão do
+    // jogador — mesmo com ele do lado — e ela nunca chegava a entrar em Attack, estado em
+    // que a arma é liberada. Era isso que impedia o inimigo de atirar.
+    private AlienShipState DecideState() => AlienShipDecision.Choose(hasTarget, attackRangeLatched,
         patrolWeight, pursueWeight, attackWeight);
 
     private void EnterState(AlienShipState next)

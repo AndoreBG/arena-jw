@@ -103,16 +103,40 @@ public sealed class AlienShipWeapon : MonoBehaviour
         Fire(delta.normalized);
     }
 
-    /// <summary>Verdadeiro quando o primeiro obstáculo no caminho é o próprio alvo.</summary>
+    /// <summary>
+    /// Verdadeiro quando nenhum obstáculo sólido fica entre a nave e o alvo.
+    ///
+    /// Usa RaycastAll e não Linecast: o Linecast devolve só o primeiro obstáculo, e o primeiro
+    /// acaba sendo um collider da própria nave (Cabine, Corpo). Os hits do próprio atirador são
+    /// ignorados e a checagem continua até achar o alvo ou uma parede de verdade.
+    /// </summary>
     private bool HasLineOfSight(Vector3 aimPoint)
     {
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-        if (!Physics.Linecast(origin, aimPoint, out RaycastHit hit, lineOfSightMask, QueryTriggerInteraction.Ignore))
-            return true;
+        Vector3 delta = aimPoint - origin;
+        float distance = delta.magnitude;
+        if (distance <= 0.001f) return true;
 
-        Transform hitTransform = hit.transform;
-        return hitTransform == transform || hitTransform.IsChildOf(transform) ||
-               (target != null && (hitTransform == target || hitTransform.IsChildOf(target)));
+        RaycastHit[] hits = Physics.RaycastAll(origin, delta / distance, distance,
+            lineOfSightMask, QueryTriggerInteraction.Ignore);
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit hit in hits)
+        {
+            Transform hitTransform = hit.transform;
+
+            // Própria nave (raiz ou filhos): não conta como obstáculo.
+            if (hitTransform == transform || hitTransform.IsChildOf(transform)) continue;
+
+            // Alvo encontrado antes de qualquer parede: linha de visão livre.
+            if (target != null && (hitTransform == target || hitTransform.IsChildOf(target))) return true;
+
+            // Qualquer outra coisa sólida no caminho bloqueia.
+            return false;
+        }
+
+        // Nada no caminho até o alvo.
+        return true;
     }
 
     private void Fire(Vector3 direction)

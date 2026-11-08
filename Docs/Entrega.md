@@ -87,10 +87,21 @@ Depois, no Unity: **Arena → Setup Main Menu + Playground** e **Bake** da NavMe
 |---|---|
 | Compilação dos 22 scripts de runtime contra stubs Unity 6/uGUI/TMP/Input System | **0 erros** |
 | Compilação dos 7 scripts de Editor (`UNITY_EDITOR`) | **0 erros** |
-| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência, menu, sliders, prefab do inimigo) | **241 verificações, 0 falhas** |
+| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência, menu, sliders, prefab e disparo do inimigo) | **254 verificações, 0 falhas** |
 
 Não validado (exige o Unity Editor): layout visual das telas, bake da NavMesh, comportamento
 em Play Mode, criação de assets/layer pelos menus.
+
+### Inimigo não atirava
+
+Dois defeitos independentes:
+
+| # | Causa | Correção |
+|---|---|---|
+| 1 | `AlienShipAI.DecideState()` passava `aware` como **primeiro** argumento de `AlienShipDecision.Choose`, cuja assinatura é `(hasTarget, attackInRange, ...)`. Sem visão direta a nave voltava para `Patrol` mesmo com o jogador ao lado — e só o estado `Attack` chama `SetWeaponActive(true)` | passa `hasTarget` |
+| 2 | `HasLineOfSight` usava `Physics.Linecast`, que devolve só o **primeiro** obstáculo. Com colliders na própria nave, o primeiro hit era ela mesma: a visão ao jogador nunca era avaliada | usa `RaycastAll`, descarta os hits da própria hierarquia e segue até achar o alvo ou uma parede |
+
+Nenhum valor do prefab ou da cena foi alterado.
 
 ### Erro "missing script" ao salvar o prefab do inimigo
 
