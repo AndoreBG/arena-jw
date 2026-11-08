@@ -40,7 +40,6 @@ public sealed class ArenaSpawner : MonoBehaviour
     private Transform player;
     private float timer;
     private bool configErrorReported;
-    private bool firstSpawnReported;
 
     public int AliveCount => alive.Count;
     public ArenaManager Manager => manager;
@@ -114,14 +113,11 @@ public sealed class ArenaSpawner : MonoBehaviour
             return;
         }
 
-        if (!firstSpawnReported)
+        // Procura o jogador só até achar (o spawner pode nascer antes dele na cena).
+        if (player == null)
         {
-            if (player == null)
-            {
-                GameObject go = GameObject.FindGameObjectWithTag("Player");
-                if (go != null) player = go.transform;
-            }
-            firstSpawnReported = true;
+            GameObject go = GameObject.FindGameObjectWithTag("Player");
+            if (go != null) player = go.transform;
         }
 
         if (!TryFindPosition(out Vector3 position, out Quaternion rotation))

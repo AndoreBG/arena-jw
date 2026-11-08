@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;   // GamepadButton mora aqui
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
@@ -30,6 +31,13 @@ public sealed class AtalhoParaOMenu : MonoBehaviour
     [Tooltip("Tecla que precisa ficar pressionada para voltar ao menu.")]
     [SerializeField] private Key tecla = Key.Escape;
 
+    [Tooltip("Botão do controle que precisa ficar pressionado para voltar ao menu. " +
+             "North = Y (Xbox) / Triângulo (PlayStation).")]
+    [SerializeField] private GamepadButton botaoDoControle = GamepadButton.North;
+
+    [Tooltip("Desliga o atalho pelo controle (deixa só a tecla).")]
+    [SerializeField] private bool usarControle = true;
+
     [Tooltip("Quantos segundos a tecla precisa ficar pressionada.")]
     [SerializeField, Min(0.5f)] private float segundosSegurando = 3f;
 
@@ -43,8 +51,11 @@ public sealed class AtalhoParaOMenu : MonoBehaviour
     [Tooltip("Texto do aviso.")]
     [SerializeField] private string textoDoAviso = "Voltando ao menu...";
 
-    [Tooltip("Solte a tecla antes do fim e o aviso some, sem voltar ao menu.")]
-    [SerializeField] private string textoParaSoltarAntes = "Solte Esc para cancelar";
+    [Tooltip("Texto auxiliar quando o atalho e acionado pelo teclado. {0} vira a tecla.")]
+    [SerializeField] private string textoDoTeclado = "Solte {0} para cancelar";
+
+    [Tooltip("Texto auxiliar quando o atalho e acionado pelo controle. {0} vira o botao.")]
+    [SerializeField] private string textoDoControle = "Solte {0} para cancelar";
 
     private float tempoSegurando;
     private bool voltando;
@@ -75,14 +86,7 @@ public sealed class AtalhoParaOMenu : MonoBehaviour
             return;
         }
 
-        Keyboard teclado = Keyboard.current;
-        if (teclado == null)
-        {
-            Cancelar();
-            return;
-        }
-
-        bool pressionada = teclado[tecla].isPressed;
+        bool pressionada = TeclaPressionada() || BotaoPressionado();
 
         if (!pressionada)
         {
@@ -96,6 +100,20 @@ public sealed class AtalhoParaOMenu : MonoBehaviour
         AtualizarAviso();
 
         if (tempoSegurando >= segundosSegurando) VoltarAoMenu();
+    }
+
+    private bool TeclaPressionada()
+    {
+        Keyboard teclado = Keyboard.current;
+        return teclado != null && teclado[tecla].isPressed;
+    }
+
+    private bool BotaoPressionado()
+    {
+        if (!usarControle) return false;
+
+        Gamepad controle = Gamepad.current;
+        return controle != null && controle[botaoDoControle].isPressed;
     }
 
     private void Cancelar()
@@ -241,8 +259,46 @@ public sealed class AtalhoParaOMenu : MonoBehaviour
             barraDeProgresso.fillAmount = Progresso;
 
         if (rotulo != null)
-            rotulo.text = textoDoAviso;
+            rotulo.text = TextoDoAviso();
     }
+
+    /// <summary>
+    /// "Voltando ao menu..." quando nada esta pressionado ainda, ou o lembrete de soltar
+    /// com o nome do botao/tecla que esta sendo usado agora.
+    /// </summary>
+    private string TextoDoAviso()
+    {
+        if (tempoSegurando <= 0f) return textoDoAviso;
+
+        // Mostra o botao do controle so se ele estiver de fato pressionado ou se nao houver teclado.
+        bool peloControle = BotaoPressionado() || (Keyboard.current == null && Gamepad.current != null);
+
+        return peloControle
+            ? string.Format(textoDoControle, NomeDoBotao(botaoDoControle))
+            : string.Format(textoDoTeclado, NomeDaTecla(tecla));
+    }
+
+    /// <summary>
+    /// Nome do botao para a tela. O mesmo botao fisico tem nomes diferentes no Xbox e no
+    /// PlayStation, entao a legenda cita os dois.
+    /// </summary>
+    private static string NomeDoBotao(GamepadButton botao)
+    {
+        switch (botao)
+        {
+            case GamepadButton.South: return "A / ✕";
+            case GamepadButton.East:  return "B / ○";
+            case GamepadButton.West:  return "X / □";
+            case GamepadButton.North: return "Y / △";
+            case GamepadButton.LeftShoulder: return "LB / L1";
+            case GamepadButton.RightShoulder: return "RB / R1";
+            case GamepadButton.Start: return "Menu / Options";
+            case GamepadButton.Select: return "View / Share";
+            default: return botao.ToString();
+        }
+    }
+
+    private static string NomeDaTecla(Key tecla) => tecla == Key.Escape ? "Esc" : tecla.ToString();
 
     private void MostrarAviso(bool visivel)
     {

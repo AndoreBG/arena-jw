@@ -38,9 +38,6 @@ public sealed class ArenaGameInitializer : MonoBehaviour
     [Tooltip("Painel de Game Over que já existe no prefab/cena (GameOverPanel).")]
     [SerializeField] private ArenaGameOverUI gameOver;
 
-    [Header("Diagnóstico")]
-    [SerializeField] private bool logReport = true;
-
     private void Awake()
     {
         if (!autoInstallOnPlayground) return;
@@ -48,6 +45,95 @@ public sealed class ArenaGameInitializer : MonoBehaviour
             return;
 
         Install();
+    }
+
+    /// <summary>
+    /// Deixa o menu utilizavel no controle. O Unity só navega com D-pad/stick quando existe
+    /// um objeto selecionado no <see cref="UnityEngine.EventSystems.EventSystem"/>, e por
+    /// padrão a cena abre sem nenhum.
+    ///
+    /// <para>
+    /// A escolha do primeiro selecionável NÃO pode ser a ordem da hierarquia: no menu há
+    /// botões de diálogos fechados (Sim/Não do "voltar ao menu") que vêm antes do "Jogar" e
+    /// roubariam a seleção. Aqui filtra-se apenas o que está realmente visível e clicável e
+    /// escolhe-se o mais acima na tela, que é o primeiro botão do painel aberto.
+    /// </para>
+    /// </summary>
+    public static void EnsureMenuNavigable()
+    {
+        UnityEngine.EventSystems.EventSystem sistema = UnityEngine.EventSystems.EventSystem.current;
+        if (sistema == null) return;
+
+        // Já existe seleção válida e visível? Não mexe (não rouba a navegação de quem está
+        // no meio dela). Se a seleção aponta para algo desligado, é lixo: troca.
+        GameObject atual = sistema.currentSelectedGameObject;
+        if (atual != null && atual.activeInHierarchy &&
+            atual.GetComponent<UnityEngine.UI.Selectable>()?.IsInteractable() == true)
+            return;
+
+        UnityEngine.UI.Selectable primeiro = PrimeiroSelecionavel();
+        if (primeiro != null) sistema.SetSelectedGameObject(primeiro.gameObject);
+    }
+
+    /// <summary>
+    /// O botão mais acima na tela entre os visíveis, ativos e clicáveis. Ignora diálogos
+    /// fechados, componentes desligados e painéis com o CanvasGroup transparente.
+    /// </summary>
+    public static UnityEngine.UI.Selectable PrimeiroSelecionavel()
+    {
+        UnityEngine.UI.Selectable melhor = null;
+        float melhorOrdem = float.MaxValue;
+
+        foreach (UnityEngine.UI.Selectable candidato in
+                 FindObjectsByType<UnityEngine.UI.Selectable>(FindObjectsSortMode.None))
+        {
+            if (candidato == null || !candidato.IsInteractable()) continue;
+            if (!candidato.isActiveAndEnabled) continue;
+            if (!candidato.gameObject.activeInHierarchy) continue;
+            if (!Visivel(candidato)) continue;
+
+            float ordem = OrdemNaTela(candidato);
+            if (ordem < melhorOrdem)
+            {
+                melhorOrdem = ordem;
+                melhor = candidato;
+            }
+        }
+
+        return melhor;
+    }
+
+    /// <summary>Falso quando algum CanvasGroup do caminho está com alpha 0.</summary>
+    private static bool Visivel(UnityEngine.Component componente)
+    {
+        for (Transform t = componente.transform; t != null; t = t.parent)
+        {
+            UnityEngine.CanvasGroup grupo = t.GetComponent<UnityEngine.CanvasGroup>();
+            if (grupo != null && grupo.alpha <= 0.01f) return false;
+        }
+        return true;
+    }
+
+    /// <summary>Ordem de leitura: mais para cima primeiro e, na mesma altura, da esquerda.</summary>
+    private static float OrdemNaTela(UnityEngine.UI.Selectable candidato)
+    {
+        if (!(candidato.transform is RectTransform rt)) return float.MaxValue;
+        Vector3 posicao = rt.position;
+        return -posicao.y * 10000f + posicao.x;
+    }
+
+    /// <summary>
+    /// Liga a navegação do menu ao controle: põe o <see cref="NavegacaoDoControle"/> no
+    /// EventSystem (se ainda não estiver lá). Fica no EventSystem porque é o único objeto
+    /// que toda cena com menu já tem — não precisa de nada por cena.
+    /// </summary>
+    public static void ConectarNavegacaoDoControle()
+    {
+        UnityEngine.EventSystems.EventSystem sistema = EnsureEventSystem();
+        if (sistema == null) return;
+
+        if (sistema.GetComponent<NavegacaoDoControle>() == null)
+            sistema.gameObject.AddComponent<NavegacaoDoControle>();
     }
 
     /// <summary>
@@ -84,7 +170,18 @@ public sealed class ArenaGameInitializer : MonoBehaviour
     public static UnityEngine.EventSystems.EventSystem EnsureEventSystem()
     {
         UnityEngine.EventSystems.EventSystem current = UnityEngine.EventSystems.EventSystem.current;
-        if (current != null) return current;
+        if (current != null)
+        {
+            // Já existe EventSystem na cena: só garante que ele navegue no controle.
+            // (Idempotente; roda no Awake do MenuManager, que é o único ponto que
+            //  TODA entrada no menu passa.)
+            var menu = current.GetComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+            if (menu != null && menu.actionsAsset == null)
+                menu.AssignDefaultActions();
+
+            EnsureMenuNavigable();
+            return current;
+        }
 
         GameObject go = new GameObject("EventSystem");
         UnityEngine.EventSystems.EventSystem system = go.AddComponent<UnityEngine.EventSystems.EventSystem>();
@@ -93,6 +190,7 @@ public sealed class ArenaGameInitializer : MonoBehaviour
         if (go.GetComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>() == null)
             go.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
 
+        EnsureMenuNavigable();
         return system;
     }
 
@@ -153,7 +251,6 @@ public sealed class ArenaGameInitializer : MonoBehaviour
             if (hud != null) hud.Bind(life, movement, input, manager);
         }
 
-        if (logReport) Report(manager, player);
     }
 
     /// <summary>HUDController que tem o painel das barras configurado, ou null.</summary>
@@ -208,18 +305,6 @@ public sealed class ArenaGameInitializer : MonoBehaviour
             if (playerLayer >= 0) mask &= ~(1 << playerLayer);
             return mask;
         }
-    }
-
-    private static void Report(ArenaManager manager, GameObject player)
-    {
-        string difficulty = manager != null && manager.Difficulty != null ? manager.Difficulty.DisplayName : "---";
-        Debug.Log("<b>[Arena] Partida configurada.</b>\n" +
-                  "• Jogador: " + (player != null ? player.name : "<b>NÃO ENCONTRADO</b>") + "\n" +
-                  "• Dificuldade: " + difficulty + (manager != null ? $" (limite {manager.EnemyLimit}, spawn {manager.SpawnInterval:0.0}s)" : "") + "\n" +
-                  "• Spawner: " + (FindFirstObjectByType<ArenaSpawner>() != null ? "ok" : "<b>ausente</b>") +
-                  " · Pool: " + (FindFirstObjectByType<TankProjectilePool>() != null ? "ok" : "<b>ausente</b>") + "\n" +
-                  "• HUD: " + (FindFirstObjectByType<HUDController>() != null ? "ok" : "<b>ausente</b>") +
-                  " · Game Over: " + (FindFirstObjectByType<ArenaGameOverUI>() != null ? "ok" : "<b>ausente</b>"));
     }
 
     /// <summary>

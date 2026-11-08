@@ -10,7 +10,11 @@ faz o inimigo perseguir, mesmo sem ter visto o jogador.
 
 A pontuação vai para um ranking persistente, com top 5 por dificuldade.
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+>>>>>>> Stashed changes
 
 ## Sumário
 
@@ -30,7 +34,11 @@ A pontuação vai para um ranking persistente, com top 5 por dificuldade.
 - [Decisões de projeto](#decisões-de-projeto)
 - [Limitações conhecidas](#limitações-conhecidas)
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+>>>>>>> Stashed changes
 
 ## Sobre o jogo
 
@@ -40,12 +48,17 @@ A pontuação vai para um ranking persistente, com top 5 por dificuldade.
 | **Plataforma** | PC (Windows) |
 | **Engine** | Unity 6 (`6000.3.18f1`) |
 | **Pipeline** | Universal Render Pipeline (URP) |
+<<<<<<< Updated upstream
 | **Entrada** | Teclado e mouse (Input System) |
+=======
+| **Entrada** | Teclado, mouse e controle (Xbox / PlayStation) |
+>>>>>>> Stashed changes
 | **Duração de uma partida** | Sem fim definido — termina quando o jogador perde |
 
 O objetivo é sobreviver o máximo possível. Cada inimigo destruído vale um ponto. O jogo acaba
 quando a vida do jogador chega a zero.
 
+<<<<<<< Updated upstream
 <br>
 
 ## Controles
@@ -65,6 +78,44 @@ tanque, e a torre acompanha o mouse separadamente.
 
 <br>
 
+=======
+---
+
+## Controles
+
+Funciona no teclado/mouse e no controle, sem precisar escolher.
+
+| Ação | Teclado / Mouse | Xbox | PlayStation |
+|---|---|---|---|
+| Acelerar / recuar | `W` `S` ou `↑` `↓` | Stick esquerdo (↕) ou D-pad | Stick esquerdo (↕) ou D-pad |
+| Girar o tanque | `A` `D` ou `←` `→` | Stick esquerdo (↔) ou D-pad | Stick esquerdo (↔) ou D-pad |
+| Olhar / mirar | Mouse | **Stick direito** | **Stick direito** |
+| Atirar | Clique esquerdo ou `Espaço` | RT, **A** ou RB | R2, **✕** ou R1 |
+| Voltar ao menu (sem gravar) | Segurar `Esc` por 3 s | Segurar **Y** por 3 s | Segurar **△** por 3 s |
+| Navegar nos menus | Mouse | D-pad ou stick | D-pad ou stick |
+
+O mesmo código serve para os dois controles: o Input System trata os dois como `<Gamepad>`, e as
+legendas na tela citam os dois nomes (`A / ✕`, `Y / △`).
+
+A direção do movimento é independente da câmera: a tração usa o `transform.forward` do próprio
+tanque, e a torre acompanha a mira separadamente.
+
+### Controle
+
+O stick direito gira câmera e torre, com **zona morta** para não tremer com o analógico parado.
+A velocidade fica em `Sensibilidade Do Controle` (180°/s no padrão) e a zona morta em
+`Zona Morta Do Analógico` (0,18), no componente `MouseOrbitCamera`.
+
+Nos menus, o Unity só navega por D-pad/stick quando existe um objeto selecionado. O componente
+`ControleNoMenu` seleciona o primeiro botão disponível assim que o menu abre — e também quando
+o jogador aperta qualquer coisa no controle.
+
+O botão de sair pode ser trocado no Inspector (`Botao Do Controle`), e o atalho pelo controle
+pode ser desligado com `Usar Controle = false`.
+
+---
+
+>>>>>>> Stashed changes
 ## Sistemas
 
 ### Movimento e câmera
@@ -100,6 +151,11 @@ Todo objeto com vida usa o mesmo componente `Vida`, que expõe `ReceberDano`, `M
 O HUD mostra a barra de vida do jogador, a pontuação e a dificuldade em uso. Inimigos têm uma
 barra de vida própria, sempre visível e virada para a câmera (`OlharParaCamera`).
 
+<<<<<<< Updated upstream
+=======
+---
+
+>>>>>>> Stashed changes
 ## Inteligência Artificial
 
 O controle dos inimigos está em `InimigoMaquinaDeEstados` (o mesmo nome usado nas aulas). O
@@ -169,7 +225,11 @@ Todos ficam em `ScriptableObject`s, ajustáveis sem tocar em código:
 | Dano do projétil | 25 |
 | Giro ao trombar | 15° a 180° |
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+>>>>>>> Stashed changes
 
 ## Dificuldade
 
@@ -185,7 +245,11 @@ Três dificuldades, escolhidas no menu antes de jogar:
 > consome** — hoje o que muda de fato entre as dificuldades é o limite de inimigos e o
 > intervalo de spawn. Os números do comportamento do inimigo são os mesmos nas três.
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+>>>>>>> Stashed changes
 
 ## Ranking
 
@@ -198,7 +262,11 @@ a pontuação de propósito.
 
 Cada entrada guarda apelido (3 caracteres), pontos e dificuldade.
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+>>>>>>> Stashed changes
 
 ## Áudio
 
@@ -212,7 +280,11 @@ Cada entrada guarda apelido (3 caracteres), pontos e dificuldade.
 Todos passam pelos volumes de `GameSettings` (`Master × Sfx` para efeitos, `Master × Música`
 para a música) e acompanham os sliders mesmo com a partida em andamento.
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+>>>>>>> Stashed changes
 
 ## Saída da partida
 
@@ -221,7 +293,35 @@ de progresso enchendo. Soltar antes cancela. A partida sai **sem gravar a pontua
 
 Com a tela de Game Over aberta, o atalho fica inerte — ali quem manda são os botões.
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+
+## Como executar
+
+### Requisitos
+
+- Unity **6** (`6000.3.18f1`) — outras versões 6.x devem funcionar, mas o projeto foi feito
+  nesta
+- Universal Render Pipeline (instalado como dependência do projeto)
+
+### Passos
+
+1. Abra o projeto no Unity Hub (`Add project from disk`).
+2. Aguarde a importação e a compilação dos scripts.
+3. Abra a cena `Assets/Scenes/menu_principal`.
+4. Aperte **Play**.
+
+Para gerar a build, adicione as duas cenas em **File → Build Settings**, nesta ordem:
+
+```
+Assets/Scenes/menu_principal.unity
+Assets/Scenes/playground.unity
+```
+
+---
+>>>>>>> Stashed changes
 
 ## Estrutura do projeto
 
@@ -256,7 +356,11 @@ A versão final de cada aula mantém o nome original (`MovimentoPlayer`, `BarraV
 `GeradorInimigos`) e é a que vai para o jogo. O componente `Vida` e a `BarraVida` usados na
 arena são justamente esses.
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+>>>>>>> Stashed changes
 
 ## Decisões de projeto
 
@@ -282,7 +386,28 @@ nessa situação gera o erro *"Resume can only be called on an active agent"*. P
 `LevarDanoFazPerseguir` e `EntrarNoEstado` checam se o inimigo está vivo e no NavMesh antes de
 tocar no agente.
 
+<<<<<<< Updated upstream
 <br>
+=======
+---
+
+## Limitações conhecidas
+
+- **`aiIntensity` não é consumida.** O campo existe nas dificuldades e aparece na descrição,
+  mas hoje só o limite de inimigos e o intervalo de spawn mudam de fato entre elas.
+- **Sem pausa.** Não há menu de pausa; a partida roda até o jogador morrer, sair pelo atalho de
+  `Esc` ou voltar pelo Game Over.
+- **Sem build para console.** O projeto é focado em PC. A matéria é *Jogos Digitais para
+  Console*, mas a entrega rodou em Windows. O jogo **tem suporte completo a controle** (Xbox e
+  PlayStation, ver [Controles](#controles)) — o que falta é gerar a build para o console.
+- **Sem remapeamento pelo jogador.** O esquema funciona em Xbox e PlayStation, mas trocar um
+  botão exige mexer no Inspector (ou no `TankInputActions`), não há tela de configuração.
+- **Uma única cena de arena.** A arena (`playground`) é fixa.
+- **Um tipo de inimigo.** Existe apenas o alienígena; não há variação de comportamento entre
+  inimigos na mesma partida.
+
+---
+>>>>>>> Stashed changes
 
 ## Créditos
 

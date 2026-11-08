@@ -23,7 +23,15 @@ public sealed class MouseOrbitCamera : MonoBehaviour
     [SerializeField, Min(0.1f)] private float distance = 6.5f;
 
     [Tooltip("Graus de rotação por pixel de movimento do mouse.")]
+    [Header("Mouse")]
     [SerializeField, Min(0.001f)] private float sensitivity = 0.12f;
+
+    [Header("Controle")]
+    [Tooltip("Velocidade da câmera no stick direito, em graus por segundo com o stick no máximo.")]
+    [SerializeField, Min(1f)] private float sensibilidadeDoControle = 180f;
+
+    [Tooltip("Quanto o stick precisa sair do centro para a câmera começar a andar.")]
+    [SerializeField, Range(0f, 0.9f)] private float zonaMortaDoAnalógico = 0.18f;
 
     [SerializeField] private float initialYaw = 0f;
     [SerializeField] private float initialPitch = 28f;
@@ -78,22 +86,53 @@ public sealed class MouseOrbitCamera : MonoBehaviour
 
     private void Update()
     {
-        Mouse mouse = Mouse.current;
-        if (mouse == null)
-            return;
-
         // Escape agora é o atalho de "segure para voltar ao menu" (AtalhoParaOMenu),
         // então não solta mais o cursor: as duas coisas brigariam pela mesma tecla.
         // Clicar com o botão esquerdo volta a controlar a câmera.
-        if (lockCursorOnStart && mouse.leftButton.wasPressedThisFrame && ArenaManager.IsPlaying)
+        Mouse mouse = Mouse.current;
+        if (mouse != null && lockCursorOnStart && mouse.leftButton.wasPressedThisFrame && ArenaManager.IsPlaying)
             SetCursorLocked(true); // Não captura o cursor com o Game Over aberto (os botões precisam dele).
 
-        if (Cursor.lockState != CursorLockMode.Locked && lockCursorOnStart)
-            return;
+        // Mouse e controle convivem: cada um responde pelo seu próprio sinal, sem precisar
+        // escolher um "modo". Amarrar o controle ao cursor solto era um erro: em partida o
+        // cursor fica travado, então o stick direito NUNCA era lido.
+        bool cursorTravado = Cursor.lockState == CursorLockMode.Locked;
+        if (mouse != null && cursorTravado) GirarComMouse(mouse);
+        GirarComControle();
+    }
 
-        Vector2 delta = mouse.delta.ReadValue();
-        yaw += delta.x * sensitivity;
-        pitch = Mathf.Clamp(pitch - delta.y * sensitivity, pitchLimits.x, pitchLimits.y);
+    private void GirarComMouse(Mouse mouse)
+    {
+        Girar(mouse.delta.ReadValue(), sensitivity);
+    }
+
+    /// <summary>
+    /// Stick direito (ou canhão/segundo analógico, no controle que tiver). O analógico
+    /// entrega um valor de -1 a 1, então precisa do delta do frame para virar velocidade.
+    /// </summary>
+    private void GirarComControle()
+    {
+        Gamepad controle = Gamepad.current;
+        if (controle == null) return;
+
+        Vector2 leitura = controle.rightStick.ReadValue();
+
+        // Zona morta: sem isso a câmera treme e anda sozinha com o analógico parado.
+        if (leitura.magnitude < zonaMortaDoAnalógico) return;
+
+        // O stick entrega -1..1 (uma velocidade), então vira delta do frame com dt.
+        // Escala = sensibilidadeDoControle, em graus por segundo.
+        Girar(leitura * Time.unscaledDeltaTime, sensibilidadeDoControle);
+    }
+
+    /// <summary>
+    /// Aplica o giro. A sensibilidade entra aqui porque mouse (delta em pixels, ~0,12) e
+    /// stick (delta em graus por segundo, ~180) estão em escalas completamente diferentes.
+    /// </summary>
+    private void Girar(Vector2 delta, float escala)
+    {
+        yaw += delta.x * escala;
+        pitch = Mathf.Clamp(pitch - delta.y * escala, pitchLimits.x, pitchLimits.y);
     }
 
     private void LateUpdate()

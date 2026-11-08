@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -53,6 +55,12 @@ public sealed class MenuManager : MonoBehaviour
 
         ShowMain();
         if (messageText != null) messageText.gameObject.SetActive(false);
+
+        // O menu abre sem nada selecionado, e o Unity só navega no D-pad/stick quando há
+        // seleção. Faz aqui (e não num componente solto) porque este Awake é o ponto por
+        // onde toda entrada no menu passa.
+        ArenaGameInitializer.EnsureMenuNavigable();
+        ArenaGameInitializer.ConectarNavegacaoDoControle();
     }
 
     private static void Wire(Button button, UnityEngine.Events.UnityAction action)
@@ -136,6 +144,30 @@ public sealed class MenuManager : MonoBehaviour
         SetActiveIfPresent(mainPanel, panel);
 
         if (panel != null && !panel.activeSelf) panel.SetActive(true);
+
+        // O botão que estava selecionado acabou de ser desligado junto com o painel antigo.
+        // Sem reeleger, a navegação morre e o jogador precisa do mouse para voltar.
+        StartCoroutine(SelecionarPrimeiroNoFimDoFrame());
+    }
+
+    /// <summary>
+    /// Espera um frame: o layout do painel recém-aberto só está calculado no fim do frame,
+    /// e antes disso a posição na tela é a do painel antigo.
+    /// </summary>
+    private IEnumerator SelecionarPrimeiroNoFimDoFrame()
+    {
+        yield return null;
+
+        EventSystem sistema = EventSystem.current;
+        if (sistema == null) yield break;   // yield break: return vazio não compila em iterador
+
+        // A seleção anterior morreu junto com o painel; limpa antes de escolher.
+        if (sistema.currentSelectedGameObject == null ||
+            !sistema.currentSelectedGameObject.activeInHierarchy)
+        {
+            sistema.SetSelectedGameObject(null);
+            ArenaGameInitializer.EnsureMenuNavigable();
+        }
     }
 
     private static void SetActiveIfPresent(GameObject candidate, GameObject active)

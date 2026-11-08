@@ -1905,7 +1905,6 @@ MonoBehaviour:
   autoInstallOnPlayground: 1
   hud: {fileID: 1852076462040642577}
   gameOver: {fileID: 2114192311412178688}
-  logReport: 1
 --- !u!114 &1079322271964755245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1942,7 +1941,10 @@ MonoBehaviour:
   funcionarNoGameOver: 0
   mostrarAviso: 1
   textoDoAviso: Voltando ao menu...
-  textoParaSoltarAntes: Solte Esc para cancelar
+  botaoDoControle: 3
+  usarControle: 1
+  textoDoTeclado: Solte {0} para cancelar
+  textoDoControle: Solte {0} para cancelar
 --- !u!1 &7994175286676276332
 GameObject:
   m_ObjectHideFlags: 0
