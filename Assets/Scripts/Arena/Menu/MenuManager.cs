@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Navegação da cena de menu: Menu Principal ↔ painel de dificuldade ↔ painel de configurações.
@@ -19,6 +20,14 @@ public sealed class MenuManager : MonoBehaviour
     [SerializeField] private GameObject difficultyPanel;
     [SerializeField] private GameObject settingsPanel;
 
+    [Header("Botões do menu principal")]
+    [Tooltip("Abre o painel de dificuldade.")]
+    [SerializeField] private Button playButton;
+    [Tooltip("Abre o painel de configurações.")]
+    [SerializeField] private Button settingsButton;
+    [Tooltip("Fecha o jogo.")]
+    [SerializeField] private Button quitButton;
+
     [Header("Jogo")]
     [Tooltip("Nome da cena do jogo no Build Settings.")]
     [SerializeField] private string gameSceneName = GameSceneName;
@@ -35,8 +44,22 @@ public sealed class MenuManager : MonoBehaviour
     {
         GameSettings.ApplyRuntimeSettings();
         ArenaGameInitializer.EnsureEventSystem();
+
+        // Os botões são ligados aqui, e não no Editor script: um AddListener feito em tempo de
+        // Editor não fica gravado na cena, então os botões nasciam sem nenhuma ação.
+        Wire(playButton, ShowDifficulty);
+        Wire(settingsButton, ShowSettings);
+        Wire(quitButton, QuitGame);
+
         ShowMain();
         if (messageText != null) messageText.gameObject.SetActive(false);
+    }
+
+    private static void Wire(Button button, UnityEngine.Events.UnityAction action)
+    {
+        if (button == null) return;
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(action);
     }
 
     public void ShowMain() => SetActivePanel(mainPanel);
@@ -126,5 +149,15 @@ public sealed class MenuManager : MonoBehaviour
         mainPanel = main;
         difficultyPanel = difficulty;
         settingsPanel = settings;
+    }
+
+    /// <summary>Versão com os botões do menu principal (usada pelo Editor script).</summary>
+    public void Configure(GameObject main, GameObject difficulty, GameObject settings,
+        Button play, Button configuracoes, Button sair)
+    {
+        Configure(main, difficulty, settings);
+        playButton = play;
+        settingsButton = configuracoes;
+        quitButton = sair;
     }
 }

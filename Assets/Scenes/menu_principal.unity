@@ -1017,7 +1017,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 150, y: -590}
+  m_AnchoredPosition: {x: 150, y: -502}
   m_SizeDelta: {x: 420, y: 52}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &90750558
@@ -1158,7 +1158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 150, y: -240}
+  m_AnchoredPosition: {x: 150, y: -152}
   m_SizeDelta: {x: 420, y: 40}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &120617807
@@ -1779,7 +1779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &189188931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2715,7 +2715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -230, y: -590}
+  m_AnchoredPosition: {x: -60.000046, y: -528}
   m_SizeDelta: {x: 260, y: 44}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &277849674
@@ -3510,7 +3510,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -3845,6 +3845,9 @@ MonoBehaviour:
   mainPanel: {fileID: 1586532524}
   difficultyPanel: {fileID: 2016649100}
   settingsPanel: {fileID: 1381861151}
+  playButton: {fileID: 1505311915}
+  settingsButton: {fileID: 745008206}
+  quitButton: {fileID: 1438843589}
   gameSceneName: playground
   introSceneName: menu_principal
   messageText: {fileID: 1740847172}
@@ -4088,7 +4091,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 170, y: 100}
+  m_AnchoredPosition: {x: 170, y: 72}
   m_SizeDelta: {x: 300, y: 68}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &517508291
@@ -4768,7 +4771,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -230, y: -240}
+  m_AnchoredPosition: {x: -60, y: -178}
   m_SizeDelta: {x: 260, y: 44}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &606231771
@@ -5711,7 +5714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -170, y: 100}
+  m_AnchoredPosition: {x: -170, y: 72}
   m_SizeDelta: {x: 300, y: 68}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &737372787
@@ -6668,7 +6671,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 150, y: -420}
+  m_AnchoredPosition: {x: 150, y: -332}
   m_SizeDelta: {x: 420, y: 40}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &943012796
@@ -6897,7 +6900,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 150, y: -510}
+  m_AnchoredPosition: {x: 150, y: -422}
   m_SizeDelta: {x: 420, y: 52}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &984108629
@@ -7159,7 +7162,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -7505,7 +7508,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4281479730
   m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -7518,7 +7521,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -8475,7 +8478,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -230, y: -510}
+  m_AnchoredPosition: {x: -60.000046, y: -448}
   m_SizeDelta: {x: 260, y: 44}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1190856094
@@ -9928,7 +9931,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -230, y: -330}
+  m_AnchoredPosition: {x: -60.000046, y: -268}
   m_SizeDelta: {x: 260, y: 44}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1430382627
@@ -10920,7 +10923,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -230, y: -420}
+  m_AnchoredPosition: {x: -60.000046, y: -358}
   m_SizeDelta: {x: 260, y: 44}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1578197553
@@ -11196,7 +11199,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 150, y: -330}
+  m_AnchoredPosition: {x: 150, y: -242}
   m_SizeDelta: {x: 420, y: 40}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1586305388
@@ -12249,7 +12252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 178}
+  m_AnchoredPosition: {x: 0, y: 18}
   m_SizeDelta: {x: 820, y: 34}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1741485023
@@ -12294,7 +12297,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -13401,7 +13404,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 900, y: 780}
+  m_SizeDelta: {x: 1200, y: 780}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1907418798
 MonoBehaviour:
@@ -14182,10 +14185,10 @@ MonoBehaviour:
   dificilButton: {fileID: 20109807}
   cancelButton: {fileID: 1126977316}
   descriptionText: {fileID: 1913923070}
-  catalog: {fileID: 0}
-  facilDescription: "IA fraca \xB7 2 inimigos \xB7 spawn lento"
-  medioDescription: "IA m\xE9dia \xB7 4 inimigos \xB7 spawn m\xE9dio"
-  dificilDescription: "IA forte \xB7 6 inimigos \xB7 spawn r\xE1pido"
+  catalog: {fileID: 11400000, guid: 95ff8a14dbec8aa49a0d72dec51e221d, type: 2}
+  facilDescription: "2 inimigos \xB7 spawn lento"
+  medioDescription: "4 inimigos \xB7 spawn m\xE9dio"
+  dificilDescription: "6 inimigos \xB7 spawn r\xE1pido"
 --- !u!114 &2016649103
 MonoBehaviour:
   m_ObjectHideFlags: 0

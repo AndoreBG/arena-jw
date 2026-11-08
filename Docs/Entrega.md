@@ -87,10 +87,23 @@ Depois, no Unity: **Arena → Setup Main Menu + Playground** e **Bake** da NavMe
 |---|---|
 | Compilação dos 22 scripts de runtime contra stubs Unity 6/uGUI/TMP/Input System | **0 erros** |
 | Compilação dos 7 scripts de Editor (`UNITY_EDITOR`) | **0 erros** |
-| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência) | **99 verificações, 0 falhas** |
+| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência, menu) | **113 verificações, 0 falhas** |
 
 Não validado (exige o Unity Editor): layout visual das telas, bake da NavMesh, comportamento
 em Play Mode, criação de assets/layer pelos menus.
+
+### Correção: botões do menu sem resposta (`cc04d2a`)
+
+Duas causas somadas:
+
+| Causa | Efeito | Correção |
+|---|---|---|
+| O painel `SettingsConfirmModal` nasceu **ativo** na cena. É Stretch, tem `raycastTarget` e é o último irmão do Canvas | capturava o clique antes de qualquer botão — **nenhum** botão respondia | nasce desativado no setup e na cena; `SettingsConfirmModal` ganhou o flag `showing` para o `Awake` não fechar o modal no instante em que o `Show()` o abre |
+| `playButton.onClick.AddListener(...)` era chamado no **Editor script** | listener registrado em tempo de execução do Editor **não é serializado**: todos os `m_OnClick` ficavam vazios | as referências vão para o `MenuManager`, que liga os três botões no `Awake`, como os outros painéis já faziam |
+
+**Se você já editou a cena à mão** (cores, posições), rode `Arena > Repair Main Menu Scene`
+em vez de `Setup Main Menu Scene`: ele desativa o modal e preenche as referências dos botões
+sem recriar nada.
 
 ### Correções depois dos commits `6d12eed` / `2d0aa32`
 

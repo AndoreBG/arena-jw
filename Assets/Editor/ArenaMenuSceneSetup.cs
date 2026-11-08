@@ -24,6 +24,129 @@ namespace ArenaSetup
         private static readonly Color MutedColor = new Color(0.16f, 0.17f, 0.22f, 1f);
         private static readonly Color TextColor = new Color(0.95f, 0.96f, 1f, 1f);
 
+        /// <summary>
+        /// Conserta a cena de menu que já está montada, sem reconstruí-la. Serve para quem editou a
+        /// cena à mão (cores, posições) e não quer perdê-las.
+        ///
+        /// Faz duas coisas e nada mais:
+        ///  1. Desativa o painel do modal de confirmação, que cobre a tela inteira e bloqueia o
+        ///     clique de todos os botões enquanto estiver ativo.
+        ///  2. Liga as referências dos botões do menu principal no MenuManager (o Wire real
+        ///     acontece no Awake, em runtime).
+        /// </summary>
+        [MenuItem("Arena/Repair Main Menu Scene", priority = 21)]
+        public static void RepairMainMenuScene()
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            if (!scene.isLoaded)
+            {
+                Debug.LogError("[Arena] Nenhuma cena aberta.");
+                return;
+            }
+
+            int fixes = 0;
+
+            // 1. Modal que nasceu ativo.
+            SettingsConfirmModal[] modals = Object.FindObjectsByType<SettingsConfirmModal>(
+                UnityEngine.FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            foreach (SettingsConfirmModal modal in modals)
+            {
+                if (modal.gameObject.activeSelf)
+                {
+                    modal.gameObject.SetActive(false);
+                    fixes++;
+                    Debug.Log("[Arena] Modal de confirmação desativado (bloqueava os cliques): " +
+                              modal.gameObject.name);
+                }
+            }
+
+            // 2. Referências dos botões do menu principal.
+            MenuManager manager = Object.FindFirstObjectByType<MenuManager>(UnityEngine.FindObjectsInactive.Include);
+            if (manager != null)
+            {
+                fixes += LinkMenuButtons(manager);
+            }
+
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene, scene.path);
+
+            Debug.Log($"<b>[Arena] Cena de menu reparada.</b> {fixes} ajuste(s). " +
+                      "Os botões passam a responder; nenhum objeto foi recriado.");
+        }
+
+        /// <summary>
+        /// Preenche no MenuManager as referências dos botões Jogar / Configurações / Sair,
+        /// procurando pelos painéis já existentes na cena.
+        /// </summary>
+        private static int LinkMenuButtons(MenuManager manager)
+        {
+            GameObject mainPanel = FindObjectInScene("Panel_MenuPrincipal");
+            if (mainPanel == null)
+            {
+                Debug.LogWarning("[Arena] Panel_MenuPrincipal não encontrado na cena.");
+                return 0;
+            }
+
+            Button play = FindButton(mainPanel, "BotaoJogar");
+            Button settings = FindButton(mainPanel, "BotaoConfiguracoes");
+            Button quit = FindButton(mainPanel, "BotaoSair");
+
+            if (play == null || settings == null || quit == null)
+            {
+                Debug.LogWarning("[Arena] Um dos botões do menu não foi encontrado " +
+                                 "(BotaoJogar/BotaoConfiguracoes/BotaoSair).");
+                return 0;
+            }
+
+            // InstanceID do objeto na cena, para não trocar referência válida por engano.
+            SerializedObject serialized = new SerializedObject(manager);
+            int linked = 0;
+            linked += SetObjectReference(serialized, "playButton", play);
+            linked += SetObjectReference(serialized, "settingsButton", settings);
+            linked += SetObjectReference(serialized, "quitButton", quit);
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            return linked;
+        }
+
+        private static int SetObjectReference(SerializedObject serialized, string field, Object value)
+        {
+            SerializedProperty property = serialized.FindProperty(field);
+            if (property == null || property.objectReferenceValue != null) return 0;
+            property.objectReferenceValue = value;
+            return 1;
+        }
+
+        private static GameObject FindObjectInScene(string name)
+        {
+            foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
+            {
+                GameObject found = Search(go.transform, name);
+                if (found != null) return found;
+            }
+
+            return null;
+        }
+
+        private static GameObject Search(Transform parent, string name)
+        {
+            if (parent.name == name) return parent.gameObject;
+
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                GameObject found = Search(parent.GetChild(i), name);
+                if (found != null) return found;
+            }
+
+            return null;
+        }
+
+        private static Button FindButton(GameObject parent, string name)
+        {
+            GameObject go = Search(parent.transform, name);
+            return go != null ? go.GetComponent<Button>() : null;
+        }
+
         [MenuItem("Arena/Setup Main Menu Scene", priority = 20)]
         public static void SetupMainMenuScene()
         {
@@ -52,11 +175,12 @@ namespace ArenaSetup
 
             // Os paineis precisam ser FILHOS do Canvas: um painel irmao do Canvas (filho do
             // MenuPrincipal) nao e renderizado pela uGUI.
-            BuildMainPanel(canvas.transform, canvas.transform, manager, out GameObject mainPanel, out TextMeshProUGUI message);
+            BuildMainPanel(canvas.transform, canvas.transform, manager, out GameObject mainPanel,
+                out TextMeshProUGUI message, out Button playButton, out Button settingsButton, out Button quitButton);
             GameObject difficultyPanel = BuildDifficultyPanel(canvas.transform, canvas.transform, manager);
             GameObject settingsPanel = BuildSettingsPanel(canvas.transform, canvas.transform, manager);
 
-            manager.Configure(mainPanel, difficultyPanel, settingsPanel);
+            manager.Configure(mainPanel, difficultyPanel, settingsPanel, playButton, settingsButton, quitButton);
             ArenaEditorUtil.SetField(manager, "messageText", message);
 
             difficultyPanel.SetActive(false);
@@ -97,7 +221,7 @@ namespace ArenaSetup
         #region Menu principal
 
         private static void BuildMainPanel(Transform root, Transform canvas, MenuManager manager, out GameObject panel,
-            out TextMeshProUGUI message)
+            out TextMeshProUGUI message, out Button playButton, out Button settingsButton, out Button quitButton)
         {
             Image background = ArenaEditorUtil.CreatePanel(canvas, "Panel_MenuPrincipal", new Color(0.03f, 0.04f, 0.06f, 1f));
             ArenaEditorUtil.Stretch(background.rectTransform);
@@ -185,13 +309,13 @@ namespace ArenaSetup
                 new Vector2(0f, -230f), new Vector2(900f, 60f));
             message.gameObject.SetActive(false);
 
-            Button playButton = CreateMainButton(panel.transform, "BotaoJogar", "Jogar", 220f, AccentColor);
-            Button settingsButton = CreateMainButton(panel.transform, "BotaoConfiguracoes", "Configurações", 110f, MutedColor);
-            Button quitButton = CreateMainButton(panel.transform, "BotaoSair", "Sair", 0f, MutedColor);
+            playButton = CreateMainButton(panel.transform, "BotaoJogar", "Jogar", 220f, AccentColor);
+            settingsButton = CreateMainButton(panel.transform, "BotaoConfiguracoes", "Configurações", 110f, MutedColor);
+            quitButton = CreateMainButton(panel.transform, "BotaoSair", "Sair", 0f, MutedColor);
 
-            playButton.onClick.AddListener(manager.ShowDifficulty);
-            settingsButton.onClick.AddListener(manager.ShowSettings);
-            quitButton.onClick.AddListener(manager.QuitGame);
+            // NÃO ligar com AddListener aqui: uma chamada registrada em tempo de Editor não é
+            // gravada na cena, e os botões ficariam sem ação depois de salvar. As referências vão
+            // para o MenuManager, que liga tudo no Awake (em runtime).
 
             // --- Coluna direita: créditos ---
             Image creditsCard = ArenaEditorUtil.CreatePanel(panel.transform, "Panel_Creditos", CardColor);
@@ -390,6 +514,12 @@ namespace ArenaSetup
 
             SettingsConfirmModal modal = dim.gameObject.AddComponent<SettingsConfirmModal>();
             modal.Configure(dim.gameObject, message, yes, no);
+
+            // Nasce DESATIVADO. Ativo, este painel cobre a tela inteira (Stretch) e, por ser o
+            // último irmão, fica acima de tudo: o raycast do GraphicRaycaster bate nele e nenhum
+            // botão do menu recebe o clique. O Awake tambem desativa, mas se o objeto estiver
+            // inativo o Awake só roda depois — entao o estado inicial tem de vir daqui.
+            dim.gameObject.SetActive(false);
             return modal;
         }
 

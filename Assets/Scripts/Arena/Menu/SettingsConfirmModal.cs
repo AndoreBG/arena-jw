@@ -15,7 +15,7 @@ public sealed class SettingsConfirmModal : MonoBehaviour
     public const string ModalName = "SettingsConfirmModal";
 
     public const string DefaultMessage =
-        "If you leave without applying, all changes will be lost. Do you really want to leave?";
+        "Se você sair sem aplicar, as mudanças não serão salvas. Deseja realmente sair?";
 
     [Header("Referências")]
     [SerializeField] private GameObject modalRoot;
@@ -25,17 +25,23 @@ public sealed class SettingsConfirmModal : MonoBehaviour
 
     private Action onConfirm;
     private bool built;
+    private bool showing;
 
     private void Awake()
     {
         if (modalRoot == null) BuildHierarchy();
-        if (modalRoot != null) modalRoot.SetActive(false);
+
+        // Não se desativa se o Awake está rodando por causa do SetActive(true) do Show — isso
+        // acontece quando o objeto nasce inativo na cena e seria fechado no mesmo instante em
+        // que fosse aberto.
+        if (!showing && modalRoot != null) modalRoot.SetActive(false);
     }
 
     public void Show(Action confirmed)
     {
         if (modalRoot == null) BuildHierarchy();
 
+        showing = true;
         onConfirm = confirmed;
         if (messageText != null) messageText.text = DefaultMessage;
         if (modalRoot != null) modalRoot.SetActive(true);
@@ -49,6 +55,7 @@ public sealed class SettingsConfirmModal : MonoBehaviour
     {
         Action callback = onConfirm;
         onConfirm = null;
+        showing = false;
         Hide();
         callback?.Invoke();
     }
@@ -56,6 +63,7 @@ public sealed class SettingsConfirmModal : MonoBehaviour
     public void Dismiss()
     {
         onConfirm = null;
+        showing = false;
         Hide();
     }
 
