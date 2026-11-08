@@ -178,6 +178,13 @@ namespace ArenaSetup
                 if (instance.GetComponent<ArenaEnemyRegistration>() == null)
                     instance.AddComponent<ArenaEnemyRegistration>();
 
+                // Rede de seguranca: se o prefab ainda tiver componente com script ausente
+                // (m_Script: {fileID: 0}), o Unity recusa salvar com "You are trying to save a
+                // Prefab with a missing script". Remove antes de tentar.
+                int broken = RemoveBrokenBehaviours(instance);
+                if (broken > 0)
+                    Debug.LogWarning($"[Arena] {broken} componente(s) sem script removido(s) antes de salvar.");
+
                 PrefabUtility.SaveAsPrefabAsset(instance, ArenaEditorUtil.EnemyPrefabPath, out bool saveOk);
 
                 if (!saveOk)
@@ -205,6 +212,29 @@ namespace ArenaSetup
         #region Cena do Playground
 
         [MenuItem("Arena/Setup Playground Scene", priority = 40)]
+        /// <summary>
+        /// Remove componentes cujo m_Script ficou vazio (fileID 0). O Unity se recusa a salvar
+        /// um prefab nesse estado: "You are trying to save a Prefab with a missing script".
+        /// </summary>
+        private static int RemoveBrokenBehaviours(GameObject root)
+        {
+            int removed = 0;
+
+            foreach (Transform child in root.GetComponentsInChildren<Transform>(true))
+            {
+                GameObject go = child.gameObject;
+                int count = GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(go);
+                if (count > 0)
+                {
+                    GameObjectUtility.RemoveMonoBehavioursWithMissingScript(go);
+                    EditorUtility.SetDirty(go);
+                    removed += count;
+                }
+            }
+
+            return removed;
+        }
+
         public static void SetupPlaygroundScene()
         {
             Scene scene = EditorSceneManager.OpenScene(ArenaEditorUtil.PlaygroundScenePath, OpenSceneMode.Single);

@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 7106821139262559771}
   - component: {fileID: 4863473366753429368}
   - component: {fileID: 4120245319706398713}
-  - component: {fileID: 8890956404817682221}
   m_Layer: 8
   m_Name: Inimigo
   m_TagString: Untagged
@@ -247,18 +246,6 @@ MonoBehaviour:
   size: {x: 1.6, y: 0.28}
   iconSize: 0.38
   billboard: 1
---- !u!114 &8890956404817682221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2266264261382295678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArenaEnemyRegistration
 --- !u!1 &3631192642350276814
 GameObject:
   m_ObjectHideFlags: 0
