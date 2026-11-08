@@ -87,10 +87,26 @@ Depois, no Unity: **Arena → Setup Main Menu + Playground** e **Bake** da NavMe
 |---|---|
 | Compilação dos 22 scripts de runtime contra stubs Unity 6/uGUI/TMP/Input System | **0 erros** |
 | Compilação dos 7 scripts de Editor (`UNITY_EDITOR`) | **0 erros** |
-| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência, menu, sliders, prefab do inimigo) | **173 verificações, 0 falhas** |
+| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência, menu, sliders, prefab do inimigo) | **241 verificações, 0 falhas** |
 
 Não validado (exige o Unity Editor): layout visual das telas, bake da NavMesh, comportamento
 em Play Mode, criação de assets/layer pelos menus.
+
+### Erro "missing script" ao salvar o prefab do inimigo
+
+> `You are trying to save a Prefab with a missing script. Please change the script or remove it from the GameObject 'Inimigo'.`
+
+**Causa:** `ArenaEnemyRegistration` estava declarada dentro de `ArenaSpawner.cs`. O Unity cria o
+`MonoScript` apenas para a classe que tem o **mesmo nome do arquivo**; uma segunda classe
+`MonoBehaviour` no mesmo arquivo fica sem script. O `AddComponent` do setup então gerava
+`m_Script: {fileID: 0}` e o Unity recusava salvar.
+
+**Correção:** a classe foi para `Assets/Scripts/Arena/ArenaEnemyRegistration.cs`, com `.meta`
+próprio. O componente quebrado que tinha ficado gravado no prefab foi removido, e o setup
+ganhou uma limpeza defensiva (`RemoveBrokenBehaviours`) antes de salvar.
+
+**Regra:** no Unity, cada classe `MonoBehaviour` precisa de um arquivo com o mesmo nome.
+O harness passou a verificar isso em todos os `.cs` do projeto.
 
 ### Prefab do inimigo enxuto (versão atual)
 
