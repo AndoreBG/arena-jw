@@ -163,7 +163,16 @@ public sealed class TankProjectile : MonoBehaviour
                 bool isPlayer = hitRoot.CompareTag("Player") || (ArenaManager.Instance != null && life == ArenaManager.Instance.PlayerLife);
                 bool isEnemy = collision.collider.GetComponentInParent<ArenaEnemyRegistration>() != null;
                 if ((faction == TankShotFaction.Player && isEnemy) || (faction == TankShotFaction.Enemy && isPlayer))
+                {
                     life.ReceberDano(damage);
+
+                    // Inimigo atingido pelo jogador: ele passa a perseguir.
+                    if (faction == TankShotFaction.Player && isEnemy)
+                    {
+                        InimigoMaquinaDeEstados maquina = collision.collider.GetComponentInParent<InimigoMaquinaDeEstados>();
+                        if (maquina != null) maquina.LevarDanoFazPerseguir();
+                    }
+                }
             }
         }
         RequestDespawn();

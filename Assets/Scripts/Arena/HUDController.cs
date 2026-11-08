@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// HUD da partida: barra de vida, barra de aceleração, pontuação e o nome da dificuldade.
+/// HUD da partida: barra de vida, pontuação e o nome da dificuldade.
 ///
 /// A hierarquia vive no prefab <c>Assets/Prefabs/ArenaGame.prefab</c> (GameObject
 /// <c>HUD_Partida</c>) — nada é criado em código. Este script só preenche os valores e
@@ -18,12 +18,11 @@ using UnityEngine.UI;
 public sealed class HUDController : MonoBehaviour
 {
     [Header("Referências")]
-    [Tooltip("Objeto que contém a barra de vida, a aceleração, a pontuação e a dificuldade.")]
+    [Tooltip("Objeto que contém a barra de vida, a pontuação e a dificuldade.")]
     [SerializeField] private GameObject hud;
 
     [SerializeField] private Image healthFill;
     [SerializeField] private TMP_Text healthText;
-    [SerializeField] private Image accelerationFill;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text difficultyText;
 
@@ -33,10 +32,8 @@ public sealed class HUDController : MonoBehaviour
     [Header("Cores")]
     [SerializeField] private Color healthyColor = new Color(0.35f, 0.9f, 0.4f);
     [SerializeField] private Color hurtColor = new Color(1f, 0.25f, 0.2f);
-    [SerializeField] private Color accelerationColor = new Color(0.35f, 0.75f, 1f);
 
     private Vida life;
-    private TankMovement movement;
     private TankPlayerInput input;
     private ArenaManager manager;
 
@@ -49,13 +46,15 @@ public sealed class HUDController : MonoBehaviour
         if (reticles == null || reticles.Length == 0) reticles = ProcurarReticulos();
     }
 
-    /// <summary>Liga o HUD aos dados da partida.</summary>
+    /// <summary>
+    /// Liga o HUD aos dados da partida. O <paramref name="tankMovement"/> continua na assinatura
+    /// porque o inicializador já chama assim (o HUD não usa mais a velocidade).
+    /// </summary>
     public void Bind(Vida playerLife, TankMovement tankMovement, TankPlayerInput playerInput, ArenaManager arenaManager)
     {
         Unbind();
 
         life = playerLife;
-        movement = tankMovement;
         input = playerInput;
         manager = arenaManager;
 
@@ -74,14 +73,6 @@ public sealed class HUDController : MonoBehaviour
     {
         if (life != null) life.AoAlterarVida -= OnHealthChanged;
         life = null;
-    }
-
-    private void Update()
-    {
-        if (accelerationFill == null) return;
-
-        float speed = movement != null ? Mathf.Abs(movement.NormalizedSpeed) : 0f;
-        accelerationFill.fillAmount = Mathf.Clamp01(speed);
     }
 
     private void OnHealthChanged(float current, float maximum)

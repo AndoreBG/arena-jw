@@ -37,7 +37,8 @@ public class BarraVida : MonoBehaviour
         if (preenchimento == null)
             return;
 
-        preenchimento.fillAmount = atual / maxima;
+        // Sem 'maxima' a divisão daria Infinity/NaN e a barra ficaria travada.
+        preenchimento.fillAmount = maxima > 0f ? Mathf.Clamp01(atual / maxima) : 0f;
 
         if (raiz != null)
             raiz.SetActive(atual < maxima);
