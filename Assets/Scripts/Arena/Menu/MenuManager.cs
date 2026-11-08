@@ -40,6 +40,7 @@ public sealed class MenuManager : MonoBehaviour
     }
 
     public void ShowMain() => SetActivePanel(mainPanel);
+
     public void ShowDifficulty() => SetActivePanel(difficultyPanel);
     public void ShowSettings() => SetActivePanel(settingsPanel);
 

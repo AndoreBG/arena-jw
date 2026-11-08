@@ -115,37 +115,64 @@ public sealed class HUDController : MonoBehaviour
 
     /// <summary>
     /// Cria a hierarquia do HUD. Pode ser chamado pelo Editor script (para a UI ficar editável na
-    /// cena) ou em runtime como fallback. É idempotente: apaga a hierarquia anterior.
+    /// cena) ou em runtime como fallback. É idempotente: reutiliza um Canvas válido e reconstrói
+    /// só o conteúdo dele.
     /// </summary>
     public void BuildHierarchy()
     {
+        // Já montado nesta instância? Não mexe em nada.
         if (built) return;
 
-        GameObject existing = GameObject.Find(RootName);
-        if (existing != null && existing != root)
-        {
-            if (Application.isPlaying) Destroy(existing);
-            else DestroyImmediate(existing);
-        }
-
-        // Se o próprio objeto já é um Canvas (ex.: o HUD_Mira da cena), usa ele: assim a
-        // barra de vida nasce dentro do canvas que já existe, sem criar um segundo.
+        // Resolve o objeto que vai receber o Canvas. Regra: o que está gravado em 'root' manda
+        // (é a hierarquia que ficou salva no prefab/cena); sem root, o próprio GameObject serve
+        // se já for um Canvas (ex.: o HUD_Mira da cena).
         GameObject canvasObject = root;
         if (canvasObject == null && GetComponent<Canvas>() != null) canvasObject = gameObject;
 
-        if (canvasObject == null || canvasObject.GetComponent<Canvas>() == null)
+        if (canvasObject != null && canvasObject.GetComponent<Canvas>() == null)
+        {
+            // 'root' aponta para um objeto que perdeu o Canvas (ou nunca teve). Em vez de
+            // estourar MissingComponentException no renderMode, descarta esse objeto e começa
+            // de novo num Canvas próprio.
+            Debug.LogWarning($"[HUDController] O objeto '{canvasObject.name}' não tem Canvas. " +
+                             "A hierarquia do HUD será reconstruída em um Canvas novo.", this);
+
+            if (canvasObject != gameObject)
+            {
+                if (Application.isPlaying) Destroy(canvasObject);
+                else DestroyImmediate(canvasObject);
+            }
+
+            canvasObject = null;
+        }
+
+        if (canvasObject == null)
         {
             canvasObject = new GameObject(RootName, typeof(RectTransform));
             canvasObject.transform.SetParent(transform, false);
+            // Canvas/CanvasScaler/GraphicRaycaster entram logo abaixo.
         }
 
         root = canvasObject;
+        built = true;
 
-        Canvas canvas = canvasObject.GetComponent<Canvas>() ?? canvasObject.AddComponent<Canvas>();
+        // Reconstrói o conteúdo (some com barras/textos antigos para não duplicar ao rodar o
+        // comando duas vezes).
+        for (int index = canvasObject.transform.childCount - 1; index >= 0; index--)
+        {
+            Transform child = canvasObject.transform.GetChild(index);
+            if (child == null) continue;
+            if (Application.isPlaying) Destroy(child.gameObject);
+            else DestroyImmediate(child.gameObject);
+        }
+
+        Canvas canvas = canvasObject.GetComponent<Canvas>();
+        if (canvas == null) canvas = canvasObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 5;
 
-        CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>() ?? canvasObject.AddComponent<CanvasScaler>();
+        CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
+        if (scaler == null) scaler = canvasObject.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920f, 1080f);
         scaler.matchWidthOrHeight = 0.5f;

@@ -98,7 +98,8 @@ namespace ArenaSetup
             try
             {
                 // --- Hierarquia: o corpo visual precisa de um pai neutro ---
-                Transform body = instance.transform.Find("Corpo") ?? FindChildContaining(instance.transform, "Corpo");
+                Transform body = instance.transform.Find("Corpo");
+                if (body == null) body = FindChildContaining(instance.transform, "Corpo");
                 if (body != null && body.parent != instance.transform)
                     body.SetParent(instance.transform, true);
 
@@ -129,7 +130,8 @@ namespace ArenaSetup
                 rootBox.size = new Vector3(3.4f, 1.8f, 4.2f);
 
                 // --- NavMeshAgent: só X/Z; rotação é da arma, altura é do EnemyHover ---
-                NavMeshAgent agent = instance.GetComponent<NavMeshAgent>() ?? instance.AddComponent<NavMeshAgent>();
+                NavMeshAgent agent = instance.GetComponent<NavMeshAgent>();
+                if (agent == null) agent = instance.AddComponent<NavMeshAgent>();
                 agent.radius = 1.2f;
                 agent.height = 2f;
                 agent.baseOffset = 0f;
@@ -157,18 +159,21 @@ namespace ArenaSetup
                 ArenaEditorUtil.SetField(life, "destruirAoMorrer", false);
 
                 // --- Sensor (sem autoridade de movimento) ---
-                ArenaEnemySensor sensor = instance.GetComponent<ArenaEnemySensor>() ?? instance.AddComponent<ArenaEnemySensor>();
+                ArenaEnemySensor sensor = instance.GetComponent<ArenaEnemySensor>();
+                if (sensor == null) sensor = instance.AddComponent<ArenaEnemySensor>();
                 ArenaEditorUtil.SetField(sensor, "viewDistance", 26f);
                 ArenaEditorUtil.SetField(sensor, "fieldOfView", 220f);
                 ArenaEditorUtil.SetField(sensor, "blockingMask", ArenaGameInitializer.DefaultLineOfSightMask);
                 ArenaEditorUtil.SetField(sensor, "eyes", body != null ? body : instance.transform);
 
                 // --- IA da nave ---
-                AlienShipAI ai = instance.GetComponent<AlienShipAI>() ?? instance.AddComponent<AlienShipAI>();
+                AlienShipAI ai = instance.GetComponent<AlienShipAI>();
+                if (ai == null) ai = instance.AddComponent<AlienShipAI>();
                 ArenaEditorUtil.SetField(ai, "sensor", sensor);
 
                 // --- Arma ---
-                AlienShipWeapon weapon = instance.GetComponent<AlienShipWeapon>() ?? instance.AddComponent<AlienShipWeapon>();
+                AlienShipWeapon weapon = instance.GetComponent<AlienShipWeapon>();
+                if (weapon == null) weapon = instance.AddComponent<AlienShipWeapon>();
                 ArenaEditorUtil.SetField(weapon, "lineOfSightMask", ArenaGameInitializer.DefaultLineOfSightMask);
 
                 // --- Flutuação ---

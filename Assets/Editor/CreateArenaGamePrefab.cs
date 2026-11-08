@@ -15,35 +15,67 @@ namespace ArenaSetup
     {
         public static GameObject CreatePrefab()
         {
-            DifficultyCatalog catalog = AssetDatabase.LoadAssetAtPath<DifficultyCatalog>(
-                ArenaEditorUtil.ScriptableObjectsRoot + "/DifficultyCatalog.asset");
-            PlayerStats stats = AssetDatabase.LoadAssetAtPath<PlayerStats>(
-                ArenaEditorUtil.ScriptableObjectsRoot + "/PlayerStats.asset");
-            SpawnerConfig spawnerConfig = AssetDatabase.LoadAssetAtPath<SpawnerConfig>(
-                ArenaEditorUtil.ScriptableObjectsRoot + "/SpawnerConfig.asset");
+            // Os assets podem estar em ScriptableObjects/ (fonte) ou só em Resources/ (cópia que o
+            // jogo lê em runtime). Aceita os dois para não bloquear quem já rodou só um dos menus.
+            DifficultyCatalog catalog = FindAsset<DifficultyCatalog>("DifficultyCatalog");
+            PlayerStats stats = FindAsset<PlayerStats>("PlayerStats");
+            SpawnerConfig spawnerConfig = FindAsset<SpawnerConfig>("SpawnerConfig");
 
             if (catalog == null || stats == null)
             {
-                Debug.LogError("[Arena] Rode primeiro 'Arena > Create ScriptableObjects Assets'.");
+                Debug.LogError("[Arena] DifficultyCatalog/PlayerStats não encontrados. " +
+                               "Rode 'Arena > Create ScriptableObjects Assets'.");
                 return null;
             }
 
-            GameObject root = new GameObject("ArenaGame");
+            // Reaproveita o prefab anterior (se existir) para não perder ajustes e para o HUD
+            // reconstruir por cima do Canvas já salvo.
+            GameObject root;
+            HUDController hud;
+            ArenaGameOverUI gameOver;
 
-            // HUD
-            GameObject hudObject = new GameObject("HUDController");
-            hudObject.transform.SetParent(root.transform, false);
-            HUDController hud = hudObject.AddComponent<HUDController>();
+            GameObject existing = AssetDatabase.LoadAssetAtPath<GameObject>(ArenaEditorUtil.GameInitializerPath);
+            if (existing != null)
+            {
+                root = (GameObject)PrefabUtility.InstantiatePrefab(existing);
+                root.name = "ArenaGame";
+
+                hud = root.GetComponentInChildren<HUDController>(true);
+                if (hud == null)
+                {
+                    GameObject hudObject = new GameObject("HUDController");
+                    hudObject.transform.SetParent(root.transform, false);
+                    hud = hudObject.AddComponent<HUDController>();
+                }
+
+                gameOver = root.GetComponentInChildren<ArenaGameOverUI>(true);
+                if (gameOver == null)
+                {
+                    GameObject gameOverObject = new GameObject("GameOverUI");
+                    gameOverObject.transform.SetParent(root.transform, false);
+                    gameOver = gameOverObject.AddComponent<ArenaGameOverUI>();
+                }
+            }
+            else
+            {
+                root = new GameObject("ArenaGame");
+
+                GameObject hudObject = new GameObject("HUDController");
+                hudObject.transform.SetParent(root.transform, false);
+                hud = hudObject.AddComponent<HUDController>();
+
+                GameObject gameOverObject = new GameObject("GameOverUI");
+                gameOverObject.transform.SetParent(root.transform, false);
+                gameOver = gameOverObject.AddComponent<ArenaGameOverUI>();
+            }
+
+            // Reconstrói a UI por cima do que já existir (idempotente nas duas classes).
             hud.BuildHierarchy();
-
-            // Painel de Game Over
-            GameObject gameOverObject = new GameObject("GameOverUI");
-            gameOverObject.transform.SetParent(root.transform, false);
-            ArenaGameOverUI gameOver = gameOverObject.AddComponent<ArenaGameOverUI>();
             gameOver.BuildHierarchy();
 
             // Inicializador
-            ArenaGameInitializer initializer = root.AddComponent<ArenaGameInitializer>();
+            ArenaGameInitializer initializer = root.GetComponent<ArenaGameInitializer>();
+            if (initializer == null) initializer = root.AddComponent<ArenaGameInitializer>();
             ArenaEditorUtil.SetField(initializer, "difficultyCatalog", catalog);
             ArenaEditorUtil.SetField(initializer, "playerStats", stats);
             ArenaEditorUtil.SetField(initializer, "spawnerConfig", spawnerConfig);
@@ -62,6 +94,25 @@ namespace ArenaSetup
 
             Debug.Log("[Arena] Prefab criado/atualizado: " + ArenaEditorUtil.GameInitializerPath);
             return prefab;
+        }
+
+        /// <summary>Procura o asset em ScriptableObjects/ e, se não achar, em Resources/.</summary>
+        private static T FindAsset<T>(string fileName) where T : Object
+        {
+            T asset = AssetDatabase.LoadAssetAtPath<T>($"{ArenaEditorUtil.ScriptableObjectsRoot}/{fileName}.asset");
+            if (asset != null) return asset;
+
+            asset = AssetDatabase.LoadAssetAtPath<T>($"{ArenaEditorUtil.ResourcesRoot}/{fileName}.asset");
+            if (asset != null) return asset;
+
+            string[] guids = AssetDatabase.FindAssets($"{fileName} t:{typeof(T).Name}");
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (path.EndsWith($"/{fileName}.asset")) return AssetDatabase.LoadAssetAtPath<T>(path);
+            }
+
+            return null;
         }
 
         [MenuItem("Arena/Create ArenaGame Prefab", priority = 25)]

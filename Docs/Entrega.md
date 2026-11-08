@@ -1,7 +1,10 @@
 # Entrega — Implementação do planejamento arena-jw
 
-Repositório implementado em **`/home/user/repo`** (clone do seu GitHub, 12 commits organizados).
-Patches por fase e o pacote `.zip` estão em **`/home/user/patches/`**.
+Repositório implementado em **`/home/user/repo`** (clone do seu GitHub), sobre os seus commits
+`6d12eed` e `2d0aa32`. As correções ficam em commits próprios, por cima deles.
+
+Patches em **`/home/user/patches/`**: `fases/` (um patch por commit de correção, base `2d0aa32`),
+`arena-jw-full.patch` (todos juntos), `arena-jw.bundle` (histórico completo) e o pacote `.zip`.
 
 ---
 
@@ -84,10 +87,27 @@ Depois, no Unity: **Arena → Setup Main Menu + Playground** e **Bake** da NavMe
 |---|---|
 | Compilação dos 22 scripts de runtime contra stubs Unity 6/uGUI/TMP/Input System | **0 erros** |
 | Compilação dos 7 scripts de Editor (`UNITY_EDITOR`) | **0 erros** |
-| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs) | **53 verificações, 0 falhas** |
+| Execução da lógica (ranking, IA, ScriptableObjects, PlayerPrefs, HUD, idempotência) | **99 verificações, 0 falhas** |
 
 Não validado (exige o Unity Editor): layout visual das telas, bake da NavMesh, comportamento
 em Play Mode, criação de assets/layer pelos menus.
+
+### Correções depois dos commits `6d12eed` / `2d0aa32`
+
+| Erro no Unity | Causa | Correção |
+|---|---|---|
+| `MissingComponentException: There is no 'Canvas' attached to 'HUD_Partida'` ao rodar `Arena > Setup Playground Scene` | o campo serializado `root` apontava para um objeto sem `Canvas`; o código antigo só criava Canvas quando o objeto era **nulo** | `HUDController`, `ArenaGameOverUI` e `SettingsConfirmModal` validam o componente antes de usar e reconstroem num Canvas próprio |
+| UI não aparecia / painéis fora do Canvas | `ArenaMenuSceneSetup` pendurava os painéis como **irmãos** do Canvas | painéis e modal passam a ser filhos de `canvas.transform`; artefatos soltos na raiz são apagados |
+| Setup duplicava UI ao rodar 2× | `BuildHierarchy` reconstruía a cada chamada | `if (built) return;` no início + limpeza dos filhos antes de montar |
+| Nave girava sozinha / altura errada | `Inimigo.prefab` sem `m_UpdateRotation` / `m_UpdateUpAxis` — o Unity aplica o default `true` | prefab grava `m_UpdateRotation: 0` e `m_UpdateUpAxis: 0`; o Editor script reforça ao rodar |
+| Referência inválida depois de `Destroy` | `GetComponent<T>() ?? AddComponent<T>()` — `??` **não** respeita o "fake null" do Unity | troca por `x = GetComponent<T>(); if (x == null) x = AddComponent<T>();` em todo o projeto |
+
+**Ordem para atualizar o seu projeto:**
+
+1. `Arena > Create ScriptableObjects Assets` (se os assets ainda não existirem).
+2. `Arena > Setup Main Menu + Playground` (regenera a cena de menu e o prefab `ArenaGame`).
+3. Abrir `playground` e **bake** da NavMesh (`NavMesh Surface > Bake`).
+4. Play em `menu_principal`.
 
 ---
 

@@ -31,7 +31,12 @@ public sealed class ArenaGameOverUI : MonoBehaviour
     private void Awake()
     {
         if (panel == null) BuildHierarchy();
-        if (panel != null) panel.SetActive(false);
+
+        if (panel == null)
+            Debug.LogError("[ArenaGameOverUI] Não foi possível montar o painel de Game Over. " +
+                           "Rode 'Arena > Setup Main Menu + Playground'.", this);
+        else
+            panel.SetActive(false);
     }
 
     public void Show(int finalScore, ArenaDifficulty currentDifficulty)
@@ -124,21 +129,58 @@ public sealed class ArenaGameOverUI : MonoBehaviour
     {
         if (built) return;
 
-        GameObject canvasObject = new GameObject(PanelName, typeof(RectTransform));
-        canvasObject.transform.SetParent(transform, false);
+        // Reaproveita o Canvas já gravado (prefab/cena). Sem isso, rodar o comando do Editor duas
+        // vezes duplicaria o painel — e um 'panel' gravado apontando para um objeto destruído
+        // estoura MissingComponentException no Canvas.
+        GameObject canvasObject = panel;
 
-        Canvas canvas = canvasObject.AddComponent<Canvas>();
+        if (canvasObject != null && canvasObject.GetComponent<Canvas>() == null)
+        {
+            Debug.LogWarning($"[ArenaGameOverUI] O objeto '{canvasObject.name}' não tem Canvas. " +
+                             "O painel será reconstruído em um Canvas novo.", this);
+
+            if (canvasObject != gameObject)
+            {
+                if (Application.isPlaying) Destroy(canvasObject);
+                else DestroyImmediate(canvasObject);
+            }
+
+            canvasObject = null;
+        }
+
+        if (canvasObject == null)
+        {
+            canvasObject = new GameObject(PanelName, typeof(RectTransform));
+            canvasObject.transform.SetParent(transform, false);
+        }
+
+        panel = canvasObject;
+        built = true;
+
+        // Limpa o conteúdo anterior (idempotência).
+        for (int index = canvasObject.transform.childCount - 1; index >= 0; index--)
+        {
+            Transform child = canvasObject.transform.GetChild(index);
+            if (child == null) continue;
+            if (Application.isPlaying) Destroy(child.gameObject);
+            else DestroyImmediate(child.gameObject);
+        }
+
+        // O Canvas fica no próprio objeto do painel; quem controla a visibilidade é o GameObject
+        // dele (SetActive em Show/Awake). O Canvas não deve ser desativado sozinho.
+        Canvas canvas = canvasObject.GetComponent<Canvas>();
+        if (canvas == null) canvas = canvasObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 50;
 
-        CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
+        CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
+        if (scaler == null) scaler = canvasObject.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920f, 1080f);
         scaler.matchWidthOrHeight = 0.5f;
 
-        canvasObject.AddComponent<GraphicRaycaster>();
-
-        panel = canvasObject;
+        if (canvasObject.GetComponent<GraphicRaycaster>() == null)
+            canvasObject.AddComponent<GraphicRaycaster>();
 
         // Fundo escuro
         GameObject dim = new GameObject("Fundo", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
@@ -190,8 +232,6 @@ public sealed class ArenaGameOverUI : MonoBehaviour
         returnToMenuButton = CreateButton(window.transform, "BotaoMenuPrincipal", font, "Menu Principal");
         Place((RectTransform)returnToMenuButton.transform, new Vector2(0f, y - 430f), new Vector2(340f, 64f));
         returnToMenuButton.onClick.AddListener(SubmitAndReturnToMenu);
-
-        built = true;
     }
 
     private static TMP_Text CreateText(Transform parent, string name, TMP_FontAsset font, string value,

@@ -50,9 +50,11 @@ namespace ArenaSetup
             Canvas canvas = ArenaEditorUtil.CreateCanvas("Canvas_Menu", root.transform, 0);
             ArenaEditorUtil.EnsureEventSystem();
 
-            BuildMainPanel(root.transform, canvas.transform, manager, out GameObject mainPanel, out TextMeshProUGUI message);
-            GameObject difficultyPanel = BuildDifficultyPanel(root.transform, canvas.transform, manager);
-            GameObject settingsPanel = BuildSettingsPanel(root.transform, canvas.transform, manager);
+            // Os paineis precisam ser FILHOS do Canvas: um painel irmao do Canvas (filho do
+            // MenuPrincipal) nao e renderizado pela uGUI.
+            BuildMainPanel(canvas.transform, canvas.transform, manager, out GameObject mainPanel, out TextMeshProUGUI message);
+            GameObject difficultyPanel = BuildDifficultyPanel(canvas.transform, canvas.transform, manager);
+            GameObject settingsPanel = BuildSettingsPanel(canvas.transform, canvas.transform, manager);
 
             manager.Configure(mainPanel, difficultyPanel, settingsPanel);
             ArenaEditorUtil.SetField(manager, "messageText", message);
@@ -75,13 +77,22 @@ namespace ArenaSetup
             // O EventSystem é preservado: criá-lo de novo a cada execução duplicaria módulos de input.
             foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
             {
-                bool isMenuRoot = go.name == "MenuPrincipal" || go.name == "Canvas_Menu";
-                bool isOldMenuCanvas = go.GetComponent<Canvas>() != null &&
-                                       go.GetComponent<SettingsConfirmModal>() == null &&
-                                       go.transform.Find("Panel_MenuPrincipal") != null;
-                if (isMenuRoot || isOldMenuCanvas) Object.DestroyImmediate(go);
+                if (go.name == "MenuPrincipal" || go.name == "Canvas_Menu")
+                {
+                    Object.DestroyImmediate(go);
+                    continue;
+                }
+
+                // Execucoes antigas deixavam os paineis soltos na raiz da cena.
+                if (go.GetComponent<Canvas>() == null && IsMenuArtifact(go.name))
+                    Object.DestroyImmediate(go);
             }
         }
+
+        private static bool IsMenuArtifact(string name) =>
+            name == "Panel_MenuPrincipal" || name == "Panel_Dificuldade" ||
+            name == "Panel_Configuracoes" || name == "SettingsConfirmModal" ||
+            name == "Mensagem";
 
         #region Menu principal
 
@@ -323,7 +334,7 @@ namespace ArenaSetup
             ArenaEditorUtil.Place((RectTransform)back.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
                 new Vector2(170f, 100f), new Vector2(300f, 68f));
 
-            SettingsConfirmModal modal = BuildConfirmModal(root, canvas);
+            SettingsConfirmModal modal = BuildConfirmModal(canvas.transform, canvas);
 
             SettingsPanel panel = dim.gameObject.AddComponent<SettingsPanel>();
             panel.Configure(manager, modal, master, sfx, music, resolution, display, apply, back, status);

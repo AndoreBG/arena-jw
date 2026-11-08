@@ -69,20 +69,60 @@ public sealed class SettingsConfirmModal : MonoBehaviour
     {
         if (built) return;
 
-        GameObject canvasObject = new GameObject(ModalName, typeof(RectTransform));
-        canvasObject.transform.SetParent(transform, false);
+        GameObject canvasObject = modalRoot;
 
-        Canvas canvas = canvasObject.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 60;
+        if (canvasObject != null && canvasObject.GetComponent<Canvas>() == null)
+        {
+            // O modal pode ser um painel comum dentro de um Canvas que já existe (é assim na
+            // cena montada). Nesse caso o canvasObject continua valendo: os filhos entram nele e
+            // quem desenha é o Canvas do pai. Só descartamos o objeto se ele estiver solto,
+            // sem nenhum Canvas acima — aí não haveria como desenhar nada.
+            if (canvasObject != gameObject && canvasObject.GetComponentInParent<Canvas>() == null)
+            {
+                if (Application.isPlaying) Destroy(canvasObject);
+                else DestroyImmediate(canvasObject);
+                canvasObject = null;
+            }
+        }
 
-        CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920f, 1080f);
-        scaler.matchWidthOrHeight = 0.5f;
+        if (canvasObject == null)
+        {
+            canvasObject = new GameObject(ModalName, typeof(RectTransform));
+            canvasObject.transform.SetParent(transform, false);
+        }
 
-        canvasObject.AddComponent<GraphicRaycaster>();
+        built = true;
         modalRoot = canvasObject;
+
+        for (int index = canvasObject.transform.childCount - 1; index >= 0; index--)
+        {
+            Transform child = canvasObject.transform.GetChild(index);
+            if (child == null) continue;
+            if (Application.isPlaying) Destroy(child.gameObject);
+            else DestroyImmediate(child.gameObject);
+        }
+
+        // Se já existe um Canvas acima (o modal é um painel da cena), não cria outro: Canvas
+        // aninhado duplicaria o escalonamento e o desenho.
+        bool insideCanvas = canvasObject.GetComponentInParent<Canvas>() != null;
+
+        Canvas canvas = canvasObject.GetComponent<Canvas>();
+        if (canvas == null && !insideCanvas) canvas = canvasObject.AddComponent<Canvas>();
+
+        if (canvas != null)
+        {
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 60;
+
+            CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
+            if (scaler == null) scaler = canvasObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
+
+            if (canvasObject.GetComponent<GraphicRaycaster>() == null)
+                canvasObject.AddComponent<GraphicRaycaster>();
+        }
 
         GameObject dim = new GameObject("Fundo", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         dim.transform.SetParent(canvasObject.transform, false);
@@ -115,8 +155,6 @@ public sealed class SettingsConfirmModal : MonoBehaviour
 
         noButton = CreateButton(window.transform, font, "Não, permanecer", new Vector2(190f, -100f));
         noButton.onClick.AddListener(Dismiss);
-
-        built = true;
     }
 
     private static TMP_Text CreateText(Transform parent, TMP_FontAsset font, string value, float size)
