@@ -69,9 +69,8 @@ namespace ArenaSetup
                 gameOver = gameOverObject.AddComponent<ArenaGameOverUI>();
             }
 
-            // Reconstrói a UI por cima do que já existir (idempotente nas duas classes).
-            hud.BuildHierarchy();
-            gameOver.BuildHierarchy();
+            // A UI (HUD_Partida e GameOverPanel) é montada à mão no prefab ArenaGame.
+            // Este menu NÃO reconstrói mais a hierarquia: ele só liga as referências.
 
             // Inicializador
             ArenaGameInitializer initializer = root.GetComponent<ArenaGameInitializer>();

@@ -199,6 +199,22 @@ public sealed class TankAimReticleHUD : MonoBehaviour
         ApplyBarrelImageConfiguration();
     }
 
+    /// <summary>
+    /// Liga/desliga o desenho dos dois retículos. Usado no Game Over: sem isso o LateUpdate
+    /// religava o Image do retículo do canhão a cada frame.
+    /// </summary>
+    public void SetReticlesVisible(bool visible)
+    {
+        if (cameraReticle != null)
+        {
+            Graphic cameraGraphic = cameraReticle.GetComponent<Graphic>();
+            if (cameraGraphic != null) cameraGraphic.enabled = visible;
+        }
+
+        if (barrelReticleGraphic != null)
+            barrelReticleGraphic.enabled = visible;
+    }
+
     #endregion
 
     private void Reset()
@@ -257,6 +273,13 @@ public sealed class TankAimReticleHUD : MonoBehaviour
     {
         if (aimCamera == null || canvasRectTransform == null)
             return;
+
+        // No Game Over os retículos somem: não reposiciona nem religa o Image deles.
+        if (!ArenaManager.IsPlaying)
+        {
+            SetReticlesVisible(false);
+            return;
+        }
 
         if (cameraReticle != null)
             UpdateCameraCenterReticle();

@@ -11,6 +11,7 @@ public enum ArenaRunState { Playing, GameOver }
 /// <see cref="DifficultyCatalog"/>. Se nada estiver configurado, o componente usa o asset do
 /// Inspector, para o Playground continuar funcionando quando aberto direto no Editor.
 /// </summary>
+[DefaultExecutionOrder(-400)] // depois do ArenaGameInitializer (-500) e antes do resto
 [DisallowMultipleComponent]
 [AddComponentMenu("Arena/Arena Manager")]
 public sealed class ArenaManager : MonoBehaviour
@@ -100,14 +101,56 @@ public sealed class ArenaManager : MonoBehaviour
         }
         else Debug.LogError("[ArenaManager] Vida do jogador não configurada nem encontrada na tag Player.", this);
 
-        if (gameOverUI == null) gameOverUI = FindFirstObjectByType<ArenaGameOverUI>();
-        if (hud == null) hud = FindFirstObjectByType<HUDController>();
+        // A cena guardou referências a componentes que já não existem ("Missing (Mono Script)").
+        // O Unity não devolve null para eles, então limpamos por conta própria.
+        if (gameOverUI == null || gameOverUI.gameObject == null) gameOverUI = null;
+        if (hud == null || hud.gameObject == null) hud = null;
+
+        // Preferir sempre o Game Over que tem painel de verdade. A cena pode ter uma sobra
+        // de ArenaGameOverUI sem painel nenhum no próprio objeto do ArenaManager.
+        if (gameOverUI == null || !gameOverUI.Configurado) gameOverUI = EscolherGameOver();
+
+        // Mesma regra do Game Over: só aceitar HUD que tenha o painel das barras.
+        if (hud == null || !hud.Configurado) hud = EscolherHud();
 
         if (hud != null) hud.Bind(playerLife, playerMovement, playerInput, this);
         if (spawner == null) spawner = FindFirstObjectByType<ArenaSpawner>();
         if (spawner != null) spawner.SetManager(this);
     }
 
+
+    /// <summary>Procura o HUDController que tem o painel das barras configurado.</summary>
+    private static HUDController EscolherHud()
+    {
+        foreach (HUDController candidato in FindObjectsByType<HUDController>(FindObjectsSortMode.None))
+        {
+            if (candidato == null) continue;
+            if (!candidato.Configurado) continue;
+            return candidato;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Procura o ArenaGameOverUI que realmente tem painel configurado. Se só existir
+    /// componente sem painel (lixo de cena antiga), devolve null em vez do primeiro que achar.
+    /// </summary>
+    private static ArenaGameOverUI EscolherGameOver()
+    {
+        ArenaGameOverUI escolhido = null;
+
+        foreach (ArenaGameOverUI candidato in FindObjectsByType<ArenaGameOverUI>(FindObjectsSortMode.None))
+        {
+            if (candidato == null) continue;
+            if (!candidato.Configurado) continue;
+
+            escolhido = candidato;
+            break;
+        }
+
+        return escolhido;
+    }
 
     private void OnDestroy()
     {

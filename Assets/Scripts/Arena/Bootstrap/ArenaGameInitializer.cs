@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 ///
 ///  1. Aplica as configurações salvas (volumes e resolução).
 ///  2. Garante que exista um <see cref="ArenaManager"/> na cena.
-///  3. Garante o HUD (<see cref="HUDController"/>) e o painel de Game Over
-///     (<see cref="ArenaGameOverUI"/>), montados em código.
+///  3. Usa o HUD (<see cref="HUDController"/>) e o painel de Game Over
+///     (<see cref="ArenaGameOverUI"/>), que já vêm montados no prefab ArenaGame.
 ///  4. Usa os componentes que já estão na cena (vida do jogador, movimento, input) e cria os
 ///     que faltam (spawner, pool de projéteis).
 ///
@@ -33,9 +33,9 @@ public sealed class ArenaGameInitializer : MonoBehaviour
     [SerializeField] private bool autoInstallOnPlayground = true;
 
     [Header("UI pronta (opcional)")]
-    [Tooltip("HUD já existente na cena. Se vazio, é montado em código.")]
+    [Tooltip("HUD que já existe no prefab/cena (HUD_Partida).")]
     [SerializeField] private HUDController hud;
-    [Tooltip("Painel de Game Over já existente na cena. Se vazio, é montado em código.")]
+    [Tooltip("Painel de Game Over que já existe no prefab/cena (GameOverPanel).")]
     [SerializeField] private ArenaGameOverUI gameOver;
 
     [Header("Diagnóstico")]
@@ -89,21 +89,20 @@ public sealed class ArenaGameInitializer : MonoBehaviour
             spawner = spawnerObject.AddComponent<ArenaSpawner>();
         }
 
+        // O HUD e o Game Over vêm montados do prefab ArenaGame (UI feita à mão).
+        // Nada é criado em código: se faltar, avisamos para o prefab voltar à cena.
         if (hud == null) hud = FindFirstObjectByType<HUDController>();
+        // A cena pode ter sobras de ArenaGameOverUI/HUDController sem painel configurado.
+        // Só interessa o que está realmente configurado.
+        if (hud == null || !hud.Configurado) hud = EscolherHud();
         if (hud == null)
-        {
-            GameObject hudObject = new GameObject("HUDController");
-            hud = hudObject.AddComponent<HUDController>();
-            hud.BuildHierarchy();
-        }
+            Debug.LogWarning("[ArenaGameInitializer] HUDController não encontrado. " +
+                             "Coloque o prefab ArenaGame (Assets/Prefabs/ArenaGame.prefab) na cena.");
 
-        if (gameOver == null) gameOver = FindFirstObjectByType<ArenaGameOverUI>();
+        if (gameOver == null || !gameOver.Configurado) gameOver = EscolherGameOver();
         if (gameOver == null)
-        {
-            GameObject panelObject = new GameObject("GameOverUI");
-            gameOver = panelObject.AddComponent<ArenaGameOverUI>();
-            gameOver.BuildHierarchy();
-        }
+            Debug.LogWarning("[ArenaGameInitializer] ArenaGameOverUI não encontrado. " +
+                             "Coloque o prefab ArenaGame (Assets/Prefabs/ArenaGame.prefab) na cena.");
 
         // 2. ArenaManager por último, já com tudo pronto.
         ArenaManager manager = FindFirstObjectByType<ArenaManager>();
@@ -126,6 +125,28 @@ public sealed class ArenaGameInitializer : MonoBehaviour
         }
 
         if (logReport) Report(manager, player);
+    }
+
+    /// <summary>HUDController que tem o painel das barras configurado, ou null.</summary>
+    private static HUDController EscolherHud()
+    {
+        foreach (HUDController candidato in FindObjectsByType<HUDController>(FindObjectsSortMode.None))
+        {
+            if (candidato != null && candidato.Configurado) return candidato;
+        }
+
+        return null;
+    }
+
+    /// <summary>ArenaGameOverUI que tem painel configurado, ou null.</summary>
+    private static ArenaGameOverUI EscolherGameOver()
+    {
+        foreach (ArenaGameOverUI candidato in FindObjectsByType<ArenaGameOverUI>(FindObjectsSortMode.None))
+        {
+            if (candidato != null && candidato.Configurado) return candidato;
+        }
+
+        return null;
     }
 
     private void EnsureProjectilePool(GameObject player)

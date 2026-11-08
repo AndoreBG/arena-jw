@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1433120901600608547}
   - component: {fileID: 3549941928346882887}
   - component: {fileID: 1491908128636323749}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Mensagem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5358141179978582891}
   - component: {fileID: 774629338648728969}
   - component: {fileID: 1695322941006344691}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 8778990639157763077}
   - component: {fileID: 4151059453324563404}
   - component: {fileID: 873368330263800876}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: VidaTexto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,7 +421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8611564049947443970}
   - component: {fileID: 1852076462040642577}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HUDController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,7 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169eac98586302b765c70016835e687b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HUDController
-  root: {fileID: 2662430588521230668}
+  hud: {fileID: 2662430588521230668}
   healthFill: {fileID: 9088657186638087643}
   healthText: {fileID: 873368330263800876}
   accelerationFill: {fileID: 7358215094916314345}
@@ -477,7 +477,7 @@ GameObject:
   - component: {fileID: 8475624524210014246}
   - component: {fileID: 2006124815491222541}
   - component: {fileID: 350948056325953632}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,7 +614,7 @@ GameObject:
   - component: {fileID: 7974713834899158122}
   - component: {fileID: 8974012151278205063}
   - component: {fileID: 7358215094916314345}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Aceleracao
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -689,7 +689,7 @@ GameObject:
   - component: {fileID: 1133291934353243680}
   - component: {fileID: 3576937095406398875}
   - component: {fileID: 7413588790606035195}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Pontuacao
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +826,7 @@ GameObject:
   - component: {fileID: 3214717993924069585}
   - component: {fileID: 1933788006531850670}
   - component: {fileID: 841489723972723670}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BarraVida_Fundo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 4103077384314504794}
   - component: {fileID: 665558303040619275}
   - component: {fileID: 2789107787846076379}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Aceleracao_Fundo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -980,7 +980,7 @@ GameObject:
   - component: {fileID: 3786939525291623907}
   - component: {fileID: 8579644139089004953}
   - component: {fileID: 7076519862377366314}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HUD_Partida
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 7835509946353212186}
   - component: {fileID: 5818101347023344453}
   - component: {fileID: 9088657186638087643}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BarraVida
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1159,7 +1159,7 @@ GameObject:
   - component: {fileID: 7361642662264929290}
   - component: {fileID: 3923922331013409132}
   - component: {fileID: 5922408255003681165}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Janela
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1241,7 +1241,7 @@ GameObject:
   - component: {fileID: 691246054636318743}
   - component: {fileID: 8214076648167910137}
   - component: {fileID: 3757670245958737909}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1377,7 +1377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7464152190021286387}
   - component: {fileID: 2114192311412178688}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameOverUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1416,8 +1416,6 @@ MonoBehaviour:
   scoreText: {fileID: 8769144477856684842}
   nicknameInput: {fileID: 7969202238920664487}
   messageText: {fileID: 1491908128636323749}
-  newGameButton: {fileID: 4988814215310371936}
-  returnToMenuButton: {fileID: 143612137050718076}
 --- !u!1 &5315804555196372418
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,7 +1427,7 @@ GameObject:
   - component: {fileID: 7721907631483560874}
   - component: {fileID: 8616526044374457341}
   - component: {fileID: 6811879059490256481}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Dificuldade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1566,7 +1564,7 @@ GameObject:
   - component: {fileID: 1649740750450339483}
   - component: {fileID: 8152102908324352548}
   - component: {fileID: 8769144477856684842}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PontuacaoFinal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1703,7 +1701,7 @@ GameObject:
   - component: {fileID: 6407689349168397495}
   - component: {fileID: 315160113510771437}
   - component: {fileID: 2883235583859705615}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Fundo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1779,7 +1777,7 @@ GameObject:
   - component: {fileID: 610945053559843043}
   - component: {fileID: 1530820431612879092}
   - component: {fileID: 3859195975676135529}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameOverPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1828,7 +1826,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 50
+  m_SortingOrder: 200
   m_TargetDisplay: 0
 --- !u!114 &1530820431612879092
 MonoBehaviour:
@@ -1881,7 +1879,7 @@ GameObject:
   - component: {fileID: 8608253051217536608}
   - component: {fileID: 8226694465020782090}
   - component: {fileID: 3264161536227446576}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Titulo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2017,7 +2015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4469637733464784245}
   - component: {fileID: 2530457723823143528}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ArenaGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2072,7 +2070,7 @@ GameObject:
   - component: {fileID: 1081681673072863976}
   - component: {fileID: 3672379406530940614}
   - component: {fileID: 7969202238920664487}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: NicknameInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2178,7 +2176,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3672379406530940614}
-  m_TextViewport: {fileID: 0}
+  m_TextViewport: {fileID: 7953066545930151803}
   m_TextComponent: {fileID: 3757670245958737909}
   m_Placeholder: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -2250,7 +2248,7 @@ GameObject:
   - component: {fileID: 5546122276117156158}
   - component: {fileID: 5426922978819978084}
   - component: {fileID: 4988814215310371936}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BotaoTentarNovamente
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2358,6 +2356,42 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5426922978819978084}
   m_OnClick:
     m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2114192311412178688}
+        m_TargetAssemblyTypeName: ArenaGameOverUI, Assembly-CSharp
+        m_MethodName: SubmitAndStartNew
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 5426922978819978084}
+  m_OnClick:
+    m_PersistentCalls:
       m_Calls: []
 --- !u!1 &8307283365016752459
 GameObject:
@@ -2370,7 +2404,7 @@ GameObject:
   - component: {fileID: 1089772681313864760}
   - component: {fileID: 7774313287221945088}
   - component: {fileID: 6028328834114496995}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ApelidoLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2508,7 +2542,7 @@ GameObject:
   - component: {fileID: 6942251802831937366}
   - component: {fileID: 3440286202469473975}
   - component: {fileID: 143612137050718076}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BotaoMenuPrincipal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2593,6 +2627,42 @@ MonoBehaviour:
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 3440286202469473975}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2114192311412178688}
+        m_TargetAssemblyTypeName: ArenaGameOverUI, Assembly-CSharp
+        m_MethodName: SubmitAndReturnToMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
