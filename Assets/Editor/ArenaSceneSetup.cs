@@ -265,21 +265,13 @@ namespace ArenaSetup
                 agent.autoBraking = true;
                 agent.enabled = true;
 
-                // ArenaEnemyWeapon.muzzle: ponto de saída do projétil (FX_Tiro sob o cano).
-                var weapon = instance.GetComponent<ArenaEnemyWeapon>();
-                if (weapon != null)
+                // TiroDoInimigo.origemDoTiro: o Corpo do inimigo.
+                var tiro = instance.GetComponent<TiroDoInimigo>();
+                if (tiro != null)
                 {
-                    var muzzle = instance.transform.Find("Corpo/Torre/Trabuco/FX_Tiro");
-                    if (muzzle != null) SetSerialized(weapon, "muzzle", muzzle);
-                    else Debug.LogWarning("FX_Tiro não encontrado sob Trabuco no prefab.");
-                }
-
-                // ArenaEnemySensor.eyes: posição dos olhos na torre.
-                var sensor = instance.GetComponent<ArenaEnemySensor>();
-                if (sensor != null)
-                {
-                    var eyes = instance.transform.Find("Corpo/Torre");
-                    if (eyes != null) SetSerialized(sensor, "eyes", eyes);
+                    var corpo = instance.transform.Find("Corpo");
+                    if (corpo != null) SetSerialized(tiro, "origemDoTiro", corpo);
+                    else Debug.LogWarning("Corpo não encontrado no prefab do inimigo.");
                 }
             }
             finally

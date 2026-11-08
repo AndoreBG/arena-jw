@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1945748ecae140bfa7c0c499e2da48b2, type: 3}
+  m_Name: InimigoFacil
+  m_EditorClassIdentifier: Assembly-CSharp::ConfiguracaoDoInimigo
+  pesoAndando: 40
+  pesoPerseguindo: 60
+  pesoAtacando: 100
+  distanciaDeVisao: 45
+  anguloDeVisao: 160
+  raioDePatrulha: 12
+  velocidadeAndando: 6
+  velocidadePerseguindo: 9
+  alcanceDeAtaque: 30
+  intervaloEntreTiros: 1.6
+  velocidadeDoProjetil: 100
+  tempoDeVidaDoProjetil: 5
+  danoDoProjetil: 25

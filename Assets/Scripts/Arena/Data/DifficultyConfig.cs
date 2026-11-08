@@ -25,6 +25,10 @@ public sealed class DifficultyConfig : ScriptableObject
     [Tooltip("0 = IA fraca, 1 = IA forte. Escala a visão, o alcance de ataque e a cadência da nave.")]
     [SerializeField, Range(0f, 1f)] private float aiIntensity = 0.5f;
 
+    [Tooltip("Números do inimigo desta dificuldade (pesos dos estados, visão, velocidades, " +
+             "alcance e projétil). O spawner entrega este asset para cada nave criada.")]
+    [SerializeField] private ConfiguracaoDoInimigo inimigo;
+
     public ArenaDifficulty Difficulty => difficulty;
     public string DisplayName => displayName;
     public string Description => description;
@@ -32,20 +36,13 @@ public sealed class DifficultyConfig : ScriptableObject
     public float SpawnInterval => spawnInterval;
     public float AiIntensity => aiIntensity;
 
-    /// <summary>Aplica a intensidade da IA nos componentes de um inimigo recém-criado.</summary>
-    public void ApplyToEnemy(AlienShipAI ai, ArenaEnemySensor sensor, AlienShipWeapon weapon)
-    {
-        if (sensor != null) sensor.ViewDistanceMultiplier = 0.75f + 0.5f * aiIntensity;
-        if (ai != null) ai.Aggression = aiIntensity;
-        if (weapon != null)
-        {
-            weapon.SetFireIntervalMultiplier(Mathf.Lerp(1.6f, 1f, aiIntensity));
-            weapon.SetAimTolerance(Mathf.Lerp(16f, 8f, aiIntensity)); // IA fraca erra mais
-        }
-    }
+    /// <summary>Asset com os números do inimigo para esta dificuldade.</summary>
+    public ConfiguracaoDoInimigo Inimigo => inimigo;
 
 #if UNITY_EDITOR
     /// <summary>Usado apenas pelo gerador de assets do Editor.</summary>
+    public void EditorSetInimigo(ConfiguracaoDoInimigo config) => inimigo = config;
+
     public void EditorConfigure(ArenaDifficulty value, string name, string info, int maxAlive, float interval, float intensity)
     {
         difficulty = value;

@@ -169,14 +169,16 @@ public sealed class ArenaManager : MonoBehaviour
 
         foreach (TankPlayerInput input in FindObjectsByType<TankPlayerInput>(FindObjectsSortMode.None)) input.enabled = false;
         foreach (TankMovement movement in FindObjectsByType<TankMovement>(FindObjectsSortMode.None)) movement.Stop();
-        foreach (AlienShipAI ship in FindObjectsByType<AlienShipAI>(FindObjectsSortMode.None))
+
+        // Inimigos: param de andar e de atirar.
+        foreach (InimigoMaquinaDeEstados maquina in FindObjectsByType<InimigoMaquinaDeEstados>(FindObjectsSortMode.None))
         {
-            ship.enabled = false;
-            UnityEngine.AI.NavMeshAgent agent = ship.GetComponent<UnityEngine.AI.NavMeshAgent>();
+            maquina.enabled = false;
+            UnityEngine.AI.NavMeshAgent agent = maquina.GetComponent<UnityEngine.AI.NavMeshAgent>();
             if (agent != null && agent.enabled && agent.isOnNavMesh) agent.isStopped = true;
         }
-        foreach (ArenaEnemyAI legacy in FindObjectsByType<ArenaEnemyAI>(FindObjectsSortMode.None)) legacy.enabled = false;
-        foreach (AlienShipWeapon weapon in FindObjectsByType<AlienShipWeapon>(FindObjectsSortMode.None)) weapon.SetCanFire(false);
+        foreach (TiroDoInimigo tiro in FindObjectsByType<TiroDoInimigo>(FindObjectsSortMode.None)) tiro.enabled = false;
+
         foreach (TankProjectile shot in FindObjectsByType<TankProjectile>(FindObjectsSortMode.None)) shot.RequestDespawn();
 
         GameSettings.SaveDifficulty(CurrentDifficulty);

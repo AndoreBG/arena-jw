@@ -39,11 +39,6 @@ public sealed class SpawnerConfig : ScriptableObject
     public float SpawnInterval => difficulty != null ? difficulty.SpawnInterval : 3f;
     public int MaxAliveEnemies => difficulty != null ? difficulty.MaxAliveEnemies : 2;
 
-    public void ApplyDifficultyToEnemy(AlienShipAI ai, ArenaEnemySensor sensor, AlienShipWeapon weapon)
-    {
-        if (difficulty != null) difficulty.ApplyToEnemy(ai, sensor, weapon);
-    }
-
 #if UNITY_EDITOR
     public void EditorConfigure(DifficultyConfig value, float minPlayerDistance, Vector3 halfExtents, Vector3 offset)
     {

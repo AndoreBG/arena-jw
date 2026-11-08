@@ -399,6 +399,44 @@ namespace ArenaSetup
             return image;
         }
 
+        /// <summary>
+        /// Monta a UI da barra de vida do inimigo (Canvas World Space > Fundo > Vida).
+        /// Usado apenas pelo menu do Editor; o prefab já traz essa UI pronta.
+        /// </summary>
+        public static GameObject CreateEnemyHealthUI(Transform nave)
+        {
+            GameObject raiz = new GameObject("UI_Inimigo", typeof(RectTransform), typeof(Canvas));
+            raiz.transform.SetParent(nave, false);
+            raiz.layer = 5; // UI
+
+            RectTransform raizRect = raiz.GetComponent<RectTransform>();
+            raizRect.localPosition = new Vector3(0f, 4.5f, 0f);
+            raizRect.localRotation = Quaternion.identity;
+            raizRect.localScale = Vector3.one * 0.01f;
+            raizRect.sizeDelta = new Vector2(160f, 24f);
+
+            Canvas canvas = raiz.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.WorldSpace;
+
+            Sprite fundoSprite = LoadBuiltinSprite("UI/Skin/Background.psd");
+            Sprite fillSprite = LoadBuiltinSprite("UI/Skin/UISprite.psd");
+
+            Image fundo = CreateImage(raiz.transform, "Fundo", fundoSprite, new Color(0f, 0f, 0f, 0.6f));
+            fundo.gameObject.layer = 5;
+            Stretch(fundo.rectTransform);
+
+            Image vida = CreateImage(fundo.transform, "Vida", fillSprite, new Color(0.85f, 0.20f, 0.20f, 1f));
+            vida.gameObject.layer = 5;
+            RectTransform vidaRect = vida.rectTransform;
+            vidaRect.anchorMin = Vector2.zero;
+            vidaRect.anchorMax = Vector2.one;
+            vidaRect.offsetMin = new Vector2(2f, 2f);
+            vidaRect.offsetMax = new Vector2(-2f, -2f);
+            vidaRect.pivot = new Vector2(0f, 0.5f);
+
+            return raiz;
+        }
+
         public static TMP_Dropdown CreateDropdown(Transform parent, string name)
         {
             GameObject go = Object.Instantiate(TMP_DefaultControls.CreateDropdown(TmpResources()));

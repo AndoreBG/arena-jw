@@ -5,6 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace ArenaSetup
 {
@@ -125,7 +126,7 @@ namespace ArenaSetup
                 hitBox.center = new Vector3(0f, 0.75f, 0f);
                 hitBox.size = new Vector3(3.4f, 1.8f, 4.2f);
 
-                // --- NavMeshAgent: anda no plano; a altura vem do EnemyHover ---
+                // --- NavMeshAgent: anda no plano ---
                 NavMeshAgent agent = instance.GetComponent<NavMeshAgent>();
                 if (agent == null) agent = instance.AddComponent<NavMeshAgent>();
                 agent.radius = 1.2f;
@@ -138,7 +139,7 @@ namespace ArenaSetup
                 agent.autoBraking = false;
                 agent.autoTraverseOffMeshLink = false;
                 agent.updatePosition = true;    // o agente manda no X/Z
-                agent.updateRotation = false;   // quem gira a nave é a AlienShipWeapon
+                agent.updateRotation = false;   // quem gira a nave é a InimigoMaquinaDeEstados
                 agent.updateUpAxis = false;
 
                 // --- Vida: sem ela a nave não morre nem pontua ---
@@ -148,31 +149,29 @@ namespace ArenaSetup
                 ArenaEditorUtil.SetField(life, "vidaMaxima", 100f);
                 ArenaEditorUtil.SetField(life, "destruirAoMorrer", false);
 
-                // --- Sensor: quem a nave vê ---
-                ArenaEnemySensor sensor = instance.GetComponent<ArenaEnemySensor>();
-                if (sensor == null) sensor = instance.AddComponent<ArenaEnemySensor>();
-                ArenaEditorUtil.SetField(sensor, "viewDistance", 26f);
-                ArenaEditorUtil.SetField(sensor, "fieldOfView", 220f);
-                ArenaEditorUtil.SetField(sensor, "blockingMask", ArenaGameInitializer.DefaultLineOfSightMask);
-                ArenaEditorUtil.SetField(sensor, "eyes", instance.transform);
+                // --- IA: máquina de estados (Andando / Perseguindo / Atacando) ---
+                InimigoMaquinaDeEstados maquina = instance.GetComponent<InimigoMaquinaDeEstados>();
+                if (maquina == null) maquina = instance.AddComponent<InimigoMaquinaDeEstados>();
 
-                // --- IA: patrulha, persegue e ataca ---
-                AlienShipAI ai = instance.GetComponent<AlienShipAI>();
-                if (ai == null) ai = instance.AddComponent<AlienShipAI>();
-                ArenaEditorUtil.SetField(ai, "sensor", sensor);
+                // --- Arma: atira do Corpo da nave ---
+                TiroDoInimigo tiro = instance.GetComponent<TiroDoInimigo>();
+                if (tiro == null) tiro = instance.AddComponent<TiroDoInimigo>();
+                Transform corpoDaNave = instance.transform.Find("Corpo");
+                if (corpoDaNave != null) ArenaEditorUtil.SetField(tiro, "origemDoTiro", corpoDaNave);
 
-                // --- Arma: atira da frente da nave ---
-                AlienShipWeapon weapon = instance.GetComponent<AlienShipWeapon>();
-                if (weapon == null) weapon = instance.AddComponent<AlienShipWeapon>();
-                ArenaEditorUtil.SetField(weapon, "lineOfSightMask", ArenaGameInitializer.DefaultLineOfSightMask);
+                // --- Barra de vida: a UI é montada no prefab por este comando ---
+                BarraVida barra = instance.GetComponentInChildren<BarraVida>(true);
+                if (barra == null)
+                {
+                    GameObject ui = ArenaEditorUtil.CreateEnemyHealthUI(instance.transform);
+                    barra = ui.AddComponent<BarraVida>();
 
-                // --- Flutuação: 3 m ± 0,5 m ---
-                if (instance.GetComponent<EnemyHover>() == null) instance.AddComponent<EnemyHover>();
-
-                // --- Barra de vida acima da nave ---
-                EnemyHealthBar healthBar = instance.GetComponent<EnemyHealthBar>();
-                if (healthBar == null) healthBar = instance.AddComponent<EnemyHealthBar>();
-                ArenaEditorUtil.SetField(healthBar, "life", life);
+                    Transform preenchimento = ui.transform.Find("Fundo/Vida");
+                    if (preenchimento != null)
+                        ArenaEditorUtil.SetField(barra, "preenchimento", preenchimento.GetComponent<Image>());
+                    ArenaEditorUtil.SetField(barra, "raiz", ui);
+                }
+                ArenaEditorUtil.SetField(barra, "vida", life);
 
                 // --- Registro: liga a morte ao spawner e ao placar ---
                 if (instance.GetComponent<ArenaEnemyRegistration>() == null)
@@ -195,10 +194,9 @@ namespace ArenaSetup
                 }
 
                 Debug.Log("<b>[Arena] Prefab Inimigo configurado.</b>\n" +
-                          "• NavMeshAgent: " + (agent.updateRotation ? "gira sozinho" : "só anda no plano") +
-                          " · altura de voo pelo EnemyHover\n" +
-                          "• Componentes: Vida, ArenaEnemySensor, AlienShipAI, AlienShipWeapon, " +
-                          "EnemyHover, EnemyHealthBar, ArenaEnemyRegistration\n" +
+                          "• NavMeshAgent: " + (agent.updateRotation ? "gira sozinho" : "só anda no plano") + "\n" +
+                          "• Componentes: Vida, InimigoMaquinaDeEstados, TiroDoInimigo, BarraVida, " +
+                          "ArenaEnemyRegistration\n" +
                           "• Tag: " + instance.tag + " · Layer: " + LayerMask.LayerToName(instance.layer));
             }
             finally

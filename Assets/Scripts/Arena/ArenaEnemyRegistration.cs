@@ -42,10 +42,11 @@ public sealed class ArenaEnemyRegistration : MonoBehaviour
 
         if (spawner != null) spawner.Unregister(this, true);
 
-        foreach (AlienShipAI ai in GetComponentsInChildren<AlienShipAI>()) ai.enabled = false;
-        foreach (ArenaEnemyAI legacy in GetComponentsInChildren<ArenaEnemyAI>()) legacy.enabled = false;
-        foreach (AlienShipWeapon weapon in GetComponentsInChildren<AlienShipWeapon>()) weapon.enabled = false;
-        foreach (ArenaEnemyWeapon legacy in GetComponentsInChildren<ArenaEnemyWeapon>()) legacy.SetCanFire(false);
+        // Para de andar e de atirar antes de sumir.
+        foreach (InimigoMaquinaDeEstados maquina in GetComponentsInChildren<InimigoMaquinaDeEstados>())
+            maquina.enabled = false;
+        foreach (TiroDoInimigo tiro in GetComponentsInChildren<TiroDoInimigo>())
+            tiro.enabled = false;
 
         Destroy(gameObject);
     }

@@ -141,31 +141,36 @@ public sealed class ArenaSpawner : MonoBehaviour
             return;
         }
 
-        // Liga os alvos e aplica a dificuldade (visão, agressão e cadência da nave).
-        AlienShipAI ai = enemy.GetComponent<AlienShipAI>();
-        if (ai != null) ai.SetTarget(player);
-
-        AlienShipWeapon weapon = enemy.GetComponent<AlienShipWeapon>();
-        if (weapon != null) weapon.SetTarget(player);
-
-        ArenaEnemySensor sensor = enemy.GetComponent<ArenaEnemySensor>();
-        if (sensor != null) sensor.SetTarget(player);
-
-        if (manager != null && manager.Difficulty != null)
-            manager.Difficulty.ApplyToEnemy(ai, sensor, weapon);
-        else if (spawnerConfig != null)
-            spawnerConfig.ApplyDifficultyToEnemy(ai, sensor, weapon);
-
-        // Compatibilidade: prefabs antigos ainda podem usar os scripts Arena*.
-        ArenaEnemyAI legacyAI = enemy.GetComponent<ArenaEnemyAI>();
-        if (legacyAI != null) legacyAI.SetTarget(player);
-        ArenaEnemyWeapon legacyWeapon = enemy.GetComponent<ArenaEnemyWeapon>();
-        if (legacyWeapon != null) legacyWeapon.SetTarget(player);
+        // Scripts novos do inimigo (Assets/Scripts/Inimigo).
+        // O spawner entrega o jogador e o asset de dificuldade; quem decide o resto é a máquina
+        // de estados da própria nave.
+        InimigoMaquinaDeEstados maquina = enemy.GetComponent<InimigoMaquinaDeEstados>();
+        if (maquina != null)
+        {
+            maquina.DefinirJogador(player);
+            maquina.DefinirConfiguracao(ResolveConfiguracaoDoInimigo());
+        }
 
         ArenaEnemyRegistration registration = enemy.GetComponent<ArenaEnemyRegistration>();
         if (registration == null) registration = enemy.AddComponent<ArenaEnemyRegistration>();
         registration.Initialize(this, manager);
         alive.Add(registration);
+    }
+
+    /// <summary>
+    /// O asset de números do inimigo para a dificuldade em uso. Fica no próprio
+    /// <see cref="DifficultyConfig"/>; sem ele, cai no configuracaoPadrao do prefab.
+    /// </summary>
+    private ConfiguracaoDoInimigo ResolveConfiguracaoDoInimigo()
+    {
+        if (manager != null && manager.Difficulty != null && manager.Difficulty.Inimigo != null)
+            return manager.Difficulty.Inimigo;
+
+        if (spawnerConfig != null && spawnerConfig.Difficulty != null &&
+            spawnerConfig.Difficulty.Inimigo != null)
+            return spawnerConfig.Difficulty.Inimigo;
+
+        return null;
     }
 
     private bool TryFindPosition(out Vector3 position, out Quaternion rotation)

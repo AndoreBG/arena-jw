@@ -116,7 +116,6 @@ public sealed class ArenaGameInitializer : MonoBehaviour
         manager.Configure(difficultyCatalog, playerStats, spawner, hud, gameOver);
 
         EnsureProjectilePool(player);
-        EnsureEnemySensorDefaults();
 
         if (player != null)
         {
@@ -145,13 +144,6 @@ public sealed class ArenaGameInitializer : MonoBehaviour
         }
 
         TankProjectilePool.Ensure(prefab, 32);
-    }
-
-    /// <summary>O sensor nasce com "Everything"; paredes e o próprio jogador precisam ser ignorados.</summary>
-    private static void EnsureEnemySensorDefaults()
-    {
-        foreach (ArenaEnemySensor sensor in FindObjectsByType<ArenaEnemySensor>(FindObjectsSortMode.None))
-            if (sensor.BlockingMask == ~0) sensor.SetBlockingMask(DefaultLineOfSightMask);
     }
 
     /// <summary>Tudo menos "Ignore Raycast" (2), "Water" (4), "UI" (5) e o layer do jogador.</summary>

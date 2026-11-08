@@ -161,7 +161,7 @@ public sealed class TankProjectile : MonoBehaviour
             if (life != null && !life.Morto)
             {
                 bool isPlayer = hitRoot.CompareTag("Player") || (ArenaManager.Instance != null && life == ArenaManager.Instance.PlayerLife);
-                bool isEnemy = collision.collider.GetComponentInParent<ArenaEnemyRegistration>() != null || collision.collider.GetComponentInParent<ArenaEnemyAI>() != null;
+                bool isEnemy = collision.collider.GetComponentInParent<ArenaEnemyRegistration>() != null;
                 if ((faction == TankShotFaction.Player && isEnemy) || (faction == TankShotFaction.Enemy && isPlayer))
                     life.ReceberDano(damage);
             }
