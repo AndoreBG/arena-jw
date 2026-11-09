@@ -33,3 +33,5 @@ Material:
     - _VelocidadeDaGrade: 0.6
     m_Colors:
     - _CorDoEscudo: {r: 0.25, g: 0.75, b: 1, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

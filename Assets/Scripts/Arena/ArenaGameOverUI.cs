@@ -1,15 +1,9 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/// <summary>
-/// Painel de Game Over: título, pontuação final, apelido (3 caracteres) e dois botões.
-///
-/// A UI vive no prefab <c>Assets/Prefabs/ArenaGame.prefab</c> (GameObject
-/// <c>GameOverUI > GameOverPanel</c>) — nada é criado em código. Este script só abre/fecha
-/// o painel, preenche os textos e trata o clique dos botões.
-/// </summary>
 [DisallowMultipleComponent]
 [AddComponentMenu("Arena/Arena Game Over UI")]
 public sealed class ArenaGameOverUI : MonoBehaviour
@@ -22,20 +16,21 @@ public sealed class ArenaGameOverUI : MonoBehaviour
     [SerializeField] private TMP_InputField nicknameInput;
     [SerializeField] private TMP_Text messageText;
 
+    [Header("Controle / Teclado Virtual")]
+    [Tooltip("Abre o teclado virtual automaticamente assim que o foco do controle entra no NicknameInput.")]
+    [SerializeField] private bool abrirTecladoAoEntrarNoInput = true;
+
     private int score;
     private ArenaDifficulty difficulty = ArenaDifficulty.Facil;
     private bool busy;
 
-    /// <summary>
-    /// True quando este componente realmente tem um painel para controlar.
-    /// Um ArenaGameOverUI sem painel (sobra na cena) fica desligado e não atrapalha.
-    /// </summary>
+    private TecladoVirtualNickname tecladoVirtual;
+    private Button botaoTentarNovamente;
+
     public bool Configurado => panel != null;
 
     private void Awake()
     {
-        // NUNCA usar 'panel = gameObject' aqui: este componente pode estar no mesmo objeto
-        // do ArenaManager, e desativar o próprio GameObject desligaria a partida inteira.
         if (panel == null)
         {
             Debug.LogWarning("[ArenaGameOverUI] Sem painel configurado neste objeto. " +
@@ -44,7 +39,51 @@ public sealed class ArenaGameOverUI : MonoBehaviour
             return;
         }
 
+        PrepararTecladoVirtual();
         panel.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (panel == null || !panel.activeInHierarchy || nicknameInput == null) return;
+
+        bool usandoControle = NavegacaoDoControle.UsandoControle;
+        nicknameInput.shouldActivateOnSelect = !usandoControle;
+
+        if (usandoControle && nicknameInput.isFocused)
+            nicknameInput.DeactivateInputField();
+    }
+
+    private void PrepararTecladoVirtual()
+    {
+        Transform janela = panel.transform.Find("Janela");
+        CanvasGroup grupoJanela = null;
+        if (janela != null)
+        {
+            grupoJanela = janela.GetComponent<CanvasGroup>();
+            if (grupoJanela == null) grupoJanela = janela.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        foreach (Button button in panel.GetComponentsInChildren<Button>(true))
+        {
+            if (button.gameObject.name == "BotaoTentarNovamente")
+            {
+                botaoTentarNovamente = button;
+                break;
+            }
+        }
+
+        tecladoVirtual = panel.GetComponent<TecladoVirtualNickname>();
+        if (tecladoVirtual == null) tecladoVirtual = panel.AddComponent<TecladoVirtualNickname>();
+
+        tecladoVirtual.Configurar(nicknameInput, grupoJanela, botaoTentarNovamente);
+
+        if (nicknameInput != null)
+        {
+            GatilhoTecladoNickname gatilho = nicknameInput.GetComponent<GatilhoTecladoNickname>();
+            if (gatilho == null) gatilho = nicknameInput.gameObject.AddComponent<GatilhoTecladoNickname>();
+            gatilho.Configurar(nicknameInput, tecladoVirtual, abrirTecladoAoEntrarNoInput);
+        }
     }
 
     public void Show(int finalScore, ArenaDifficulty currentDifficulty)
@@ -59,29 +98,47 @@ public sealed class ArenaGameOverUI : MonoBehaviour
         }
 
         panel.SetActive(true);
+        ArenaGameInitializer.EnsureEventSystem();
 
         if (scoreText != null) scoreText.text = "Pontuação final: " + score;
+
+        SetButtons(true);
 
         if (nicknameInput != null)
         {
             nicknameInput.characterLimit = 3;
             nicknameInput.text = string.Empty;
-            nicknameInput.ActivateInputField();
+
+            if (NavegacaoDoControle.UsandoControle)
+            {
+                nicknameInput.shouldActivateOnSelect = false;
+                nicknameInput.DeactivateInputField();
+
+                if (tecladoVirtual != null)
+                    tecladoVirtual.Abrir();
+                else if (EventSystem.current != null)
+                    EventSystem.current.SetSelectedGameObject(nicknameInput.gameObject);
+            }
+            else
+            {
+                if (tecladoVirtual != null) tecladoVirtual.FecharSemMoverFoco();
+                nicknameInput.shouldActivateOnSelect = true;
+                nicknameInput.ActivateInputField();
+            }
         }
 
-        SetMessage("Digite 3 caracteres: letras A–Z ou números 0–9.");
-        SetButtons(true);
+        SetMessage(NavegacaoDoControle.UsandoControle
+            ? "Use o controle para escolher 3 caracteres (A–Z, 0–9)."
+            : "Digite 3 caracteres: letras A–Z ou números 0–9.");
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    /// <summary>Compatibilidade com chamadas antigas (sem dificuldade explícita).</summary>
     public void Show(int finalScore) => Show(finalScore, ArenaManager.Instance != null
         ? ArenaManager.Instance.CurrentDifficulty
         : GameSettings.Difficulty);
 
-    /// <summary>Botão "Tentar Novamente".</summary>
     public void SubmitAndStartNew()
     {
         if (!TrySubmit()) return;
@@ -90,7 +147,6 @@ public sealed class ArenaGameOverUI : MonoBehaviour
         else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    /// <summary>Botão "Menu Principal".</summary>
     public void SubmitAndReturnToMenu()
     {
         if (!TrySubmit()) return;
@@ -136,8 +192,6 @@ public sealed class ArenaGameOverUI : MonoBehaviour
 
     private void SetButtons(bool state)
     {
-        // O painel pode estar em outro Canvas, então procuramos a partir dele (e não do
-        // GameObject deste componente, que pode ser o próprio ArenaManager).
         Transform raiz = panel != null ? panel.transform : transform;
 
         foreach (Button button in raiz.GetComponentsInChildren<Button>(true))
@@ -146,5 +200,57 @@ public sealed class ArenaGameOverUI : MonoBehaviour
                 button.gameObject.name == "BotaoMenuPrincipal")
                 button.interactable = state;
         }
+    }
+}
+
+/// <summary>
+/// Intercepta foco, Submit (botão A/Cruz) e clique de mouse no NicknameInput.
+/// </summary>
+[DisallowMultipleComponent]
+public sealed class GatilhoTecladoNickname : MonoBehaviour, ISelectHandler, ISubmitHandler, IPointerClickHandler
+{
+    private TMP_InputField input;
+    private TecladoVirtualNickname teclado;
+    private bool abrirAoSelecionar;
+
+    public void Configurar(TMP_InputField campo, TecladoVirtualNickname tecladoVirtual, bool abrirNoSelect)
+    {
+        input = campo;
+        teclado = tecladoVirtual;
+        abrirAoSelecionar = abrirNoSelect;
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        if (input == null || !NavegacaoDoControle.UsandoControle) return;
+
+        input.shouldActivateOnSelect = false;
+        input.DeactivateInputField();
+
+        if (!abrirAoSelecionar || teclado == null || teclado.EstaAberto) return;
+
+        // Evita reabrir no mesmo instante em que o jogador fechou com B.
+        if (Time.unscaledTime - teclado.FechadoEm < 0.2f) return;
+
+        teclado.Abrir();
+    }
+
+    public void OnSubmit(BaseEventData eventData)
+    {
+        if (input == null || teclado == null || !NavegacaoDoControle.UsandoControle) return;
+        if (teclado.EstaAberto) return;
+
+        teclado.Abrir();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (input == null) return;
+
+        if (teclado != null && teclado.EstaAberto)
+            teclado.FecharSemMoverFoco();
+
+        input.shouldActivateOnSelect = true;
+        input.ActivateInputField();
     }
 }

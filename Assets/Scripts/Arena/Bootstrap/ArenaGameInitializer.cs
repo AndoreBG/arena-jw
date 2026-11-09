@@ -130,8 +130,12 @@ public sealed class ArenaGameInitializer : MonoBehaviour
     public static void ConectarNavegacaoDoControle()
     {
         UnityEngine.EventSystems.EventSystem sistema = EnsureEventSystem();
-        if (sistema == null) return;
+        AnexarNavegacao(sistema);
+    }
 
+    private static void AnexarNavegacao(UnityEngine.EventSystems.EventSystem sistema)
+    {
+        if (sistema == null) return;
         if (sistema.GetComponent<NavegacaoDoControle>() == null)
             sistema.gameObject.AddComponent<NavegacaoDoControle>();
     }
@@ -172,13 +176,11 @@ public sealed class ArenaGameInitializer : MonoBehaviour
         UnityEngine.EventSystems.EventSystem current = UnityEngine.EventSystems.EventSystem.current;
         if (current != null)
         {
-            // Já existe EventSystem na cena: só garante que ele navegue no controle.
-            // (Idempotente; roda no Awake do MenuManager, que é o único ponto que
-            //  TODA entrada no menu passa.)
             var menu = current.GetComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
             if (menu != null && menu.actionsAsset == null)
                 menu.AssignDefaultActions();
 
+            AnexarNavegacao(current);
             EnsureMenuNavigable();
             return current;
         }
@@ -186,10 +188,10 @@ public sealed class ArenaGameInitializer : MonoBehaviour
         GameObject go = new GameObject("EventSystem");
         UnityEngine.EventSystems.EventSystem system = go.AddComponent<UnityEngine.EventSystems.EventSystem>();
 
-        // O projeto usa o Input System (activeInputHandler = 1): o módulo antigo não funciona.
         if (go.GetComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>() == null)
             go.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
 
+        AnexarNavegacao(system);
         EnsureMenuNavigable();
         return system;
     }

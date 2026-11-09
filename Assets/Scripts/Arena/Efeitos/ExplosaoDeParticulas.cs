@@ -159,40 +159,41 @@ public sealed class ExplosaoDeParticulas : MonoBehaviour
         if (materialCompartilhado != null) return materialCompartilhado;
 
         Material doProjeto = Resources.Load<Material>(NomeDoMaterial);
-        if (doProjeto != null)
+        if (doProjeto != null &&
+            doProjeto.shader != null &&
+            doProjeto.shader.isSupported &&
+            doProjeto.shader.name != "Hidden/InternalErrorShader")
         {
-            materialCompartilhado = doProjeto;
+            if (doProjeto.GetTexture("_BaseMap") == null)
+            {
+                materialCompartilhado = new Material(doProjeto) { name = "Explosao (instancia)" };
+                materialCompartilhado.SetTexture("_BaseMap", TexturaDeBrilho());
+            }
+            else
+            {
+                materialCompartilhado = doProjeto;
+            }
             return materialCompartilhado;
         }
 
-        // Reserva: criar em runtime. O shader pedido agora é o de partículas do URP.
-        // Antes eu pedia o equivalente do pipeline BUILT-IN, que no URP vira rosa (magenta) —
-        // e, pior, Shader.Find não arrasta o shader para a build.
         Shader shader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
-        if (shader == null) shader = Shader.Find("Particles/Standard Unlit");
-        if (shader == null) shader = Shader.Find("Legacy Shaders/Particles/Additive");
-
         if (shader == null)
         {
-            // Antes isso saía como "return null" e o Renderer ficava com um material nulo,
-            // exibindo magenta sem nenhuma mensagem explicando o motivo.
-            Debug.LogError($"[{nameof(ExplosaoDeParticulas)}] Nenhum shader de partícula " +
-                           "encontrado. O material do projeto (Assets/Resources/" + NomeDoMaterial +
-                           ".mat) é o caminho esperado; se ele sumiu, recrie-o. As explosões " +
-                           "ficarão brancas/rosa sem este material.", null);
+            Debug.LogError($"[{nameof(ExplosaoDeParticulas)}] Shader URP de partículas não encontrado.", null);
             return null;
         }
 
         materialCompartilhado = new Material(shader) { name = "Explosao (runtime)" };
-
-        // Surface Type = Transparent, Blending Mode = Alpha. Estas são as propriedades do
-        // shader de partículas do URP; sem elas o material nasce opaco.
         materialCompartilhado.SetFloat("_Surface", 1f);
         materialCompartilhado.SetFloat("_Blend", 0f);
+        materialCompartilhado.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        materialCompartilhado.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        materialCompartilhado.SetFloat("_SrcBlendAlpha", (float)UnityEngine.Rendering.BlendMode.One);
+        materialCompartilhado.SetFloat("_DstBlendAlpha", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        materialCompartilhado.SetFloat("_ZWrite", 0f);
+        materialCompartilhado.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        materialCompartilhado.SetOverrideTag("RenderType", "Transparent");
         materialCompartilhado.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-
-        // Sem textura, cada partícula é um QUADRADO sólido — visualmente parece "sem textura",
-        // que foi como o usuário descreveu o problema. Um brilho radial de 32x32 disfarça isso.
         materialCompartilhado.SetTexture("_BaseMap", TexturaDeBrilho());
 
         return materialCompartilhado;
