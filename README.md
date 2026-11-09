@@ -1,418 +1,347 @@
 # Arena JW
 
-Jogo 3D de tanque em arena, feito em Unity, para as matérias **Jogos Digitais para Console** e
-**Inteligência Artificial em Jogos Digitais**.
+Jogo 3D de sobrevivência em arena, desenvolvido em **Unity 6** para as disciplinas **Jogos Digitais para Console** e **Inteligência Artificial em Jogos Digitais**.
 
-O jogador pilota um tanque numa arena e enfrenta naves alienígenas que aparecem sem parar. Os
-inimigos são controlados por uma máquina de estados com percepção por visão e audição de
-proximidade — eles patrulham sozinhos, veem o jogador, perseguem e atiram. Levar dano também
-faz o inimigo perseguir, mesmo sem ter visto o jogador.
+Pilote um tanque, enfrente naves alienígenas e sobreviva pelo maior tempo possível. Cada inimigo destruído vale um ponto. Ao final da partida, registre seu apelido e dispute um lugar no ranking da dificuldade escolhida.
 
-A pontuação vai para um ranking persistente, com top 5 por dificuldade.
-
-<<<<<<< Updated upstream
-<br>
-=======
----
->>>>>>> Stashed changes
+**[Baixar o jogo](https://github.com/AndoreBG/arena-jw/releases)** · **[Código-fonte](https://github.com/AndoreBG/arena-jw)**
 
 ## Sumário
 
 - [Sobre o jogo](#sobre-o-jogo)
+- [Como jogar](#como-jogar)
 - [Controles](#controles)
-- [Sistemas](#sistemas)
-  - [Movimento e câmera](#movimento-e-câmera)
-  - [Tiro e projéteis](#tiro-e-projéteis)
-  - [Vida e HUD](#vida-e-hud)
-- [Inteligência Artificial](#inteligência-artificial)
-- [Dificuldade](#dificuldade)
-- [Ranking](#ranking)
+- [Menu e configurações](#menu-e-configurações)
+- [Sistemas de jogo](#sistemas-de-jogo)
+- [Efeitos visuais](#efeitos-visuais)
+- [Inteligência artificial](#inteligência-artificial)
+- [Dificuldades](#dificuldades)
+- [Ranking e persistência](#ranking-e-persistência)
 - [Áudio](#áudio)
-- [Saída da partida](#saída-da-partida)
-- [Como executar](#como-executar)
+- [Executar no Unity](#executar-no-unity)
+- [Gerar uma build](#gerar-uma-build)
 - [Estrutura do projeto](#estrutura-do-projeto)
-- [Decisões de projeto](#decisões-de-projeto)
-- [Limitações conhecidas](#limitações-conhecidas)
-
-<<<<<<< Updated upstream
-<br>
-=======
----
->>>>>>> Stashed changes
+- [Contexto acadêmico](#contexto-acadêmico)
+- [Limitações e pontos de atenção](#limitações-e-pontos-de-atenção)
+- [Documentação complementar](#documentação-complementar)
+- [Autoria e créditos](#autoria-e-créditos)
 
 ## Sobre o jogo
 
-| | |
+| Característica | Descrição |
 |---|---|
-| **Gênero** | Arena shooter 3D, visão de terceira pessoa |
-| **Plataforma** | PC (Windows) |
-| **Engine** | Unity 6 (`6000.3.18f1`) |
-| **Pipeline** | Universal Render Pipeline (URP) |
-<<<<<<< Updated upstream
-| **Entrada** | Teclado e mouse (Input System) |
-=======
-| **Entrada** | Teclado, mouse e controle (Xbox / PlayStation) |
->>>>>>> Stashed changes
-| **Duração de uma partida** | Sem fim definido — termina quando o jogador perde |
+| Gênero | Arena shooter 3D em terceira pessoa |
+| Plataforma de distribuição | PC — Windows |
+| Engine | Unity 6 — `6000.3.18f1` |
+| Renderização | Universal Render Pipeline — `17.3.0` |
+| Entrada | Teclado, mouse e gamepad pelo Input System — `1.19.0` |
+| Navegação dos inimigos | AI Navigation — `2.0.13`, com NavMeshAgent |
+| Objetivo | Sobreviver e acumular pontos |
+| Fim da partida | Vida do jogador chega a zero |
 
-O objetivo é sobreviver o máximo possível. Cada inimigo destruído vale um ponto. O jogo acaba
-quando a vida do jogador chega a zero.
+O projeto implementa suporte a gamepads reconhecidos pelo Input System, com referências de botões Xbox e PlayStation. Isso não significa que exista uma build para consoles.
 
-<<<<<<< Updated upstream
-<br>
+## Como jogar
+
+1. Acesse a página de [Releases](https://github.com/AndoreBG/arena-jw/releases).
+2. Baixe e extraia o pacote Windows disponibilizado na release.
+3. Execute `Arena-JW.exe`, mantendo os demais arquivos e pastas da build juntos.
+4. No menu principal, selecione **Jogar** e escolha a dificuldade.
+5. Movimente o tanque, mire e destrua as naves para pontuar.
+6. No Game Over, informe um apelido de três caracteres e escolha **Tentar Novamente** ou **Menu Principal** para enviar a pontuação.
+
+> Sair durante a partida pelo atalho de retorno ao menu descarta a pontuação daquela tentativa.
 
 ## Controles
 
-| Ação | Tecla |
-|---|---|
-| Acelerar / recuar | `W` / `S` ou `↑` / `↓` |
-| Girar o tanque | `A` / `D` ou `←` / `→` |
-| Mirar a torre | Mouse |
-| Orbitar a câmera | Mouse |
-| Atirar | Clique esquerdo |
-| Capturar o cursor | Clique esquerdo |
-| Voltar ao menu (sem gravar) | Segurar `Esc` por 3 s |
+### Durante a partida
 
-A direção do movimento é independente da câmera: a tração usa o `transform.forward` do próprio
-tanque, e a torre acompanha o mouse separadamente.
-
-<br>
-
-=======
----
-
-## Controles
-
-Funciona no teclado/mouse e no controle, sem precisar escolher.
-
-| Ação | Teclado / Mouse | Xbox | PlayStation |
+| Ação | Teclado / mouse | Xbox | PlayStation |
 |---|---|---|---|
-| Acelerar / recuar | `W` `S` ou `↑` `↓` | Stick esquerdo (↕) ou D-pad | Stick esquerdo (↕) ou D-pad |
-| Girar o tanque | `A` `D` ou `←` `→` | Stick esquerdo (↔) ou D-pad | Stick esquerdo (↔) ou D-pad |
-| Olhar / mirar | Mouse | **Stick direito** | **Stick direito** |
-| Atirar | Clique esquerdo ou `Espaço` | RT, **A** ou RB | R2, **✕** ou R1 |
-| Voltar ao menu (sem gravar) | Segurar `Esc` por 3 s | Segurar **Y** por 3 s | Segurar **△** por 3 s |
-| Navegar nos menus | Mouse | D-pad ou stick | D-pad ou stick |
+| Acelerar / recuar | `W` / `S` ou `↑` / `↓` | Analógico esquerdo vertical ou D-pad | Analógico esquerdo vertical ou D-pad |
+| Girar o tanque | `A` / `D` ou `←` / `→` | Analógico esquerdo horizontal ou D-pad | Analógico esquerdo horizontal ou D-pad |
+| Mirar e orbitar a câmera | Mouse | Analógico direito | Analógico direito |
+| Atirar | Clique esquerdo ou `Espaço` | `RT`, `A` ou `RB` | `R2`, `✕` ou `R1` |
+| Voltar ao menu sem salvar | Segurar `Esc` por 3 segundos | Segurar `Y` por 3 segundos | Segurar `△` por 3 segundos |
 
-O mesmo código serve para os dois controles: o Input System trata os dois como `<Gamepad>`, e as
-legendas na tela citam os dois nomes (`A / ✕`, `Y / △`).
+O movimento usa a orientação do próprio tanque, independentemente da câmera. A torre possui controle de mira separado do chassi. O analógico direito utiliza zona morta para reduzir movimentos involuntários.
 
-A direção do movimento é independente da câmera: a tração usa o `transform.forward` do próprio
-tanque, e a torre acompanha a mira separadamente.
+Ao segurar o atalho de saída, um aviso apresenta o progresso. Soltar antes de completar o tempo cancela o retorno. Na tela de Game Over, esse atalho fica desabilitado.
 
-### Controle
+### Menus e teclado virtual
 
-O stick direito gira câmera e torre, com **zona morta** para não tremer com o analógico parado.
-A velocidade fica em `Sensibilidade Do Controle` (180°/s no padrão) e a zona morta em
-`Zona Morta Do Analógico` (0,18), no componente `MouseOrbitCamera`.
+- Navegue com D-pad ou analógico esquerdo.
+- Acione o elemento selecionado com o botão de confirmação (`A` / `✕`).
+- Ao usar o controle no campo de apelido, o Game Over oferece um teclado virtual com `A–Z` e `0–9`.
+- Use `X` / `□` para apagar o último caractere.
+- Use `B` / `○` para fechar o teclado e retornar ao campo de apelido.
+- Selecione o botão **OK** do teclado para seguir para a confirmação da partida.
+- Ao completar três caracteres, o foco passa para **OK**.
+- O teclado físico continua disponível para digitação direta.
 
-Nos menus, o Unity só navega por D-pad/stick quando existe um objeto selecionado. O componente
-`ControleNoMenu` seleciona o primeiro botão disponível assim que o menu abre — e também quando
-o jogador aperta qualquer coisa no controle.
+> O botão físico `B` / `○` fecha o teclado; ele não executa a mesma ação do botão visual **OK**, apesar do rótulo atual `OK (B)`.
 
-O botão de sair pode ser trocado no Inspector (`Botao Do Controle`), e o atalho pelo controle
-pode ser desligado com `Usar Controle = false`.
+## Menu e configurações
 
----
+O menu principal permite iniciar uma partida, abrir as configurações ou sair do jogo. Antes do combate, o jogador escolhe entre Fácil, Médio e Difícil.
 
->>>>>>> Stashed changes
-## Sistemas
+As configurações incluem:
 
-### Movimento e câmera
+- Volume geral, de efeitos e de música.
+- Resolução.
+- Modo de exibição: janela, janela sem bordas ou tela cheia exclusiva.
+- Botão **Aplicar** para salvar e aplicar as opções.
+- Confirmação ao tentar voltar com alterações não aplicadas.
 
-O tanque usa `Rigidbody` + **WheelColliders**. Em `Awake` o script cria 4 rodas a partir dos
-bounds das esteiras e desativa os colisores delas, que passam a servir só de apoio — o torque
-vai para as rodas. A direção é o `transform.forward` do próprio tanque, independente da câmera.
+As preferências são persistidas em `PlayerPrefs`. As mudanças de resolução são aplicadas na execução fora do Editor.
 
-A câmera orbita o tanque com *yaw* e *pitch* limitado (de −15° a 75°) e segue o alvo com
-suavização.
+## Sistemas de jogo
 
-A torre (`TankTurretAim`) gira independente do chassi, e o cano inclina conforme a mira. Dois
-retículos no HUD marcam onde a câmera aponta e onde o cano aponta — eles coincidem quando o
-cano está alinhado com o alvo.
+### Movimento, câmera e mira
 
-### Tiro e projéteis
+O tanque utiliza `Rigidbody` e `WheelColliders`. A câmera orbital acompanha o jogador com suavização, enquanto a torre e o cano se orientam de acordo com a mira.
 
-Os projéteis saem de uma **pool** (`TankProjectilePool`), não de `Instantiate`/`Destroy`. É o
-mesmo caminho para o jogador e para os inimigos: a diferença é só a origem, a direção e o
-*dano* de quem atirou (`TankShotData`).
+Dois indicadores ajudam a visualizar o alinhamento: a direção apontada pela câmera e a direção do cano.
 
-Cada projétil carrega sua facção (`Player` ou `Enemy`) e ignora as colisões do próprio dono, o
-que evita o tanque atirar em si mesmo.
+### Projéteis
 
-O jogador atira a 1 tiro/s com 50 de dano; o inimigo atira a cada 1,6 s com 25 de dano.
+Jogador e inimigos compartilham o sistema de projéteis, utilizando `TankProjectilePool` para reutilizar objetos em vez de criar e destruir um novo objeto a cada disparo.
+
+`TankShotData` identifica o dono, a facção e o dano do tiro. As colisões do próprio dono são ignoradas para evitar autoacertos na saída do projétil.
 
 ### Vida e HUD
 
-Todo objeto com vida usa o mesmo componente `Vida`, que expõe `ReceberDano`, `Morto` e o evento
-`AoMorrer`. A `BarraVida` desenha a vida como recorte (`fillAmount` em um `Image` do tipo
-*Filled*).
+O componente `Vida` centraliza o recebimento de dano e os eventos de alteração de vida e morte. O HUD apresenta vida do jogador, pontuação e dificuldade. Os inimigos também possuem barras de vida voltadas para a câmera.
 
-O HUD mostra a barra de vida do jogador, a pontuação e a dificuldade em uso. Inimigos têm uma
-barra de vida própria, sempre visível e virada para a câmera (`OlharParaCamera`).
+Quando o jogador morre, a partida é congelada e a interface de Game Over é exibida. O teclado virtual utiliza tempo não escalado para continuar funcionando com `Time.timeScale = 0`.
 
-<<<<<<< Updated upstream
-=======
----
+## Efeitos visuais
 
->>>>>>> Stashed changes
-## Inteligência Artificial
+### Shader do escudo
 
-O controle dos inimigos está em `InimigoMaquinaDeEstados` (o mesmo nome usado nas aulas). O
-inimigo é um `NavMeshAgent`, e a locomoção usa o NavMesh da arena.
+O arquivo `Assets/Shaders/EscudoDoTanque.shader` implementa um efeito em HLSL com:
+
+- Fresnel para realçar o contorno conforme o ângulo da câmera.
+- Padrão procedural de células animadas.
+- Pulsação de brilho ao longo do tempo.
+- Transparência e blending aditivo.
+
+`EscudoDoTanque.cs` controla a exibição do efeito e seus parâmetros conforme o dano recebido e a vida restante. O padrão é estilizado; não representa uma malha hexagonal geometricamente exata.
+
+### Partículas
+
+`ExplosaoDeParticulas.cs` configura o Particle System por código para impactos e explosões de morte dos inimigos.
+
+O efeito utiliza emissão em rajada, distribuição esférica, velocidade, gravidade, gradiente de cor, transparência e redução de tamanho ao longo da vida. O objeto é destruído automaticamente ao terminar.
+
+O material de partículas fica em `Assets/Resources/ExplosaoDeParticulas.mat`.
+
+## Inteligência artificial
+
+Cada nave é um agente reativo: percebe o jogador, seleciona um comportamento e executa movimento ou ataque. Não há aprendizado de máquina.
 
 ### Máquina de estados
 
-Três estados, com pesos configuráveis:
+A lógica está em `InimigoMaquinaDeEstados.cs` e utiliza três estados:
 
 | Estado | Comportamento |
 |---|---|
-| **Andando** | Vai reto para frente até trombar em algo. Ao bater, gira de 15° a 180° (ângulo e lado sorteados) e segue reto. |
-| **Perseguindo** | Vai atrás do jogador, enquanto ele está fora do alcance de ataque. |
-| **Atacando** | Parou no alcance e atira. |
+| **Andando** | Desloca-se em frente e escolhe outra direção quando encontra condições de bloqueio ou término do caminho. |
+| **Perseguindo** | Atualiza o destino do NavMeshAgent para se aproximar do jogador. |
+| **Atacando** | Interrompe o deslocamento, orienta-se para o jogador e permite disparos. |
 
-A escolha é por **peso** (`PesoAndando` 40, `PesoPerseguindo` 60, `PesoAtacando` 100). Quando
-mais de um estado é possível no mesmo frame, vence o de peso maior. Em caso de empate, a
-prioridade é `Atacando > Perseguindo > Andando`.
+A seleção considera pesos configuráveis. Os valores do asset `InimigoFacil` são `40` para Andando, `60` para Perseguindo e `100` para Atacando. No empate, a seleção prioriza Atacando, depois Perseguindo e depois Andando.
+
+Os pesos representam prioridade, não probabilidade. Existem transições diretas que não passam pela disputa de pesos, como a reação a dano e a entrada em ataque ao alcançar o jogador durante uma perseguição.
 
 ### Percepção
 
-O inimigo "vê" o jogador quando **três condições** são verdadeiras:
+O sensor visual combina distância, ângulo e raycast. No asset atual do inimigo:
 
-1. A distância é menor que `DistanciaDeVisao` (45 m).
-2. O ângulo entre a frente do inimigo e o jogador cabe em `AnguloDeVisao` (160°, metade para
-   cada lado).
-3. Um `Physics.Raycast` da posição dos olhos até o jogador **não encontra parede** no caminho.
-   O raio ignora o próprio inimigo e o jogador — eles não são obstáculos para a visão.
-
-Além da visão, existe **percepção por proximidade**: se o jogador está a até 70% da distância
-de visão (31,5 m), o inimigo percebe **mesmo de costas**. Sem isso, um inimigo que nasce virado
-para o lado errado andaria reto para longe e nunca encontraria o jogador.
-
-### Reação a dano
-
-**Ao levar um tiro, o inimigo passa a perseguir o jogador independentemente de tê-lo visto.**
-É uma regra fixa: o dano interrompe o que ele estava fazendo e força o estado `Perseguindo`.
-
-A perseguição forçada só termina quando:
-
-- o inimigo **alcança** o jogador (entra no alcance e vira `Atacando`), ou
-- estoura o teto de segurança `tempoMaximoPerseguindo` (20 s) — que existe apenas para o
-  inimigo não passar o resto da partida atrás de alguém que nunca vai alcançar.
-
-### Navegação
-
-O inimigo usa `NavMeshAgent` com `updateRotation = false`, ou seja, quem gira a nave é a máquina
-de estados, não o agente. A "trombada" do estado `Andando` é detectada pelo próprio agente:
-quando o caminho fica inválido ou parcial (`NavMeshPathStatus`), significa que há algo no
-caminho — é o gatilho do giro.
-
-Durante a perseguição o destino é recalculado a cada 0,2 s, para acompanhar o jogador em
-movimento sem gastar processamento todo frame.
-
-### Números do inimigo
-
-Todos ficam em `ScriptableObject`s, ajustáveis sem tocar em código:
-
-| Parâmetro | Valor padrão |
+| Parâmetro | Valor |
 |---|---|
 | Distância de visão | 45 m |
 | Ângulo de visão | 160° |
-| Alcance de ataque | 30 m |
+| Alcance inicial de ataque | 30 m |
 | Velocidade andando | 6 |
 | Velocidade perseguindo | 9 |
 | Intervalo entre tiros | 1,6 s |
-| Dano do projétil | 25 |
-| Giro ao trombar | 15° a 180° |
+| Dano por projétil | 25 |
 
-<<<<<<< Updated upstream
-<br>
-=======
----
->>>>>>> Stashed changes
+Há também percepção por proximidade em até 70% da distância de visão: com 45 m de visão, o raio de proximidade é 31,5 m.
 
-## Dificuldade
+**Proximidade não é audição:** o sistema verifica distância, não eventos sonoros. Essa verificação também não consulta paredes, permitindo perceber o jogador atrás de obstáculos dentro do raio.
 
-Três dificuldades, escolhidas no menu antes de jogar:
+### Reação a dano e ataque
 
-| Dificuldade | Inimigos vivos | Spawn | Intensidade de IA |
-|---|---|---|---|
-| **Fácil** | 2 | a cada 3 s | 0,35 |
-| **Médio** | 4 | a cada 2 s | 0,65 |
-| **Difícil** | 6 | a cada 1 s | 1,00 |
+Receber dano pode forçar a perseguição mesmo sem detecção visual. A perseguição possui um limite de segurança de 20 segundos e pode terminar ao alcançar o jogador.
 
-> **Nota:** a intensidade de IA está exposta no `DifficultyConfig`, mas o jogo ainda **não a
-> consome** — hoje o que muda de fato entre as dificuldades é o limite de inimigos e o
-> intervalo de spawn. Os números do comportamento do inimigo são os mesmos nas três.
+`TiroDoInimigo.cs` executa os disparos quando a máquina permite atacar. A mira utiliza o corpo do jogador como alvo, e os projéteis saem da mesma pool usada pelo tanque.
 
-<<<<<<< Updated upstream
-<br>
-=======
----
->>>>>>> Stashed changes
+### Navegação
 
-## Ranking
+O cenário contém dados de NavMesh. Os inimigos utilizam NavMeshAgent, e o spawner procura posições válidas com `NavMesh.SamplePosition()`.
 
-O ranking fica em `ranking.json`, salvo em `Application.persistentDataPath`. Guarda o **top 5
-de cada dificuldade**, com desempate pelo registro mais recente.
+Durante a perseguição, o destino é atualizado em intervalos de 0,2 segundo. Os parâmetros do comportamento ficam em `ConfiguracaoDoInimigo`, um ScriptableObject ajustável pelo Inspector.
 
-A pontuação **só** é salva quando o jogador clica em um dos botões da tela de Game Over
-(`SubmitAndStartNew` ou `SubmitAndReturnToMenu`). Sair da partida pelo atalho de `Esc` descarta
-a pontuação de propósito.
+## Dificuldades
 
-Cada entrada guarda apelido (3 caracteres), pontos e dificuldade.
+| Dificuldade | Limite de inimigos vivos | Intervalo entre tentativas de geração |
+|---|---|---|
+| Fácil | 2 | 3 s |
+| Médio | 4 | 2 s |
+| Difícil | 6 | 1 s |
 
-<<<<<<< Updated upstream
-<br>
-=======
----
->>>>>>> Stashed changes
+Os valores ficam nos assets de `Assets/ScriptableObjects/Difficulties/`.
+
+No estado atual, a diferença efetiva entre as dificuldades está no limite de inimigos e na frequência de geração. O campo `aiIntensity` existe na configuração, mas não é consumido pela lógica atual da IA. O projeto possui um único asset de configuração de inimigo.
+
+## Ranking e persistência
+
+O ranking é local, salvo em:
+
+```text
+Application.persistentDataPath/ranking.json
+```
+
+Regras:
+
+- Top 5 por dificuldade.
+- Apelido de exatamente três caracteres: letras `A–Z` ou números `0–9`.
+- Letras digitadas são normalizadas para maiúsculas.
+- Uma entrada por apelido em cada dificuldade.
+- Um novo resultado substitui o mesmo apelido apenas se superar a pontuação anterior.
+- Em empate de pontos entre registros, o mais recente tem prioridade.
+
+O envio acontece pelos botões **Tentar Novamente** e **Menu Principal** do Game Over. Um resultado fora do top 5 não altera o ranking. Abandonar a partida pelo atalho não envia pontuação.
 
 ## Áudio
 
-| Som | Quando toca |
-|---|---|
-| `tank-shot` | a cada disparo do jogador |
-| `alien-shot` | a cada disparo do inimigo |
-| `alien-ship` | em loop, em cada inimigo (3D — dá para localizar pelo som) |
-| `music` | música de fundo, em loop |
+O jogo possui sons de tiro do tanque, tiros dos inimigos, loop espacial das naves e música de fundo.
 
-Todos passam pelos volumes de `GameSettings` (`Master × Sfx` para efeitos, `Master × Música`
-para a música) e acompanham os sliders mesmo com a partida em andamento.
+`AudioDaArena.cs` gerencia as fontes e acompanha os valores das configurações. O sistema também possui integração com AudioMixer para os parâmetros de volume geral, música e efeitos.
 
-<<<<<<< Updated upstream
-<br>
-=======
----
->>>>>>> Stashed changes
+## Executar no Unity
 
-## Saída da partida
+### Requisitos de desenvolvimento
 
-Segurar `Esc` por **3 segundos** volta ao menu: aparece um aviso no centro da tela com a barra
-de progresso enchendo. Soltar antes cancela. A partida sai **sem gravar a pontuação**.
+- Unity Hub.
+- Unity Editor **6000.3.18f1**.
+- Para build Windows, o módulo de suporte correspondente instalado no Editor.
 
-Com a tela de Game Over aberta, o atalho fica inerte — ali quem manda são os botões.
-
-<<<<<<< Updated upstream
-<br>
-=======
----
-
-## Como executar
-
-### Requisitos
-
-- Unity **6** (`6000.3.18f1`) — outras versões 6.x devem funcionar, mas o projeto foi feito
-  nesta
-- Universal Render Pipeline (instalado como dependência do projeto)
+As dependências do projeto estão declaradas em `Packages/manifest.json` e são resolvidas pelo Package Manager.
 
 ### Passos
 
-1. Abra o projeto no Unity Hub (`Add project from disk`).
-2. Aguarde a importação e a compilação dos scripts.
-3. Abra a cena `Assets/Scenes/menu_principal`.
-4. Aperte **Play**.
-
-Para gerar a build, adicione as duas cenas em **File → Build Settings**, nesta ordem:
-
-```
-Assets/Scenes/menu_principal.unity
-Assets/Scenes/playground.unity
+```bash
+git clone https://github.com/AndoreBG/arena-jw.git
 ```
 
----
->>>>>>> Stashed changes
+1. No Unity Hub, adicione a pasta clonada como projeto existente.
+2. Abra com a versão indicada do Editor.
+3. Aguarde a importação dos assets e a compilação dos scripts.
+4. Abra `Assets/Scenes/menu_principal.unity`.
+5. Entre em **Play**.
+
+Utilizar a versão indicada reduz o risco de incompatibilidades de pacotes e serialização.
+
+## Gerar uma build
+
+1. Abra **File → Build Profiles** no Unity 6.
+2. Selecione ou crie um perfil para Windows.
+3. Confira se as cenas estão habilitadas nesta ordem:
+
+   ```text
+   0 — Assets/Scenes/menu_principal.unity
+   1 — Assets/Scenes/playground.unity
+   ```
+
+4. Gere a build em uma pasta separada dos assets do projeto.
+5. Teste o executável fora do Editor, incluindo áudio, shader, partículas, persistência e navegação por controle.
+6. Para distribuir, compacte a pasta completa da build — não apenas o executável.
 
 ## Estrutura do projeto
 
-```
+```text
 Assets/
+├── Aulas/                  Material e versões dos exercícios das aulas
+├── Editor/                 Ferramentas de configuração no Editor
+├── Input/                  Ações e bindings do Input System
+├── Prefabs/                ArenaGame, Inimigo e ProjetilTanque
+├── Resources/              Assets carregados em tempo de execução
 ├── Scenes/
-│   ├── menu_principal.unity     Menu, configurações, ranking
-│   └── playground.unity         A arena
+│   ├── menu_principal.unity
+│   ├── playground.unity
+│   └── playground/         Dados de NavMesh
+├── ScriptableObjects/      Dificuldades, inimigo e outros parâmetros
 ├── Scripts/
-│   ├── Arena/                   Jogo: manager, spawner, HUD, ranking, áudio
-│   │   ├── Bootstrap/           Instalação automática da partida
-│   │   ├── Data/                ScriptableObjects (dificuldade, status do jogador)
-│   │   ├── Menu/                Painéis do menu
-│   │   └── Settings/            Volume e resolução
-│   ├── Inimigo/                 IA: máquina de estados, tiro, configuração
-│   └── PlayerMovement/          Tanque, torre, câmera, projéteis, mira
-├── Prefabs/                     ArenaGame, Inimigo, ProjetilTanque
-├── ScriptableObjects/           Dados ajustáveis (dificuldades, inimigos)
-├── Resources/                   Assets carregados por nome em runtime
-├── Sound/                       Efeitos e música
-└── Aulas/                       Material das aulas (ver abaixo)
+│   ├── Arena/
+│   │   ├── Bootstrap/      Inicialização e dependências da partida
+│   │   ├── Data/           Definições de dados
+│   │   ├── Debug/          Diagnóstico
+│   │   ├── Efeitos/        Escudo e partículas
+│   │   ├── Menu/           Navegação, painéis e teclado virtual
+│   │   └── Settings/       Configurações persistentes
+│   ├── Inimigo/            Estados, configuração e arma da IA
+│   └── PlayerMovement/     Movimento, câmera, torre, mira e projéteis
+├── Settings/               Configurações de renderização
+├── Shaders/                Shader e material do escudo
+└── Sound/                  Música e efeitos sonoros
+Docs/                       Documentação técnica complementar
+Packages/                   Dependências do projeto
+ProjectSettings/            Configurações da Unity
 ```
 
-### Sobre `Assets/Aulas`
+A pasta `Assets/Aulas` preserva etapas do desenvolvimento. Versões intermediárias possuem nomes de classe distintos para evitar conflitos de compilação. Componentes como `Vida` e `BarraVida` são utilizados pelo jogo.
 
-Esta pasta guarda todas as etapas de cada aula (`Versao1`, `Versao2`, `Passo1`…), mantidas como
-registro do processo. Como todas ficam no mesmo projeto, as etapas intermediárias recebem um
-sufixo no nome da classe (`MovimentoPlayerV1`, `ContadorPasso2`, `GeradorInimigosPasso1`…) — o
-Unity não permite duas classes com o mesmo nome no mesmo assembly.
+## Contexto acadêmico
 
-A versão final de cada aula mantém o nome original (`MovimentoPlayer`, `BarraVida`, `Contador`,
-`GeradorInimigos`) e é a que vai para o jogo. O componente `Vida` e a `BarraVida` usados na
-arena são justamente esses.
+### Jogos Digitais para Console
 
-<<<<<<< Updated upstream
-<br>
-=======
----
->>>>>>> Stashed changes
+| Tema | Aplicação no projeto |
+|---|---|
+| Shader | Escudo de energia em HLSL com Fresnel e animação procedural. |
+| Configurações | Áudio, resolução, modo de tela e persistência. |
+| Partículas | Impactos e explosões de inimigos. |
+| Joystick | Combate, navegação da interface e teclado virtual. |
+| Menu principal | Entrada no jogo, escolha de dificuldade, configurações e saída. |
+| Colaboração | Deve ser demonstrada por registros reais de participação, testes ou feedback; o código isoladamente não comprova esse tópico. |
 
-## Decisões de projeto
+### Inteligência Artificial em Jogos Digitais
 
-**Máquina de estados com pesos, não `switch` por distância.** Cada estado declara se é possível
-no frame atual e qual seu peso; o de maior peso vence. Isso tornou trivial ajustar o
-comportamento por dificuldade e evitar o clássico "o inimigo pisca entre dois estados na
-beirada do alcance" — que foi resolvido com uma noção única de percepção compartilhada pelos
-três estados.
+| Tema | Aplicação no projeto |
+|---|---|
+| Arena | Ambiente de sobrevivência com geração de inimigos e pontuação. |
+| Agente inteligente | Naves que percebem, decidem e agem de forma autônoma. |
+| IA simples | Máquina de estados com prioridades por pesos e transições especiais. |
+| Cenário para IA | NavMesh, obstáculos e validação de posições de geração. |
+| Sensor de detecção | Distância, cone visual, raycast e proximidade. |
+| Sensor para ação | Percepção e distância orientando perseguição e ataque. |
 
-**Dano força a perseguição.** É uma regra de design: o jogador nunca fica impune por atirar de
-longe. O inimigo vai atrás mesmo sem ver de onde veio o tiro.
+## Limitações e pontos de atenção
 
-**Pool de projéteis.** Um arena shooter gera muitos projéteis por segundo; `Instantiate` e
-`Destroy` nesse volume causam picos de GC. A pool elimina isso.
+- **Plataforma:** a distribuição é para Windows; não há build de console documentada.
+- **Sem pausa manual:** há congelamento no Game Over, mas não um menu de pausa durante a partida.
+- **Sem remapeamento na interface:** alterações de bindings exigem edição do projeto.
+- **Conteúdo:** uma arena e um tipo principal de inimigo.
+- **Dificuldade:** `aiIntensity` não altera o comportamento atual.
+- **Percepção:** a proximidade ignora obstáculos. O raycast visual aceita o próprio inimigo como primeiro impacto válido, sem continuar a consulta para verificar obstáculos adiante.
+- **Ataque:** não há uma nova checagem independente de linha de visão a cada disparo; o inimigo pode tentar atirar contra paredes. O bloqueio do projétil depende de suas colisões.
+- **Resoluções:** a ordenação dos assets deve ser consistente entre a lista do menu e a aplicação da opção salva por índice.
+- **Teclado virtual:** o rótulo `OK (B)` não corresponde à ação física do botão `B` / `○`, que fecha o teclado retornando ao campo.
+- **Validação:** suporte implementado não substitui testes na build e em controles físicos de diferentes modelos.
 
-**Criar as dependências em runtime.** O `ArenaGameInitializer` garante que o HUD, o áudio e o
-atalho de saída existam, então a cena funciona mesmo se o prefab `ArenaGame` não estiver
-montado. Isso reduziu muito o tempo perdido com "esqueci de arrastar tal referência".
+## Documentação complementar
 
-**Proteções contra o `NavMeshAgent` de inimigo morto.** Quando o dano mata, o `Destroy` é
-adiado: o componente ainda executa no mesmo frame, mas o agente já saiu do NavMesh. Mexer nele
-nessa situação gera o erro *"Resume can only be called on an active agent"*. Por isso
-`LevarDanoFazPerseguir` e `EntrarNoEstado` checam se o inimigo está vivo e no NavMesh antes de
-tocar no agente.
+- [Implementação da arena](Docs/ArenaImplementation.md)
+- [Configuração de áudio e AudioMixer](Docs/AudioMixer.md)
+- [Mira e projéteis](Docs/MiraEProjeteis.md)
+- [Conversão de cena para YAML](Docs/ConversaoCenaYAML.md)
 
-<<<<<<< Updated upstream
-<br>
-=======
----
+A documentação complementar registra decisões e etapas de desenvolvimento; em caso de divergência, consulte a implementação atual.
 
-## Limitações conhecidas
+## Autoria e créditos
 
-- **`aiIntensity` não é consumida.** O campo existe nas dificuldades e aparece na descrição,
-  mas hoje só o limite de inimigos e o intervalo de spawn mudam de fato entre elas.
-- **Sem pausa.** Não há menu de pausa; a partida roda até o jogador morrer, sair pelo atalho de
-  `Esc` ou voltar pelo Game Over.
-- **Sem build para console.** O projeto é focado em PC. A matéria é *Jogos Digitais para
-  Console*, mas a entrega rodou em Windows. O jogo **tem suporte completo a controle** (Xbox e
-  PlayStation, ver [Controles](#controles)) — o que falta é gerar a build para o console.
-- **Sem remapeamento pelo jogador.** O esquema funciona em Xbox e PlayStation, mas trocar um
-  botão exige mexer no Inspector (ou no `TankInputActions`), não há tela de configuração.
-- **Uma única cena de arena.** A arena (`playground`) é fixa.
-- **Um tipo de inimigo.** Existe apenas o alienígena; não há variação de comportamento entre
-  inimigos na mesma partida.
+Projeto de **André B Gorzoni**, desenvolvido no contexto das disciplinas **Jogos Digitais para Console** e **Inteligência Artificial em Jogos Digitais**.
 
----
->>>>>>> Stashed changes
-
-## Créditos
-
-Trabalho desenvolvido para as matérias **Jogos Digitais para Console** e
-**Inteligência Artificial em Jogos Digitais**.
-
-Assets 3D e sons são de uso livre/educacional; a pasta `Assets/Aulas` contém o material das
-aulas que serviu de base para o projeto.
+O projeto inclui material das aulas e assets de terceiros. As condições de uso e redistribuição de cada recurso devem ser verificadas em suas respectivas fontes; o uso acadêmico não substitui a licença de um asset.
