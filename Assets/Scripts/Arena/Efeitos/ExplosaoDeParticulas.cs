@@ -31,6 +31,7 @@ public sealed class ExplosaoDeParticulas : MonoBehaviour
     /// então um material branco neutro serve para todas.
     /// </summary>
     private static Material materialCompartilhado;
+    private static Texture2D texturaDeBrilho;
 
     [Header("Aparência")]
     [SerializeField] private Color cor = new Color(1f, 0.55f, 0.1f, 1f);
@@ -134,17 +135,107 @@ public sealed class ExplosaoDeParticulas : MonoBehaviour
         }
     }
 
-    /// <summary>Material de partícula criado uma vez e reaproveitado por todas as explosões.</summary>
+    /// <summary>Caminho do material dentro de Assets/Resources.</summary>
+    private const string NomeDoMaterial = "ExplosaoDeParticulas";
+
+    /// <summary>
+    /// Material de partícula carregado uma vez e reaproveitado por todas as explosões.
+    ///
+    /// <para>
+    /// PRIMEIRO tenta o material que está no projeto (Assets/Resources/ExplosaoDeParticulas.mat).
+    /// Isso não é preferência de estilo: um material que existe como ASSET vai para o build
+    /// junto com o shader que ele referencia. Um material criado em runtime com
+    /// <c>Shader.Find</c> não arrasta nada — o build descarta o shader e as partículas ficam
+    /// MAGENTA só na build, funcionando no Editor.
+    /// </para>
+    ///
+    /// <para>
+    /// Se o asset não existir, cai para a criação em runtime usando o shader de partículas do
+    /// URP (e não mais o do pipeline built-in, que é o que deixava o material rosa).
+    /// </para>
+    /// </summary>
     private static Material MaterialCompartilhado()
     {
         if (materialCompartilhado != null) return materialCompartilhado;
 
-        Shader shader = Shader.Find("Particles/Standard Unlit");
-        if (shader == null) shader = Shader.Find("Legacy Shaders/Particles/Additive");
-        if (shader == null) return null;
+        Material doProjeto = Resources.Load<Material>(NomeDoMaterial);
+        if (doProjeto != null)
+        {
+            materialCompartilhado = doProjeto;
+            return materialCompartilhado;
+        }
 
-        materialCompartilhado = new Material(shader) { name = "Explosao (compartilhado)" };
+        // Reserva: criar em runtime. O shader pedido agora é o de partículas do URP.
+        // Antes eu pedia o equivalente do pipeline BUILT-IN, que no URP vira rosa (magenta) —
+        // e, pior, Shader.Find não arrasta o shader para a build.
+        Shader shader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
+        if (shader == null) shader = Shader.Find("Particles/Standard Unlit");
+        if (shader == null) shader = Shader.Find("Legacy Shaders/Particles/Additive");
+
+        if (shader == null)
+        {
+            // Antes isso saía como "return null" e o Renderer ficava com um material nulo,
+            // exibindo magenta sem nenhuma mensagem explicando o motivo.
+            Debug.LogError($"[{nameof(ExplosaoDeParticulas)}] Nenhum shader de partícula " +
+                           "encontrado. O material do projeto (Assets/Resources/" + NomeDoMaterial +
+                           ".mat) é o caminho esperado; se ele sumiu, recrie-o. As explosões " +
+                           "ficarão brancas/rosa sem este material.", null);
+            return null;
+        }
+
+        materialCompartilhado = new Material(shader) { name = "Explosao (runtime)" };
+
+        // Surface Type = Transparent, Blending Mode = Alpha. Estas são as propriedades do
+        // shader de partículas do URP; sem elas o material nasce opaco.
+        materialCompartilhado.SetFloat("_Surface", 1f);
+        materialCompartilhado.SetFloat("_Blend", 0f);
+        materialCompartilhado.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+
+        // Sem textura, cada partícula é um QUADRADO sólido — visualmente parece "sem textura",
+        // que foi como o usuário descreveu o problema. Um brilho radial de 32x32 disfarça isso.
+        materialCompartilhado.SetTexture("_BaseMap", TexturaDeBrilho());
+
         return materialCompartilhado;
+    }
+
+    /// <summary>
+    /// Textura radial branca: centro opaco, borda transparente. Gerada uma única vez.
+    ///
+    /// O shader de partículas multiplica a cor pela textura, então uma textura em tons de
+    /// branco serve para qualquer cor de explosão.
+    /// </summary>
+    private static Texture2D TexturaDeBrilho()
+    {
+        if (texturaDeBrilho != null) return texturaDeBrilho;
+
+        const int lado = 32;
+        texturaDeBrilho = new Texture2D(lado, lado, TextureFormat.RGBA32, false)
+        {
+            name = "BrilhoDaExplosao",
+            // Não salva no projeto e não vaza entre sessões de Play.
+            hideFlags = HideFlags.HideAndDontSave,
+        };
+
+        float centro = (lado - 1) * 0.5f;
+
+        for (int y = 0; y < lado; y++)
+        {
+            for (int x = 0; x < lado; x++)
+            {
+                float dx = (x - centro) / centro;
+                float dy = (y - centro) / centro;
+                float distancia = Mathf.Sqrt(dx * dx + dy * dy);
+
+                // Queda suave: 1 no centro, 0 na borda do círculo.
+                float alfa = Mathf.Clamp01(1f - distancia);
+                alfa *= alfa;   // curva quadrática deixa o miolo mais forte
+
+                texturaDeBrilho.SetPixel(x, y, new Color(1f, 1f, 1f, alfa));
+            }
+        }
+
+        texturaDeBrilho.Apply();
+        return texturaDeBrilho;
     }
 
     /// <summary>Branco opaco → cor → transparente. O pico de branco dá o "flash".</summary>
